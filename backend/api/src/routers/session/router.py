@@ -1,9 +1,9 @@
 
 from typing import Annotated
 from fastapi import APIRouter, Depends
-from api.dependencies import mongo_db_client
+from src.dependencies import mongo_db_client
 from . import model as router_model
-import api.mongodb.session as mongodb_model
+import src.mongodb.session as mongodb_model
 from pymongo.database import Database
 import dataclasses
 

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pymongo import MongoClient
 import datetime
-from api.routers.session.router import router as session_router
+from src.routers.session.router import router as session_router
 
 app = FastAPI()
 app.include_router(session_router)
