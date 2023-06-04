@@ -4,3 +4,5 @@ __pycache__
 *.lock
 .vscode/
 .fake
+.next/
+node_modules
