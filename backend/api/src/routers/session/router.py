@@ -40,14 +40,14 @@ async def list_sessions(user: str, db: Annotated[Database, Depends(mongo_db_clie
         actions = s['actions']
         result.append(router_model.Session(user, actions))
 
-    print("sending messages on kafka")
+    print("sending messages on kafka", flush=True)
     for e in range(1):
         data = {'number' : e}
         producer.send('numtest', value=data)
-        print(f"message sent: {e}")
+        print(f"message sent: {e}", flush=True)
         time.sleep(5)
 
-    print("receiving messages from kafka")
+    print("receiving messages from kafka", flush=True)
     for message in consumer:
         print(f"message received: {message.value}")
     return result
