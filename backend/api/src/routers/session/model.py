@@ -1,11 +1,28 @@
 from dataclasses import dataclass
+from uuid import UUID
+from mongodb.session import Session
+
+#######################################################################################################################
 
 @dataclass
-class Action:
-    timestamp: float
-    action: str
-
-@dataclass
-class Session:
+class PostSessionsStartRequest:
     user: str
-    actions: list[Action]
+
+@dataclass
+class PostSessionsPauseRequest:
+    id: UUID
+
+@dataclass
+class PostSessionsResumeRequest:
+    id: UUID
+
+@dataclass
+class PostSessionsStopRequest:
+    id: UUID
+
+
+@dataclass 
+class GetSessionsResponse:
+    sessions: list[Session]
+
+    

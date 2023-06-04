@@ -1,53 +1,69 @@
 
 from typing import Annotated
 from fastapi import APIRouter, Depends
-from kafka import KafkaConsumer, KafkaProducer
-from src.dependencies import mongo_db_client, kafka_producer, kafka_consumer
-from . import model as router_model
-import src.mongodb.session as mongodb_model
+from dependencies import mongo_db_client
+from .model import (PostSessionsStartRequest, PostSessionsPauseRequest,PostSessionsStopRequest,
+                   PostSessionsResumeRequest, GetSessionsResponse)
+import mongodb.session as mongodb_model
 from pymongo.database import Database
 import dataclasses
-import time
+import uuid
+from datetime import datetime
+import bson
+
 
 router = APIRouter()
 
-@router.post("/sessions")
-async def add_session(user: str, session: router_model.Session, db: Annotated[Database, Depends(mongo_db_client)],
-                      producer: Annotated[KafkaProducer, Depends(kafka_producer)],
-                      consumer: Annotated[KafkaConsumer, Depends(kafka_consumer)]) -> None:
-    # document = mongodb_model.Session(
-    #     user=user,
-    #     actions=session.actions
-    # )
-    # db.sessions.insert_one(dataclasses.asdict(document))
-    for e in range(1000):
-        data = {'number' : e}
-        producer.send('numtest', value=data)
-        time.sleep(5)
+@router.post("/sessions/start")
+async def add_session(input: PostSessionsStartRequest, db: Annotated[Database, Depends(mongo_db_client)]) -> None:
+    document = mongodb_model.Session(
+        id=uuid.uuid4(),
+        user=input.user,
+        actions=[mongodb_model.Action(timestamp=datetime.now().timestamp(), action="start")]
+    )
+    
+    db.sessions.insert_one(dataclasses.asdict(document))
+    return
 
-    for message in consumer:
-        print(message.value)
+@router.post("/sessions/pause")
+async def add_session(input: PostSessionsPauseRequest, db: Annotated[Database, Depends(mongo_db_client)]) -> None:
+    action = mongodb_model.Action(timestamp=datetime.now().timestamp(), action="pause")
+    result = db.sessions.update_one(
+        { "id": input.id },
+        { "$push" : { "actions": dataclasses.asdict(action)}}
+    )
+    print(result.raw_result)
+    return 
+
+@router.post("/sessions/resume")
+async def add_session(input: PostSessionsResumeRequest, db: Annotated[Database, Depends(mongo_db_client)]) -> None:
+    action = mongodb_model.Action(timestamp=datetime.now().timestamp(), action="resume")
+    db.sessions.update_one(
+        { "id": input.id },
+        { "$push" : { "actions": dataclasses.asdict(action)}}
+    )
+    return
+
+@router.post("/sessions/stop")
+async def add_session(input: PostSessionsStopRequest, db: Annotated[Database, Depends(mongo_db_client)]) -> None:
+    action = mongodb_model.Action(timestamp=datetime.now().timestamp(), action="stop")
+    db.sessions.update_one(
+        { "id": input.id },
+        { "$push" : { "actions": dataclasses.asdict(action)}}
+    )
     return
 
 
-@router.get("/sessions")
-async def list_sessions(user: str, db: Annotated[Database, Depends(mongo_db_client)],
-                        producer: Annotated[KafkaProducer, Depends(kafka_producer)],
-                        consumer: Annotated[KafkaConsumer, Depends(kafka_consumer)]) -> list[router_model.Session]:
+@router.get("/sessions/{user}")
+async def list_sessions(user: str, db: Annotated[Database, Depends(mongo_db_client)]) -> GetSessionsResponse:
     sessions = db.sessions.find({"user": f"{user}"})
     result = []
-    for s in sessions:
+    for s in [s for s in sessions if 'id' in s]:
         actions = s['actions']
-        result.append(router_model.Session(user, actions))
-
-    print("sending messages on kafka", flush=True)
-    for e in range(1):
-        data = {'number' : e}
-        producer.send('numtest', value=data)
-        print(f"message sent: {e}", flush=True)
-        time.sleep(5)
-
-    print("receiving messages from kafka", flush=True)
-    for message in consumer:
-        print(f"message received: {message.value}")
-    return result
+        result.append(
+            mongodb_model.Session(
+            id=s['id'],
+            user=s['user'],
+            actions=[mongodb_model.Action(**a) for a in actions]
+        ))
+    return GetSessionsResponse(sessions=result)
