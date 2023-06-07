@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import styles from '../styles/Session.module.css';
+import Stopwatch from "../components/stopwatch";
 
 const StopwatchImage = () => (
     <Image
@@ -17,6 +18,7 @@ export default function Session() {
             <main className={styles.container}>
                 <StopwatchImage />
                 <h1 className={styles.title}>Session tracker</h1>
+                <Stopwatch />
                 <h1 className={styles.title}> <Link href="/">Back to landing page</Link> </h1>
             </main>
         </div>
