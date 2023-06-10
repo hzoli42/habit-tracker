@@ -2,8 +2,8 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends
 from dependencies import mongo_db_client
-from .model import (PostSessionsStartRequest, PostSessionsPauseRequest,PostSessionsStopRequest,
-                   PostSessionsResumeRequest, GetSessionsResponse)
+from .model import (PostSessionsStartRequest, PostSessionsStartResponse, PostSessionsPauseRequest,
+                   PostSessionsStopRequest, PostSessionsResumeRequest, GetSessionsResponse)
 import mongodb.session as mongodb_model
 from pymongo.database import Database
 import dataclasses
@@ -15,18 +15,19 @@ import bson
 router = APIRouter()
 
 @router.post("/sessions/start")
-async def add_session(input: PostSessionsStartRequest, db: Annotated[Database, Depends(mongo_db_client)]) -> None:
+async def add_session(input: PostSessionsStartRequest, db: Annotated[Database, Depends(mongo_db_client)]) -> PostSessionsStartResponse:
+    session_id = uuid.uuid4()
     document = mongodb_model.Session(
-        id=uuid.uuid4(),
+        id=session_id,
         user=input.user,
         actions=[mongodb_model.Action(timestamp=datetime.now().timestamp(), action="start")]
     )
     
     db.sessions.insert_one(dataclasses.asdict(document))
-    return
+    return PostSessionsStartResponse(id=session_id)
 
 @router.post("/sessions/pause")
-async def add_session(input: PostSessionsPauseRequest, db: Annotated[Database, Depends(mongo_db_client)]) -> None:
+async def pause_session(input: PostSessionsPauseRequest, db: Annotated[Database, Depends(mongo_db_client)]) -> None:
     action = mongodb_model.Action(timestamp=datetime.now().timestamp(), action="pause")
     result = db.sessions.update_one(
         { "id": input.id },
@@ -36,7 +37,7 @@ async def add_session(input: PostSessionsPauseRequest, db: Annotated[Database, D
     return 
 
 @router.post("/sessions/resume")
-async def add_session(input: PostSessionsResumeRequest, db: Annotated[Database, Depends(mongo_db_client)]) -> None:
+async def resume_session(input: PostSessionsResumeRequest, db: Annotated[Database, Depends(mongo_db_client)]) -> None:
     action = mongodb_model.Action(timestamp=datetime.now().timestamp(), action="resume")
     db.sessions.update_one(
         { "id": input.id },
@@ -45,7 +46,7 @@ async def add_session(input: PostSessionsResumeRequest, db: Annotated[Database, 
     return
 
 @router.post("/sessions/stop")
-async def add_session(input: PostSessionsStopRequest, db: Annotated[Database, Depends(mongo_db_client)]) -> None:
+async def stop_session(input: PostSessionsStopRequest, db: Annotated[Database, Depends(mongo_db_client)]) -> None:
     action = mongodb_model.Action(timestamp=datetime.now().timestamp(), action="stop")
     db.sessions.update_one(
         { "id": input.id },

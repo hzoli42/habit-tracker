@@ -9,6 +9,10 @@ class PostSessionsStartRequest:
     user: str
 
 @dataclass
+class PostSessionsStartResponse:
+    id: UUID
+
+@dataclass
 class PostSessionsPauseRequest:
     id: UUID
 
