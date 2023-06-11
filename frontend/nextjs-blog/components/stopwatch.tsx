@@ -31,24 +31,43 @@ export default function Stopwatch() {
         setTime({hours: hoursMod, minutes: minutesMod, seconds: secondsMod});
     }
 
-    function start() {
-        axios.post('http://0.0.0.0:80/sessions/start', {user: "zolika"})
-            .then(response => console.log(response.data.id))
+    async function start() {
+        
     }
 
-    function toggle() {
+    async function toggle() {
+        if (sessionId === "") {
+            await axios.post('http://0.0.0.0:80/sessions/start', {user: "zolika"})
+            .then(response => {
+                console.log(response.data.id)
+                setSessionId(response.data.id)
+            })
+            setIsActive(true)
+            return
+        }
         if (isActive) {
-            axios.post('http://0.0.0.0:80/sessions/pause', {id: sessionId})
-                .then(response => console.log(response))
+            await axios.post('http://0.0.0.0:80/sessions/pause', {id: sessionId})
         } else {
-            axios.post('http://0.0.0.0:80/sessions/resume', {id: sessionId})
+            await axios.post('http://0.0.0.0:80/sessions/resume', {id: sessionId})
         }
         setIsActive(!isActive);
     }
     
-    function reset() {
+    async function reset() {
+        await axios.post('http://0.0.0.0:80/sessions/stop', {id: sessionId})
         setIsActive(false);
         setTime({hours: 0, minutes: 0, seconds: 0});
+        setSessionId("")
+    }
+
+    function startButtonText() {
+        if(sessionId === "") {
+            return "Start";
+        }
+        if(isActive) {
+            return "Pause";
+        }
+        return "Resume";
     }
 
     useEffect(() => {
@@ -62,6 +81,7 @@ export default function Stopwatch() {
         }
         return () => clearInterval(interval);
     }, [isActive, time]);
+
     return (
         <Grid container spacing={2}>
             <Grid item container xs={12} className={styles.stopwatch}>
@@ -72,17 +92,12 @@ export default function Stopwatch() {
                     {time.hours} : {time.minutes} : {time.seconds}
                 </Typography>
             </Grid>
-            <Grid item container xs={4} className={styles.stopwatch}>
-                <Button variant="contained" color="success" onClick={start} fullWidth>
-                    Start
-                </Button>
-            </Grid>
-            <Grid item container xs={4} className={styles.stopwatch}>
+            <Grid item container xs={6} className={styles.stopwatch}>
                 <Button variant={isActive ? "outlined" : "contained"} color={isActive ? "error" : "success"} onClick={toggle} fullWidth>
-                    {isActive ? "Pause" : "Start"}
+                    {startButtonText()}
                 </Button>
             </Grid>
-            <Grid item container xs={4} className={styles.stopwatch}>
+            <Grid item container xs={6} className={styles.stopwatch}>
                 <Button variant="outlined" onClick={reset} fullWidth>
                     Reset
                 </Button>
