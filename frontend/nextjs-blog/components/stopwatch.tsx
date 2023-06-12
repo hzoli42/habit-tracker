@@ -31,10 +31,6 @@ export default function Stopwatch() {
         setTime({hours: hoursMod, minutes: minutesMod, seconds: secondsMod});
     }
 
-    async function start() {
-        
-    }
-
     async function toggle() {
         if (sessionId === "") {
             await axios.post('http://0.0.0.0:80/sessions/start', {user: "zolika"})

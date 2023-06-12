@@ -8,6 +8,7 @@ export default function Session() {
         <Container maxWidth="sm">
             <Stopwatch />
             <Typography> <Link href="/">Back to landing page</Link> </Typography>
+            <Typography> <Link href="/dashboard">View user's Dashboard</Link> </Typography>
         </Container>
     )
 }
