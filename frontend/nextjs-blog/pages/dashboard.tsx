@@ -1,6 +1,6 @@
 import {Container, Card, CardContent, Typography} from '@mui/material'
 import axios from 'axios';
-import { Session } from '../models/Session';
+import { Session } from '../models/session';
 import SessionCard from '../components/sessioncard';
 import { useEffect, useState } from 'react';
 

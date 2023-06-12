@@ -1,5 +1,5 @@
 import { Card, CardContent, Typography } from "@mui/material";
-import { Session } from '../models/Session';
+import { Session } from '../models/session';
 
 
 export default function SessionCard(session: Session) {
