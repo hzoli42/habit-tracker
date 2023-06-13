@@ -1,6 +1,6 @@
  export type Action = {
     timestamp: number;
-    user: string;
+    action: string;
 }
 
 export type Session = {

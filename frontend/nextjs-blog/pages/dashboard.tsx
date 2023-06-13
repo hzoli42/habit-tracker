@@ -1,4 +1,4 @@
-import {Container, Card, CardContent, Typography} from '@mui/material'
+import {Container, Card, CardContent, Typography, Box} from '@mui/material'
 import axios from 'axios';
 import { Session } from '../models/session';
 import SessionCard from '../components/sessioncard';
@@ -22,15 +22,18 @@ export default function Dashboard() {
 
     useEffect(() => {
         updateSessions();
+        console.log(sessions);
     }, []);
     
     return (
-        <Container maxWidth='sm'>
+        <Container maxWidth='md'>
+            <Box sx={{mt: '10px'}}>
             {
                 sessions.map((s, idx) => {
                     return (<SessionCard key={idx} id={s.id} user={s.user} actions={s.actions} />);
                 })
             }
+            </Box>
         </Container>
     );
 

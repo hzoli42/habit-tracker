@@ -3,27 +3,38 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import styles from '../styles/Appbar.module.css';
 
 export default function SimpleAppBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
+          <AccessTimeIcon />
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              ml: 2,
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.2rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
+            Habit Tracker
           </Typography>
-          <Button color="inherit">Login</Button>
+          
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', flexGrow: 1}}>
+            <Button color="inherit" href='/session'>Record a session</Button>
+            <Button color="inherit" href='/dashboard'>Dashboard</Button>
+          </Box>
         </Toolbar>
       </AppBar>
     </Box>
