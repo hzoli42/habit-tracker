@@ -6,6 +6,7 @@ export default function SessionCard(session: Session) {
     return (
         <Card variant="outlined" sx={{ display: 'flex' }}>
             <CardContent>
+                <Typography>User: {session.user} </Typography>
                 <Typography>Title: TODO->Session Titles</Typography>
                 <Typography>ID: {session.id} </Typography>
                 <Typography>Tags: </Typography>
