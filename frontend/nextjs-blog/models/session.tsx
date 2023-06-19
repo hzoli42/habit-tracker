@@ -5,6 +5,8 @@
 
 export type Session = {
     id: string;
-    user: string;
+    user_id: string;
     actions: Action[];
+    title: string;
+    tags: string[];
 }

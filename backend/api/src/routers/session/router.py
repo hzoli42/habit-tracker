@@ -19,8 +19,10 @@ async def add_session(input: PostSessionsStartRequest, db: Annotated[Database, D
     session_id = uuid.uuid4()
     document = mongodb_model.Session(
         id=session_id,
-        user=input.user,
-        actions=[mongodb_model.Action(timestamp=datetime.now().timestamp(), action="start")]
+        user_id=input.user_id,
+        actions=[mongodb_model.Action(timestamp=datetime.now().timestamp(), action="start")],
+        title=input.title,
+        tags=input.tags
     )
     
     db.sessions.insert_one(dataclasses.asdict(document))
@@ -55,16 +57,18 @@ async def stop_session(input: PostSessionsStopRequest, db: Annotated[Database, D
     return
 
 
-@router.get("/sessions/{user}")
-async def list_sessions(user: str, db: Annotated[Database, Depends(mongo_db_client)]) -> GetSessionsResponse:
-    sessions = db.sessions.find({"user": f"{user}"})
+@router.get("/sessions/{user_id}")
+async def list_sessions(user_id: str, db: Annotated[Database, Depends(mongo_db_client)]) -> GetSessionsResponse:
+    sessions = db.sessions.find({"user_id": f"{user_id}"})
     result = []
     for s in [s for s in sessions if 'id' in s]:
         actions = s['actions']
         result.append(
             mongodb_model.Session(
             id=s['id'],
-            user=s['user'],
-            actions=[mongodb_model.Action(**a) for a in actions]
+            user_id=s['user_id'],
+            actions=[mongodb_model.Action(**a) for a in actions],
+            title=s['title'],
+            tags=s['tags']
         ))
     return GetSessionsResponse(sessions=result)

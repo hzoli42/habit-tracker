@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from uuid import UUID
 from mongodb.session import Session
 
@@ -6,7 +6,9 @@ from mongodb.session import Session
 
 @dataclass
 class PostSessionsStartRequest:
-    user: str
+    user_id: str
+    title: str = "Untitled Session"
+    tags: list[str] = field(default_factory=list)
 
 @dataclass
 class PostSessionsStartResponse:

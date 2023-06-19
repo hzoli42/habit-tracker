@@ -10,6 +10,8 @@ class Action:
 @dataclass
 class Session:
     id: UUID
-    user: str
+    title: str
+    user_id: str
+    tags: list[str]
     actions: list[Action]
 
