@@ -8,7 +8,7 @@ export default function HomePage() {
     const tabValues = ['live-session', 'history']
     const [tabValue, setTabValue] = React.useState(tabValues[0]);
 
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    const handleChange = (event: React.SyntheticEvent, newValue: string) => { 
         setTabValue(newValue);
     };
     

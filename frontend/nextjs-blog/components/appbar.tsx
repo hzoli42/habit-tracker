@@ -83,16 +83,8 @@ export default function SimpleAppBar() {
               onClose={handleClose}
             >
             { isAuthenticated
-              ? (
-                  <React.Fragment>
-                    <MenuItem onClick={handleLogoutClick}>Log out</MenuItem>
-                  </React.Fragment>
-                )
-              : (
-                  <React.Fragment>
-                    <MenuItem onClick={handleLoginClick}>Log in</MenuItem>
-                  </React.Fragment>
-                )
+              ? <MenuItem onClick={handleLogoutClick}>Log out</MenuItem>
+              : <MenuItem onClick={handleLoginClick}>Log in</MenuItem>
             }
             </Menu>
           </Box>

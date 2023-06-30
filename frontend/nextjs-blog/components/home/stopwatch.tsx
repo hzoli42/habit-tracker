@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import styles from "../../styles/Stopwatch.module.css";
-import { Button, Card, CardContent, Grid, TextField, Typography } from '@mui/material';
+import { Button, Card, CardContent, Grid, Paper, TextField, Typography } from '@mui/material';
 import Image from "next/image";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -78,10 +77,10 @@ export default function Stopwatch() {
     function displayStopwatchIsReset() {
         console.log(`Stopwatch is Reset --> isActive: ${isActive}, time: ${time.hours === 0 && time.minutes === 0 && time.seconds === 0}, session: ${sessionId}}`)
         return (<React.Fragment>
-                    <Grid item container xs={6} className={styles.stopwatch}>
+                    <Grid item container xs={6}>
                         <TextField label="Title" variant="outlined" required onChange={(event => setTitleInput(event.target.value))}/>
                     </Grid>
-                    <Grid item container xs={6} className={styles.stopwatch}>
+                    <Grid item container xs={6}>
                         <Button variant="contained" color="success" onClick={start} fullWidth>
                             Start
                         </Button>
@@ -92,37 +91,42 @@ export default function Stopwatch() {
     function displayStopwatchIsRunning() {
         console.log(`Stopwatch is Running --> isActive: ${isActive}, time: ${time.hours === 0 && time.minutes === 0 && time.seconds === 0}, session: ${sessionId}`)
         return (<React.Fragment>
-                    <Grid item container xs={6} className={styles.stopwatch}>
+                    <Grid item container xs={6}>
                         <Button variant="outlined" onClick={toggle} fullWidth>
                             {isActive ? "Pause" : "Resume"}
                         </Button>
                     </Grid>
-                    <Grid item container xs={6} className={styles.stopwatch}>
+                    <Grid item container xs={6}>
                         <Button variant="contained" color="error" onClick={stop} fullWidth>
                             Stop
                         </Button>
                     </Grid>
-                    <Grid item container xs={12} className={styles.stopwatch}>
                         {
                             actions.map(a => 
-                                (
-                                    <Card>
-                                        <CardContent>
-                                            <Typography>{a.time.hours} : {a.time.minutes} : {a.time.seconds}</Typography>
-                                            <Typography>{a.action}</Typography>
-                                        </CardContent>
-                                    </Card>
-                                )
+                                {
+                                    const actionToBgColor = {
+                                        "start": "bg-lime-200",
+                                        "pause": "bg-amber-200",
+                                        "resume": "bg-cyan-200"       
+                                    }
+                                    return (
+                                    <Grid item container xs={12} columnSpacing={0} rowSpacing={1}>
+                                        <Paper className={`flex flex-row grow ${actionToBgColor[a.action]}`}>
+                                            <Typography className="grow ml-2">{a.action}</Typography>
+                                            <Typography className="mr-2">{a.time.hours} : {a.time.minutes} : {a.time.seconds}</Typography>
+                                        </Paper>
+                                    </Grid>
+                                    )
+                                }
                             )
                         }
-                    </Grid>
                 </React.Fragment>)
     }
 
     return (
         <Grid container spacing={2}>
-            <Grid item container xs={12} className={styles.stopwatch} sx={{margin: '50px'}}>
-                <Typography variant="h1">
+            <Grid item container xs={12} className="flex flex-row justify-center">
+                <Typography variant="h1" className="my-10">
                     {time.hours} : {time.minutes} : {time.seconds}
                 </Typography>
             </Grid>
@@ -130,6 +134,7 @@ export default function Stopwatch() {
                 ? displayStopwatchIsReset()
                 : displayStopwatchIsRunning()
             }
+            
         </Grid>
     );
 };

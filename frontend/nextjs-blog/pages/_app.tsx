@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       domain="dev-53rbxqyn0edsff4y.uk.auth0.com"
       clientId="nWTpy7fJn6HtTTncbMhuGNcDst64j4Pn"
       authorizationParams={{
-        redirect_uri: 'http://localhost:3000/dashboard'
+        redirect_uri: 'http://localhost:3000'
       }}
       useRefreshTokens
       cacheLocation='localstorage'
