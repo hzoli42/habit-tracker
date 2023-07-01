@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Card, CardContent, Grid, Paper, TextField, Typography } from '@mui/material';
-import Image from "next/image";
+import { Button, Grid, Paper, TextField, Typography } from '@mui/material';
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import React from "react";
@@ -81,7 +80,7 @@ export default function Stopwatch() {
                         <TextField label="Title" variant="outlined" required onChange={(event => setTitleInput(event.target.value))}/>
                     </Grid>
                     <Grid item container xs={6}>
-                        <Button variant="contained" color="success" onClick={start} fullWidth>
+                        <Button className="bg-green-500" variant="contained" onClick={start} fullWidth>
                             Start
                         </Button>
                     </Grid>
@@ -97,7 +96,7 @@ export default function Stopwatch() {
                         </Button>
                     </Grid>
                     <Grid item container xs={6}>
-                        <Button variant="contained" color="error" onClick={stop} fullWidth>
+                        <Button className="bg-red-500" variant="contained" onClick={stop} fullWidth>
                             Stop
                         </Button>
                     </Grid>
