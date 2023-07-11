@@ -4,7 +4,6 @@ import TrackPageCard from "@/components/TrackPage/InfoCard";
 import { Input } from "@/components/ui/input";
 import { useAuth0 } from "@auth0/auth0-react";
 import InfoCard from "@/components/TrackPage/InfoCard";
-import NewSessionInput from "@/components/TrackPage/NewSessionInput";
 import StopwatchTimer from "@/components/TrackPage/StopwatchTimer";
 import StopwatchButtons from "@/components/TrackPage/StopwatchButtons";
 import StopwatchActions from "@/components/TrackPage/StopwatchActions";
@@ -33,10 +32,15 @@ export default function Home() {
     <main>
       <div className="container mx-auto max-w-screen-lg">
         <InfoCard />
-        <NewSessionInput/>
-        <StopwatchTimer />
-        <StopwatchButtons />
-        <StopwatchActions />
+        <div className="grid grid-flow-row grid-cols-2 gap-4">
+          <div>
+            <StopwatchTimer />
+            <StopwatchButtons />    
+          </div>
+          <div>
+            <StopwatchActions />
+          </div>  
+        </div>
       </div>
     </main>
   )

@@ -6,6 +6,8 @@ import { PrimitiveAtom, useAtom } from "jotai";
 import { Action, StopwatchTime } from "../../app/page"
 import { actionsAtom, isActiveAtom, sessionIdAtom, timeAtom, titleInputAtom } from "@/app/atoms";
 import { useAuth0 } from "@auth0/auth0-react";
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
 export default function Stopwatch() {
     const [time, setTime] = useAtom(timeAtom);
@@ -93,9 +95,15 @@ export default function Stopwatch() {
         return (
             <div className="grid grid-flow-col grid-cols-2 gap-4">
                 <div>
-                    <TextField 
-                        label="Title" variant="outlined" required fullWidth
-                        onChange={(event => setTitleInput(event.target.value))}/>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button>Open</Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                        <DropdownMenuLabel>Appearance</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                    </DropdownMenuContent>
+                </DropdownMenu>
                 </div>
                 <div>
                     <Button className="bg-green-400" variant="contained" onClick={start} fullWidth>

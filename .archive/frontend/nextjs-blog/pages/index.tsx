@@ -8,7 +8,7 @@ export default function LandingPage() {
     return(
         <>
         { 
-            isAuthenticated 
+            isAuthenticated
             ? <TrackPage />
             : <Typography variant="h1">Welcome, please log in!</Typography>
         }
