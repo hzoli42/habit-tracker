@@ -8,6 +8,7 @@ import { actionsAtom, isActiveAtom, sessionIdAtom, timeAtom, titleInputAtom } fr
 import { useAuth0 } from "@auth0/auth0-react";
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { Button as ShadButton} from "../ui/button"
 
 export default function Stopwatch() {
     const [time, setTime] = useAtom(timeAtom);
@@ -97,7 +98,7 @@ export default function Stopwatch() {
                 <div>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button>Open</Button>
+                        <ShadButton>Select session label <ArrowDropDownIcon /></ShadButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
                         <DropdownMenuLabel>Appearance</DropdownMenuLabel>
