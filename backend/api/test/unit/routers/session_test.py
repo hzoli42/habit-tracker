@@ -32,6 +32,11 @@ class TestSessionRouter(unittest.TestCase):
                 stopwatch_time=StopwatchTime(hours=0, minutes=0, seconds=2),
                 action="resume"
             ),
+            "stop_action": Action(
+                timestamp=10.0,
+                stopwatch_time=StopwatchTime(hours=0, minutes=0, seconds=10),
+                action="stop"
+            ),
         }
 
         self.mock_mongo = mock_mongo()
@@ -66,7 +71,66 @@ class TestSessionRouter(unittest.TestCase):
         response = self.client.post("/session/action", json=input.dict())
 
         expected_object = Session(
-            **self.test_data, id=test_uuid(), actions=[self.test_data["start_action"], self.test_data["pause_action"]])
+            **self.test_data, id=test_uuid(), actions=[self.test_data["start_action"],
+                                                       self.test_data["pause_action"]])
+        response_object = Session.from_dict(response.json())
+
+        assert response.status_code == 200
+        assert expected_object == response_object
+
+    def test_session_action_resume(self) -> None:
+        test_uuid = constant_uuid_generator()
+
+        input = SessionStartIn(
+            **self.test_data, action=self.test_data["start_action"])
+        response = self.client.post("/session/start", json=input.dict())
+        assert response.status_code == 200
+
+        input = SessionActionIn(
+            id=test_uuid(), action=self.test_data["pause_action"])
+        response = self.client.post("/session/action", json=input.dict())
+        assert response.status_code == 200
+
+        input = SessionActionIn(
+            id=test_uuid(), action=self.test_data["resume_action"])
+        response = self.client.post("/session/action", json=input.dict())
+
+        expected_object = Session(
+            **self.test_data, id=test_uuid(), actions=[self.test_data["start_action"],
+                                                       self.test_data["pause_action"],
+                                                       self.test_data["resume_action"]])
+        response_object = Session.from_dict(response.json())
+
+        assert response.status_code == 200
+        assert expected_object == response_object
+
+    def test_session_action_stop(self) -> None:
+        test_uuid = constant_uuid_generator()
+
+        input = SessionStartIn(
+            **self.test_data, action=self.test_data["start_action"])
+        response = self.client.post("/session/start", json=input.dict())
+        assert response.status_code == 200
+
+        input = SessionActionIn(
+            id=test_uuid(), action=self.test_data["pause_action"])
+        response = self.client.post("/session/action", json=input.dict())
+        assert response.status_code == 200
+
+        input = SessionActionIn(
+            id=test_uuid(), action=self.test_data["resume_action"])
+        response = self.client.post("/session/action", json=input.dict())
+        assert response.status_code == 200
+
+        input = SessionActionIn(
+            id=test_uuid(), action=self.test_data["stop_action"])
+        response = self.client.post("/session/action", json=input.dict())
+
+        expected_object = Session(
+            **self.test_data, id=test_uuid(), actions=[self.test_data["start_action"],
+                                                       self.test_data["pause_action"],
+                                                       self.test_data["resume_action"],
+                                                       self.test_data["stop_action"]])
         response_object = Session.from_dict(response.json())
 
         assert response.status_code == 200

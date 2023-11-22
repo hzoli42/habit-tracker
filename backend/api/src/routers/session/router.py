@@ -38,9 +38,8 @@ async def action_session(input: SessionActionIn,
     if last_action.action == "stop":
         raise HTTPException(
             status_code=400, detail="Session has already ended")
-    if ((last_action.action == "pause" and input.action != "resume") or
-        (last_action.action == "resume" and input.action != "pause") or
-            input.action == "stop"):
+    if ((input.action == "pause" and last_action not in {"start", "resume"}) or
+            (input.action == "resume" and last_action.action not in {"start", "pause"})):
         raise HTTPException(status_code=400, detail="Invalid order of actions")
 
     db.sessions.update_one(
