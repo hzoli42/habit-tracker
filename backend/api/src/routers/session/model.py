@@ -1,35 +1,24 @@
-from dataclasses import dataclass, field
+from pydantic import BaseModel
 from uuid import UUID
-from mongodb.session import Session, Action
+from api.src.mongodb.session import Session, Action
 
 #######################################################################################################################
 
-@dataclass
-class PostSessionsStartRequest:
+
+class SessionStartIn(BaseModel):
     user_id: str
     title: str
     labels: list[str]
 
-@dataclass
-class PostSessionsStartResponse:
+
+class SessionStartOut(BaseModel):
     id: UUID
 
-# @dataclass
-# class PostSessionsPauseRequest:
-#     id: UUID
 
-# @dataclass
-# class PostSessionsResumeRequest:
-#     id: UUID
-
-@dataclass
-class PostSessionsStopRequest:
+class SessionStopIn(BaseModel):
     id: UUID
     actions: list[Action]
 
 
-@dataclass 
-class GetSessionsResponse:
+class SessionAllOut(BaseModel):
     sessions: list[Session]
-
-    
