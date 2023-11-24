@@ -2,19 +2,13 @@
 import { useEffect } from "react";
 import { Button, Grid, Paper, TextField, Typography } from '@mui/material';
 import React from "react";
-import { PrimitiveAtom, useAtom } from "jotai";
 import { Action, StopwatchTime } from "../../app/page"
-import { actionsAtom, isActiveAtom, sessionIdAtom, timeAtom, titleInputAtom } from "@/app/atoms";
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Button as ShadButton} from "../ui/button"
 
 export default function Stopwatch() {
-    const [time, setTime] = useAtom(timeAtom);
-    const [titleInput, setTitleInput] = useAtom(titleInputAtom);
-    const [isActive, setIsActive] = useAtom(isActiveAtom);
-    const [sessionId, setSessionId] = useAtom(sessionIdAtom);
-    const [actions, setActions] = useAtom(actionsAtom);
+   
 
 
     function incrementSecond() {

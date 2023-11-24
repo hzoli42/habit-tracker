@@ -1,12 +1,9 @@
 'use client'
-import { actionsAtom } from "@/app/atoms"
 import { Grid, Paper, Typography } from "@mui/material";
-import { useAtom } from "jotai"
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 export default function StopWatchActions() {
-    const [actions, setAction] = useAtom(actionsAtom);
 
     return (
         <>  
