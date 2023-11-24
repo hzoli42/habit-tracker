@@ -5,7 +5,6 @@ import React from "react";
 import { PrimitiveAtom, useAtom } from "jotai";
 import { Action, StopwatchTime } from "../../app/page"
 import { actionsAtom, isActiveAtom, sessionIdAtom, timeAtom, titleInputAtom } from "@/app/atoms";
-import { useAuth0 } from "@auth0/auth0-react";
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Button as ShadButton} from "../ui/button"
@@ -16,7 +15,6 @@ export default function Stopwatch() {
     const [isActive, setIsActive] = useAtom(isActiveAtom);
     const [sessionId, setSessionId] = useAtom(sessionIdAtom);
     const [actions, setActions] = useAtom(actionsAtom);
-    const { user, isAuthenticated, isLoading } = useAuth0();
 
 
     function incrementSecond() {

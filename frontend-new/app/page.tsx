@@ -2,7 +2,6 @@
 import Stopwatch from "@/components/TrackPage/StopwatchButtons";
 import TrackPageCard from "@/components/TrackPage/InfoCard";
 import { Input } from "@/components/ui/input";
-import { useAuth0 } from "@auth0/auth0-react";
 import InfoCard from "@/components/TrackPage/InfoCard";
 import StopwatchTimer from "@/components/TrackPage/StopwatchTimer";
 import StopwatchButtons from "@/components/TrackPage/StopwatchButtons";
@@ -24,7 +23,6 @@ export default function Home() {
   // const [isActive, setIsActive] = useState(false);
   // const [time, setTime] = useState<StopwatchTime>({hours: 0, minutes: 0, seconds: 0});
   // const [sessionId, setSessionId] = useState("");
-  const { user, isAuthenticated, isLoading } = useAuth0();
   // const [titleInput, setTitleInput] = useState("");
   // const [actions, setActions] = useState<Action[]>([]);
 

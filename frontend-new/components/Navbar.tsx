@@ -3,18 +3,15 @@
 import { Separator } from "@/components/ui/separator"
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { useAuth0 } from "@auth0/auth0-react";
 
 export default function Navbar() {
-    const { loginWithRedirect } = useAuth0();
-    const { logout } = useAuth0();
-    
+
   return (
     <div className="h-12">
         <div className="flex items-center container mx-auto max-w-screen-lg my-2">
             <Link href="/" className="font-mono ml-2 flex-grow">Habit Tracker</Link>
             <div className="mr-2 font-mono">
-                <DropdownMenu>
+                {/* <DropdownMenu>
                     <DropdownMenuTrigger>Open</DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuLabel><button onClick={() => loginWithRedirect()}>Login</button></DropdownMenuLabel>
@@ -24,7 +21,7 @@ export default function Navbar() {
                         <DropdownMenuItem>Team</DropdownMenuItem>
                         <DropdownMenuItem>Subscription</DropdownMenuItem>
                     </DropdownMenuContent>
-                </DropdownMenu>
+                </DropdownMenu> */}
             </div>
         </div>
         <div className="container mx-auto max-w-screen-lg">
