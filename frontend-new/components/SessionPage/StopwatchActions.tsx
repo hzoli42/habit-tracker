@@ -2,8 +2,13 @@
 import { Grid, Paper, Typography } from "@mui/material";
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Action } from "@/app/page";
 
-export default function StopWatchActions() {
+export type StopwatchActionsProps = {
+    actions: Action[]
+}
+
+export default function StopWatchActions({actions} : StopwatchActionsProps) {
 
     return (
         <>  

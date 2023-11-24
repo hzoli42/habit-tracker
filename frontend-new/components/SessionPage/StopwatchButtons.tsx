@@ -1,5 +1,4 @@
-'use client'
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { Button, Grid, Paper, TextField, Typography } from '@mui/material';
 import React from "react";
 import { Action, StopwatchTime } from "../../app/page"
@@ -7,10 +6,22 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { Button as ShadButton} from "../ui/button"
 
-export default function Stopwatch() {
+export type StopwatchButtonProps = {
+    time: StopwatchTime;
+    setTime: Dispatch<SetStateAction<StopwatchTime>>;
+    title: string;
+    isActive: boolean;
+    setIsActive: Dispatch<SetStateAction<boolean>>;
+    sessionId: string;
+    setSessionId: Dispatch<SetStateAction<string>>;
+    actions: Action[]
+    setActions: Dispatch<SetStateAction<Action[]>>;
+}
+
+export default function StopwatchButtons(
+    {time, setTime, title, isActive, setIsActive, sessionId, setSessionId, actions, setActions} : StopwatchButtonProps
+    ) {
    
-
-
     function incrementSecond() {
         const [secondsDiv, secondsMod] = [Math.floor((time.seconds + 1) / 60), (time.seconds + 1) % 60];
         const [minutesDiv, minutesMod] = [Math.floor((time.minutes + secondsDiv) / 60), (time.minutes + secondsDiv) % 60];
@@ -24,14 +35,12 @@ export default function Stopwatch() {
     }
 
     async function start() {
-        const userId = user ? user.sub : "Unknown"
-        const title = titleInput !== "" ? titleInput : "Unknown"
         await fetch('http://0.0.0.0:80/sessions/start', {
             method: "POST",
             mode: "cors",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                user_id: userId,
+                user_id: "test",
                 title: title,
                 labels: []
             })
