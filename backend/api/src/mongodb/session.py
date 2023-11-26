@@ -12,7 +12,7 @@ class StopwatchTime(BaseModel):
 class Action(BaseModel):
     timestamp: float
     stopwatch_time: StopwatchTime
-    action: str
+    event: str
 
 
 class Session(BaseModel):

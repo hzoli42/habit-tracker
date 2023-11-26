@@ -30,17 +30,14 @@ async def start_session(input: SessionStartIn,
     return get_session_by_id(session_id, db)
 
 
-@router.post("/session/action")
+@router.post("/session/stop")
 async def action_session(input: SessionActionIn,
                          db: Annotated[Database, Depends(mongo_db_client)]) -> mongodb_model.Session:
     current_session = get_session_by_id(input.id, db)
     last_action = current_session.actions[-1]
-    if last_action.action == "stop":
+    if last_action.event != "start":
         raise HTTPException(
-            status_code=400, detail="Session has already ended")
-    if ((input.action.action == "pause" and last_action.action not in {"start", "resume"}) or
-            (input.action.action == "resume" and last_action.action not in {"pause"})):
-        raise HTTPException(status_code=400, detail="Invalid order of actions")
+            status_code=400, detail="STOP event must be directly preceded by a START event")
 
     db.sessions.update_one(
         {"id": input.id},
