@@ -1,10 +1,7 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { Button, Grid, Paper, TextField, Typography } from '@mui/material';
-import React from "react";
-import { Action, StopwatchTime } from "../../app/page"
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { Button as ShadButton} from "../ui/button"
+import { Button } from '@mui/material';
+import { Action, StopwatchTime } from "../../app/page";
+
 
 export type StopwatchButtonProps = {
     time: StopwatchTime;
@@ -51,15 +48,6 @@ export default function StopwatchButtons(
         })
         setIsRunning(true)
     }
-
-    // function toggle() {
-    //     if (isActive) {
-    //         setActions(actions.concat(newAction('pause')))
-    //     } else {
-    //         setActions(actions.concat(newAction('resume')))
-    //     }
-    //     setIsActive(!isActive);
-    // }
     
     async function stop() {
         await fetch('http://0.0.0.0:80/session/stop', {
@@ -89,16 +77,12 @@ export default function StopwatchButtons(
     }, [isRunning, time]);
 
     return (
-        <>
-            <div className="grid grid-flow-col grid-cols-2 gap-4">
-                <div>
-                    {
-                        !isRunning
-                        ? <Button className="bg-green-400" variant="contained" onClick={start} fullWidth>Start</Button>
-                        : <Button className="bg-red-400" variant="contained" onClick={stop} fullWidth>Stop</Button>
-                    }
-                </div>
-            </div>
-        </>
+        <div>
+            {
+                !isRunning
+                ? <Button className="bg-green-400" variant="contained" onClick={start} fullWidth>Start</Button>
+                : <Button className="bg-red-400" variant="contained" onClick={stop} fullWidth>Stop</Button>
+            }
+        </div>
     );
 };

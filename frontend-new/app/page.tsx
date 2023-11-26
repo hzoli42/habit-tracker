@@ -18,10 +18,7 @@ export default function Home() {
   return (
     <main>
       <div className="container mx-auto max-w-screen-lg">
-        {/* <InfoCard /> */}
-        <div className="grid grid-flow-row grid-cols-2 gap-4">
           <Stopwatch />
-        </div>
       </div>
     </main>
   )

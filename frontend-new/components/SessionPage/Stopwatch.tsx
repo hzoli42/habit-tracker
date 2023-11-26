@@ -1,8 +1,10 @@
 import { Action, StopwatchTime } from "@/app/page";
-import StopwatchActions from "./StopwatchActions";
 import StopwatchButtons from "./StopwatchButtons";
 import StopwatchTimer from "./StopwatchTimer";
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
+
+
 
 export default function Stopwatch() {
     const [time, setTime] = useState<StopwatchTime>({hours: 0, minutes: 0, seconds: 0})
@@ -12,15 +14,17 @@ export default function Stopwatch() {
 
     return (
         <>
-            <div>
-                <StopwatchTimer time={time} />
-                <StopwatchButtons 
-                time={time} setTime={setTime} title={title} isRunning={isRunning} setIsRunning={setIsRunning} 
-                sessionId={sessionId} setSessionId={setSessionId}/>    
+            <div class="grid grid-cols-4">
+                <div class="col-span-3">
+                    <StopwatchTimer time={time} />
+                </div>
+                <div class="grid content-center gap-4">
+                    <Input placeholder="Title" onChange={e => setTitle(e.target.value)}/>
+                    <StopwatchButtons 
+                    time={time} setTime={setTime} title={title} isRunning={isRunning} setIsRunning={setIsRunning} 
+                    sessionId={sessionId} setSessionId={setSessionId}/> 
+                </div>   
             </div>
-            {/* <div>
-                <StopwatchActions/>
-            </div> */}
         </>  
     )
 }
