@@ -19,8 +19,6 @@ export default function StopWatchActions({actions} : StopwatchActionsProps) {
                         function borderColor(action: string) {
                             switch(action) {
                                 case "start": return "border-lime-300"
-                                case "pause": return "border-amber-300"
-                                case "resume": return "border-cyan-300"
                                 case "stop": return "border-red-300"
                             }
                             return ""
@@ -28,8 +26,6 @@ export default function StopWatchActions({actions} : StopwatchActionsProps) {
                         function backgroundColor(action: string) {
                             switch(action) {
                                 case "start": return "bg-lime-100"
-                                case "pause": return "bg-amber-100"
-                                case "resume": return "bg-cyan-100"
                                 case "stop": return "bg-red-100"
                             }
                             return ""

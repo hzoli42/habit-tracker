@@ -10,16 +10,14 @@ export type StopwatchButtonProps = {
     time: StopwatchTime;
     setTime: Dispatch<SetStateAction<StopwatchTime>>;
     title: string;
-    isActive: boolean;
-    setIsActive: Dispatch<SetStateAction<boolean>>;
+    isRunning: boolean;
+    setIsRunning: Dispatch<SetStateAction<boolean>>;
     sessionId: string;
     setSessionId: Dispatch<SetStateAction<string>>;
-    actions: Action[]
-    setActions: Dispatch<SetStateAction<Action[]>>;
 }
 
 export default function StopwatchButtons(
-    {time, setTime, title, isActive, setIsActive, sessionId, setSessionId, actions, setActions} : StopwatchButtonProps
+    {time, setTime, title, isRunning, setIsRunning, sessionId, setSessionId} : StopwatchButtonProps
     ) {
    
     function incrementSecond() {
@@ -31,18 +29,19 @@ export default function StopwatchButtons(
 
     function newAction(action: string): Action {
         const currentTime = Date.now() / 1000
-        return {timestamp: currentTime, stopwatch_time: time, action: action}
+        return {timestamp: currentTime, stopwatch_time: time, event: action}
     }
 
     async function start() {
-        await fetch('http://0.0.0.0:80/sessions/start', {
+        await fetch('http://0.0.0.0:80/session/start', {
             method: "POST",
             mode: "cors",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 user_id: "test",
                 title: title,
-                labels: []
+                labels: [],
+                action: newAction("start")
             })
         })
         .then(response => response.json())
@@ -50,40 +49,36 @@ export default function StopwatchButtons(
             console.log(data.id)
             setSessionId(data.id)
         })
-        setIsActive(true)
-        setActions(actions.concat(newAction('start')))
+        setIsRunning(true)
     }
 
-    function toggle() {
-        if (isActive) {
-            setActions(actions.concat(newAction('pause')))
-        } else {
-            setActions(actions.concat(newAction('resume')))
-        }
-        setIsActive(!isActive);
-    }
+    // function toggle() {
+    //     if (isActive) {
+    //         setActions(actions.concat(newAction('pause')))
+    //     } else {
+    //         setActions(actions.concat(newAction('resume')))
+    //     }
+    //     setIsActive(!isActive);
+    // }
     
     async function stop() {
-        const postActions = actions.concat(newAction('stop'))
-        postActions.forEach(a => console.log(a.action))
-        await fetch('http://0.0.0.0:80/sessions/stop', {
+        await fetch('http://0.0.0.0:80/session/stop', {
             method: "POST",
             mode: "cors",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 id: sessionId,
-                actions: postActions
+                action: newAction("stop") 
             })
         });
-        setIsActive(false);
+        setIsRunning(false);
         setTime({hours: 0, minutes: 0, seconds: 0});
         setSessionId("")
-        setActions([])
     }
 
     useEffect(() => {
         let interval: NodeJS.Timer | undefined = undefined;
-        if (isActive) {
+        if (isRunning) {
             interval = setInterval(() => {
                 incrementSecond();
             }, 1000);
@@ -91,55 +86,19 @@ export default function StopwatchButtons(
             clearInterval(interval);
         }
         return () => clearInterval(interval);
-    }, [isActive, time]);
-
-    function displayStopwatchIsReset() {
-        return (
-            <div className="grid grid-flow-col grid-cols-2 gap-4">
-                <div>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <ShadButton>Select session label <ArrowDropDownIcon /></ShadButton>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56">
-                        <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                    </DropdownMenuContent>
-                </DropdownMenu>
-                </div>
-                <div>
-                    <Button className="bg-green-400" variant="contained" onClick={start} fullWidth>
-                        Start
-                    </Button>
-                </div>
-            </div>
-        )
-    }
-
-    function displayStopwatchIsRunning() {
-        return (
-            <div className="grid grid-flow-col grid-cols-2 gap-4">
-                <div>
-                    <Button variant="outlined" onClick={toggle} fullWidth>
-                        {isActive ? "Pause" : "Resume"}
-                    </Button>
-                </div>
-                <div>
-                    <Button className="bg-red-500" variant="contained" onClick={stop} fullWidth>
-                        Stop
-                    </Button>
-                </div>
-            </div>
-        )
-    }
+    }, [isRunning, time]);
 
     return (
         <>
-            {   
-                !isActive && time.hours === 0 && time.minutes === 0 && time.seconds === 0 && sessionId === ""
-                ? displayStopwatchIsReset()
-                : displayStopwatchIsRunning()
-            }
+            <div className="grid grid-flow-col grid-cols-2 gap-4">
+                <div>
+                    {
+                        !isRunning
+                        ? <Button className="bg-green-400" variant="contained" onClick={start} fullWidth>Start</Button>
+                        : <Button className="bg-red-400" variant="contained" onClick={stop} fullWidth>Stop</Button>
+                    }
+                </div>
+            </div>
         </>
     );
 };

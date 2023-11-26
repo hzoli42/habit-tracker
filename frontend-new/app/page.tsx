@@ -11,7 +11,7 @@ export type StopwatchTime = {
 export type Action = {
   timestamp: number;
   stopwatch_time: StopwatchTime;
-  action: string;
+  event: string;
 }
 
 export default function Home() {
