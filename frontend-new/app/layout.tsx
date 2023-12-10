@@ -9,6 +9,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+        <head>
+          <style>
+            @import url('https://fonts.googleapis.com/css2?family=Monomaniac+One&display=swap');
+          </style>
+        </head>
         <body>
           <Navbar />
           {children}

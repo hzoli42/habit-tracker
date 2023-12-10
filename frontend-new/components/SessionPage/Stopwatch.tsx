@@ -14,11 +14,11 @@ export default function Stopwatch() {
 
     return (
         <>
-            <div class="grid grid-cols-4">
-                <div class="col-span-3">
+            <div className="grid grid-cols-4">
+                <div className="col-span-3">
                     <StopwatchTimer time={time} />
                 </div>
-                <div class="grid content-center gap-4">
+                <div className="grid content-center gap-4">
                     <Input placeholder="Title" onChange={e => setTitle(e.target.value)}/>
                     <StopwatchButtons 
                     time={time} setTime={setTime} title={title} isRunning={isRunning} setIsRunning={setIsRunning} 
