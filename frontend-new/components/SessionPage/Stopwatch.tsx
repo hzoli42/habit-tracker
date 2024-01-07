@@ -1,6 +1,6 @@
 import { Action, StopwatchTime } from "@/app/page";
 import StopwatchButtons from "./StopwatchButtons";
-import StopwatchTimer from "./StopwatchTimer";
+import StopwatchClock from "./StopwatchClock";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 
@@ -16,7 +16,7 @@ export default function Stopwatch() {
         <>
             <div className="grid grid-cols-4">
                 <div className="col-span-3">
-                    <StopwatchTimer time={time} />
+                    <StopwatchClock time={time} />
                 </div>
                 <div className="grid content-center gap-4">
                     <Input placeholder="Title" onChange={e => setTitle(e.target.value)}/>
