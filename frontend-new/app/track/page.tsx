@@ -1,6 +1,6 @@
 'use client'
 
-import Stopwatch from "@/components/SessionPage/Stopwatch";
+import Stopwatch from "@/components/TrackPage/Stopwatch";
 
 export type StopwatchTime = {
   hours: number;
