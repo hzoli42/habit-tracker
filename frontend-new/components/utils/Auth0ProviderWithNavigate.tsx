@@ -32,19 +32,21 @@ import React from "react";
 //   );
 // };
 
-export default function Auth0ProviderWithNavigate(children: React.ReactNode) {
+export default function Auth0ProviderWithNavigate({children}: {children: React.ReactNode}) {
   const router = useRouter()
 
-  const domain = process.env.REACT_APP_AUTH0_DOMAIN;
-  const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
-  const redirectUri = process.env.REACT_APP_AUTH0_CALLBACK_URL;
+  const domain = process.env.NEXT_PUBLIC_REACT_APP_AUTH0_DOMAIN;
+  const clientId = process.env.NEXT_PUBLIC_REACT_APP_AUTH0_CLIENT_ID;
+  const redirectUri = process.env.NEXT_PUBLIC_REACT_APP_AUTH0_CALLBACK_URL;
 
   function onRedirectCallback(appState: AppState | undefined) {
     router.push(appState?.returnTo || window.location.pathname)
   }
 
-  if (!(domain && clientId && redirectUri)) {
-    return null;
+  if (domain && clientId && redirectUri) {
+    console.log(`Found vars: ${domain}, ${clientId}, ${redirectUri}`)
+  } else {
+    console.log(`Did not find vars: ${domain}, ${clientId}, ${redirectUri}`)
   }
 
   return (

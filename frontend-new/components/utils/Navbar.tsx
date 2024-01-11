@@ -3,6 +3,7 @@
 import { Separator } from "@/components/ui/separator"
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { LoginButton } from "./LoginButton";
 
 export default function Navbar() {
 
@@ -12,9 +13,9 @@ export default function Navbar() {
             <Link href="/" className="font-mono ml-2 flex-grow">Habit Tracker</Link>
             <div className="mr-2 font-mono">
                 {/* <DropdownMenu>
-                    <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+                    <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuLabel><button onClick={() => loginWithRedirect()}>Login</button></DropdownMenuLabel>
+                        <DropdownMenuItem><LoginButton /></DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem><button onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}>Logout</button></DropdownMenuItem>
                         <DropdownMenuItem>Billing</DropdownMenuItem>
@@ -22,6 +23,7 @@ export default function Navbar() {
                         <DropdownMenuItem>Subscription</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu> */}
+                <LoginButton />
             </div>
         </div>
         <div className="container mx-auto max-w-screen-lg">

@@ -1,6 +1,7 @@
 'use client'
-import Navbar from '@/components/Navbar'
+import Navbar from '@/components/utils/Navbar'
 import './globals.css'
+import Auth0ProviderWithNavigate from '@/components/utils/Auth0ProviderWithNavigate'
 
 export default function RootLayout({
   children,
@@ -10,8 +11,10 @@ export default function RootLayout({
   return (
     <html lang="en">
         <body>
-          <Navbar />
-          {children}
+          <Auth0ProviderWithNavigate>
+            <Navbar />
+            {children}
+          </Auth0ProviderWithNavigate>
         </body>
     </html>
   )
