@@ -18,7 +18,7 @@ export default function Home() {
   return (
     <main>
       <div className="container mx-auto max-w-screen-lg">
-          <h1>Welcome to Habit Tracker</h1>
+          <Stopwatch />
       </div>
     </main>
   )
