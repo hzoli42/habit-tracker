@@ -8,6 +8,7 @@ app.include_router(session_router)
 
 origins = [
     "http://0.0.0.0:3000",
+    "http://habit-tracker:3000",
     "http://localhost:3000"
 ]
 

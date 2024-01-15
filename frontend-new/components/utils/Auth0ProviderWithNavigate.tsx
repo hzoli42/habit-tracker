@@ -40,6 +40,7 @@ export default function Auth0ProviderWithNavigate({children}: {children: React.R
   const redirectUri = process.env.NEXT_PUBLIC_REACT_APP_AUTH0_CALLBACK_URL;
 
   function onRedirectCallback(appState: AppState | undefined) {
+    console.log(`Redirecting to ${appState?.returnTo}`)
     router.push(appState?.returnTo || window.location.pathname)
   }
 

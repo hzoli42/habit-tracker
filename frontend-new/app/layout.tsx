@@ -1,7 +1,6 @@
-'use client'
 import Navbar from '@/components/utils/Navbar'
 import './globals.css'
-import Auth0ProviderWithNavigate from '@/components/utils/Auth0ProviderWithNavigate'
+import { UserProvider } from '@auth0/nextjs-auth0/client';
 
 export default function RootLayout({
   children,
@@ -9,13 +8,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
+    
     <html lang="en">
+      <UserProvider>
         <body>
-          <Auth0ProviderWithNavigate>
-            <Navbar />
-            {children}
-          </Auth0ProviderWithNavigate>
+          <Navbar />
+          {children}    
         </body>
+      </UserProvider>
     </html>
   )
 }

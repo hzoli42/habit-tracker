@@ -4,8 +4,11 @@ import { Separator } from "@/components/ui/separator"
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { LoginButton } from "./LoginButton";
+import { useAuth0 } from "@auth0/auth0-react";
+import { LogoutButton } from "./LogoutButton";
 
 export default function Navbar() {
+    const { isAuthenticated } = useAuth0();
 
   return (
     <div className="h-12">
@@ -24,6 +27,7 @@ export default function Navbar() {
                     </DropdownMenuContent>
                 </DropdownMenu> */}
                 <LoginButton />
+                <LogoutButton />
             </div>
         </div>
         <div className="container mx-auto max-w-screen-lg">
