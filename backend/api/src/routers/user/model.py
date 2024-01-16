@@ -2,11 +2,20 @@ from dataclasses import dataclass
 
 
 @dataclass
-class UserLoginIn:
+class UserNewIn:
     id: str
     name: str
     email: str
+    nickname: str
+
 
 @dataclass
-class UserLoginOut:
+class UserAddLabels:
     id: str
+    labels: list[str]
+
+
+@dataclass
+class UserDeleteLabels:
+    id: str
+    labels: list[str]

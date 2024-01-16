@@ -1,10 +1,13 @@
 from fastapi import FastAPI
 from api.src.routers.session.router import router as session_router
+from api.src.routers.user.router import router as user_router
+
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 app.include_router(session_router)
+app.include_router(user_router)
 
 origins = [
     "http://0.0.0.0:3000",

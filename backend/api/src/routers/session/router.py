@@ -6,8 +6,6 @@ from api.src.dependencies import mongo_db_client, uuid_generator
 
 import api.src.mongodb.session as mongodb_model
 from pymongo.database import Database
-import dataclasses
-import uuid
 
 
 router = APIRouter()
@@ -53,7 +51,7 @@ async def get_session(id: str,
     return get_session_by_id(id, db)
 
 
-@router.get("/session/{user_id}/all")
+@router.get("/session/all/{user_id}")
 async def user_all_session(user_id: str,
                            db: Annotated[Database, Depends(mongo_db_client)]) -> SessionAllOut:
     sessions = db.sessions.find({"user_id": f"{user_id}"})
