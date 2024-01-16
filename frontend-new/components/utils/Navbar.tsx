@@ -18,19 +18,16 @@ export default function Navbar() {
         <div className="flex items-center container mx-auto max-w-screen-lg my-2">
             <Link href="/" className="font-mono ml-2 flex-grow">Habit Tracker</Link>
             <div className="mr-2 font-mono">
-                {/* <DropdownMenu>
+                <DropdownMenu>
                     <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuItem><LoginButton /></DropdownMenuItem>
+                        <DropdownMenuItem>
+                        {(!user) ? <LoginButton /> : <LogoutButton />}
+                        </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem><button onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}>Logout</button></DropdownMenuItem>
-                        <DropdownMenuItem>Billing</DropdownMenuItem>
-                        <DropdownMenuItem>Team</DropdownMenuItem>
-                        <DropdownMenuItem>Subscription</DropdownMenuItem>
+                        <DropdownMenuItem><a href="/track">Track</a></DropdownMenuItem>
                     </DropdownMenuContent>
-                </DropdownMenu> */}
-                {(!user) && <LoginButton />}
-                {(user) && <LogoutButton />}
+                </DropdownMenu>
             </div>
         </div>
         <div className="container mx-auto max-w-screen-lg">
