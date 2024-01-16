@@ -5,13 +5,9 @@ import React from "react";
 export const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
 
-  const handleLogin = () => {
-    fetch('/api/auth/login', {mode: 'no-cors'})
-  };
-
   return (
-    <button className="button__login" onClick={handleLogin}>
-      Login
+    <button className="button__login">
+       <a href="/api/auth/login">Log In</a>
     </button>
   );
 };

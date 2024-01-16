@@ -6,9 +6,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { LoginButton } from "./LoginButton";
 import { useAuth0 } from "@auth0/auth0-react";
 import { LogoutButton } from "./LogoutButton";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 export default function Navbar() {
     const { isAuthenticated } = useAuth0();
+    const { user, error, isLoading } = useUser();
+
 
   return (
     <div className="h-12">
@@ -26,8 +29,8 @@ export default function Navbar() {
                         <DropdownMenuItem>Subscription</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu> */}
-                <LoginButton />
-                <LogoutButton />
+                {(!user) && <LoginButton />}
+                {(user) && <LogoutButton />}
             </div>
         </div>
         <div className="container mx-auto max-w-screen-lg">

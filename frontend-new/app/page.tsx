@@ -32,16 +32,24 @@ export default function Home() {
   if (user) {
     return (
       <div>
-        Welcome {user.name}! <a href="/api/auth/logout">Logout</a>
+        {/* Welcome {user.name}! <a href="/api/auth/logout">Logout</a> */}
+        <p className="text-[40px]">Gratulujem ty truľko, konečne si fixol ten pojebaný login!</p>
       </div>
     );
   }
 
   return (
-    <>
-      <a href="/api/auth/login">Login</a>;
-      <a href="/api/auth/logout">Logout</a>;
-    </>
+    <div className="flex items-center container mx-auto max-w-screen-lg my-2">
+      <article className="prose lg:prose-xl">
+        <h1>Welcome to Habit Tracker!</h1>
+        <h3>You can use it:</h3>
+        <ul className="list-disc">
+          <li>As a stopwatch to track your work</li>
+          <li>As a timer to track specific time windows</li>
+          <li>(In the future) as a data-driven platform to optimise your work/study sessions</li>
+        </ul>
+      </article>
+    </div>
   ) 
   
   // return (

@@ -5,13 +5,9 @@ import React from "react";
 export const LogoutButton = () => {
   const { logout } = useAuth0();
 
-  const handleLogout = () => {
-    fetch('/api/auth/logout', {mode: 'no-cors'})
-  };
-
   return (
-    <button className="button__logout" onClick={handleLogout}>
-      Log Out
+    <button className="button__logout">
+      <a href="/api/auth/logout">Log Out</a>
     </button>
   );
 };
