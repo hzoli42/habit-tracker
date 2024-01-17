@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pymongo.database import Database
 
 from api.src.dependencies import mongo_db_client
-from api.src.routers.user.model import UserAddLabels, UserDeleteLabels, UserNewIn
+from api.src.routers.user.model import UserAddLabelsIn, UserDeleteLabelsIn, UserGetLabelsOut, UserNewIn
 import api.src.mongodb.user as mongodb_model
 
 
@@ -33,7 +33,7 @@ def register_user(input: UserNewIn,
 
 
 @router.post("/user/{user_id}/labels")
-def user_add_labels(input: UserAddLabels,
+def user_add_labels(input: UserAddLabelsIn,
                     db: Annotated[Database, Depends(mongo_db_client)]) -> mongodb_model.User:
     db.users.update_one(
         {"id": input.id},
@@ -43,8 +43,16 @@ def user_add_labels(input: UserAddLabels,
     return get_user_by_id(input.id, db)
 
 
+@router.get("/user/{user_id}/labels")
+def user_get_labels(user_id: str,
+                    db: Annotated[Database, Depends(mongo_db_client)]) -> UserGetLabelsOut:
+    user_data = get_user_by_id(user_id, db)
+
+    return UserGetLabelsOut(id=user_data.id, labels=user_data.labels)
+
+
 @router.delete("/user/{user_id}/labels")
-def user_delete_labels(input: UserDeleteLabels,
+def user_delete_labels(input: UserDeleteLabelsIn,
                        db: Annotated[Database, Depends(mongo_db_client)]) -> mongodb_model.User:
     db.users.update_one(
         {"id": input.id},

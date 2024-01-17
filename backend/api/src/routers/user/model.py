@@ -10,12 +10,18 @@ class UserNewIn:
 
 
 @dataclass
-class UserAddLabels:
+class UserAddLabelsIn:
     id: str
     labels: list[str]
 
 
 @dataclass
-class UserDeleteLabels:
+class UserDeleteLabelsIn:
+    id: str
+    labels: list[str]
+
+
+@dataclass
+class UserGetLabelsOut:
     id: str
     labels: list[str]
