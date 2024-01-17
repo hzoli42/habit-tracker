@@ -17,75 +17,93 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import Chip from '@mui/material/Chip'
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-]
+// const frameworks = [
+//   {
+//     value: "next.js",
+//     label: "Next.js",
+//   },
+//   {
+//     value: "sveltekit",
+//     label: "SvelteKit",
+//   },
+//   {
+//     value: "nuxt.js",
+//     label: "Nuxt.js",
+//   },
+//   {
+//     value: "remix",
+//     label: "Remix",
+//   },
+//   {
+//     value: "astro",
+//     label: "Astro",
+//   },
+// ]
 
-export function ComboboxDemo() {
+const labels = ["maths", "biology", "physics", "history"]
+
+export function LabelCombobox() {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+  const [values, setValues] = React.useState(labels)
 
-  return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-[200px] justify-between"
-        >
-          {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Select framework..."}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
-          <CommandInput placeholder="Search framework..." />
-          <CommandEmpty>No framework found.</CommandEmpty>
-          <CommandGroup>
-            {frameworks.map((framework) => (
-              <CommandItem
-                key={framework.value}
-                value={framework.value}
-                onSelect={(currentValue) => {
-                  setValue(currentValue === value ? "" : currentValue)
-                  setOpen(false)
-                }}
-              >
-                <Check
-                  className={cn(
-                    "mr-2 h-4 w-4",
-                    value === framework.value ? "opacity-100" : "opacity-0"
-                  )}
-                />
-                {framework.label}
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </Command>
-      </PopoverContent>
-    </Popover>
-  )
+    function handleDelete(currentValue: string) {
+        console.info("You clicked the delete button on a Chip component")
+        setValues(values.filter(v => v != currentValue))
+    }
+
+    function onSelectLabel(currentValue: string) {
+        let newValues: string[] = []
+        !values.includes(currentValue)
+            ? newValues = values.concat([currentValue])
+            : newValues = values.filter(v => v != currentValue)
+        setValues(newValues)
+    }
+
+    return (
+        <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+                <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open}
+                    className="flex justify-between flex-wrap h-auto"
+                >
+                    {
+                        values
+                        ? values.map(value => <Chip label={value} onDelete={() => handleDelete(value)} />)
+                        : "Select labels..."
+                    }
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent className="p-0">
+                <Command>
+                    <CommandInput placeholder="Select labels..."/>
+                    <CommandEmpty>No label found</CommandEmpty>
+                    <CommandGroup>
+                        {
+                            labels.map(label => (
+                                <CommandItem
+                                    key={label}
+                                    value={label}
+                                    onSelect={onSelectLabel}
+                                >
+                                    <Check
+                                        className={cn(
+                                            "mr-2 h-4 w-4",
+                                            values.includes(label) ? "opacity-100" : "opacity-0"
+                                        )}
+                                    />
+                                    {label}
+                                </CommandItem>
+
+                            ))
+                        }
+                    </CommandGroup>
+                </Command>
+            </PopoverContent>
+        </Popover>
+    )
 }

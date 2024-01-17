@@ -4,7 +4,7 @@ import StopwatchButtons from "./StopwatchButtons";
 import StopwatchClock from "./StopwatchClock";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { ComboboxDemo } from "./LabelCombobox";
+import { LabelCombobox } from "./LabelCombobox";
 
 
 
@@ -91,9 +91,9 @@ export default function Stopwatch() {
                 <div className="col-span-3">
                     <StopwatchClock time={time} setTime={setTime} setStopwatchDirection={setStopwatchDirection} isRunning={isRunning}/>
                 </div>
-                <div className="grid content-center gap-4">
+                <div className="grid grid-cols-1 content-center gap-4">
                     <Input placeholder="Title" onChange={e => setTitle(e.target.value)}/>
-                    <ComboboxDemo />
+                    <LabelCombobox />
                     <StopwatchButtons start={start} stop={stop} isRunning={isRunning}/> 
                 </div>   
             </div>
