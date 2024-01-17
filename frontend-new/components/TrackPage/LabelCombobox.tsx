@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
 
@@ -18,73 +16,39 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import Chip from '@mui/material/Chip'
-import { useEffect } from "react"
-import { useUser } from "@auth0/nextjs-auth0/client"
+import { Dispatch, SetStateAction, useState } from "react"
 
-// const frameworks = [
-//   {
-//     value: "next.js",
-//     label: "Next.js",
-//   },
-//   {
-//     value: "sveltekit",
-//     label: "SvelteKit",
-//   },
-//   {
-//     value: "nuxt.js",
-//     label: "Nuxt.js",
-//   },
-//   {
-//     value: "remix",
-//     label: "Remix",
-//   },
-//   {
-//     value: "astro",
-//     label: "Astro",
-//   },
-// ]
 
-// const labels = ["maths", "biology", "physics", "history"]
+export type LabelComboboxProps = {
+    labels: string[]
+    setLabels: Dispatch<SetStateAction<string[]>>
+    labelValues: string[]
+    setLabelValues: Dispatch<SetStateAction<string[]>>
+}
 
-export function LabelCombobox() {
-    const [open, setOpen] = React.useState(false)
-    const [labels, setLabels] = React.useState<string[]>([])
-    const [values, setValues] = React.useState<string[]>([])
-    const [labelsUpToDate, setLabelsUpToDate] = React.useState(false)
-    const { user, error, isLoading } = useUser();
+export function LabelCombobox({ labels, setLabels, labelValues, setLabelValues }: LabelComboboxProps) {
+    const [open, setOpen] = useState(false)
+    const [labelSearchInput, setLabelSearchInput] = useState("")
 
-    useEffect(() => {
-        if (isLoading) {
-            return
-        }
-        console.log(user)
-        if (!labelsUpToDate) {
-            fetch(`http://0.0.0.0:5000/user/${user?.sub}/labels`, {
-                method: "GET",
-                mode: "cors",
-                headers: { "Content-Type": "application/json" },
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(`Id = ${data.id}, Labels = ${data.labels}`)
-                    setLabels(data.labels)
-                })
-            setLabelsUpToDate(true)
-        }
-    }, [labelsUpToDate, isLoading])
 
 
     function handleDelete(currentValue: string) {
         console.info("You clicked the delete button on a Chip component")
-        setValues(values.filter(v => v != currentValue))
+        setLabelValues(labelValues.filter(v => v != currentValue))
     }
 
     function onSelectLabel(currentValue: string) {
         let newValues: string[] = []
-        !values.includes(currentValue)
-            ? newValues = values.concat([currentValue])
-            : newValues = values.filter(v => v != currentValue)
-        setValues(newValues)
+        !labelValues.includes(currentValue)
+            ? newValues = labelValues.concat([currentValue])
+            : newValues = labelValues.filter(v => v != currentValue)
+        setLabelValues(newValues)
+    }
+
+    function addNewLabel() {
+        if (!labelValues.includes(labelSearchInput)) {
+            setLabelValues(labelValues.concat(labelSearchInput))
+        }
     }
 
     return (
@@ -97,17 +61,26 @@ export function LabelCombobox() {
                     className="flex justify-between flex-wrap h-auto"
                 >
                     {
-                        values.length != 0
-                            ? values.map(value => <Chip label={value} onDelete={() => handleDelete(value)} />)
+                        labelValues.length != 0
+                            ? labelValues.map(value => <Chip label={value} onDelete={() => handleDelete(value)} />)
                             : "Select labels..."
                     }
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    {labelValues.length == 0 && <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0">
                 <Command>
-                    <CommandInput placeholder="Select labels..." />
-                    <CommandEmpty>No label found</CommandEmpty>
+                    <CommandInput placeholder="Select labels..." onValueChange={(v) => setLabelSearchInput(v)} />
+                    <CommandEmpty>
+                        <Button
+                            variant="outline"
+                            onClick={addNewLabel}
+                            className="flex justify-center gap-4 w-full px-8"
+                        >
+                            <p>+ add new label</p>
+                            <Chip label={labelSearchInput} />
+                        </Button>
+                    </CommandEmpty>
                     <CommandGroup>
                         {
                             labels.map(label => (
@@ -119,7 +92,7 @@ export function LabelCombobox() {
                                     <Check
                                         className={cn(
                                             "mr-2 h-4 w-4",
-                                            values.includes(label) ? "opacity-100" : "opacity-0"
+                                            labelValues.includes(label) ? "opacity-100" : "opacity-0"
                                         )}
                                     />
                                     {label}
