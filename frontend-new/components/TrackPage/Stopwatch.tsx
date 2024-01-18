@@ -74,7 +74,7 @@ export default function Stopwatch() {
             mode: "cors",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                user_id: "test",
+                user_id: user ? user.sub : "undefined",
                 title: title,
                 labels: labelValues,
                 action: newAction("start")
