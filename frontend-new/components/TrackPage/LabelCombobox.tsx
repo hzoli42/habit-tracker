@@ -24,9 +24,10 @@ import { labelsAtom } from "@/atoms/jotai"
 
 export type LabelComboboxProps = {
     startingLabels?: string[]
+    onLabelsChange?: (selectedLabels: string[]) => void
 }
 
-export function LabelCombobox({ startingLabels }: LabelComboboxProps) {
+export function LabelCombobox({ startingLabels, onLabelsChange }: LabelComboboxProps) {
     const [open, setOpen] = useState(false)
     const [labelSearchInput, setLabelSearchInput] = useState("")
     const [selectedLabels, setSelectedLabels] = useState<string[]>(startingLabels ?? [])
@@ -36,15 +37,18 @@ export function LabelCombobox({ startingLabels }: LabelComboboxProps) {
 
     function handleDelete(currentValue: string) {
         console.info("You clicked the delete button on a Chip component")
-        setSelectedLabels(selectedLabels.filter(v => v != currentValue))
+        const newSelectedLabels = selectedLabels.filter(v => v != currentValue)
+        setSelectedLabels(newSelectedLabels)
+        onLabelsChange ? onLabelsChange(newSelectedLabels) : null
     }
 
     function onSelectLabel(currentValue: string) {
-        let newCurrentLabels: string[] = []
+        let newSelectedLabels: string[] = []
         !selectedLabels.includes(currentValue)
-            ? newCurrentLabels = selectedLabels.concat([currentValue])
-            : newCurrentLabels = selectedLabels.filter(v => v != currentValue)
-        setSelectedLabels(newCurrentLabels)
+            ? newSelectedLabels = selectedLabels.concat([currentValue])
+            : newSelectedLabels = selectedLabels.filter(v => v != currentValue)
+        setSelectedLabels(newSelectedLabels)
+        onLabelsChange ? onLabelsChange(newSelectedLabels) : null
     }
 
     async function addNewLabel() {
@@ -59,7 +63,9 @@ export function LabelCombobox({ startingLabels }: LabelComboboxProps) {
             })
         })
         if (!selectedLabels.includes(labelSearchInput)) {
-            setSelectedLabels(selectedLabels.concat([labelSearchInput]))
+            const newSelectedLabels = selectedLabels.concat([labelSearchInput])
+            setSelectedLabels(newSelectedLabels)
+            onLabelsChange ? onLabelsChange(newSelectedLabels) : null
         }
         setLabels(user?.sub)
     }

@@ -1,7 +1,7 @@
 
 from typing import Annotated, Callable
 from fastapi import APIRouter, Depends, HTTPException
-from .model import SessionActionIn, SessionAllOut, SessionStartIn
+from .model import SessionActionIn, SessionAllOut, SessionModifyLabelsIn, SessionStartIn
 from api.src.dependencies import mongo_db_client, uuid_generator
 
 import api.src.mongodb.session as mongodb_model
@@ -48,6 +48,17 @@ async def action_session(input: SessionActionIn,
 @router.get("/session/{id}")
 async def get_session(id: str,
                       db: Annotated[Database, Depends(mongo_db_client)]) -> mongodb_model.Session:
+    return get_session_by_id(id, db)
+
+
+@router.post("/session/{id}/labels")
+async def modify_session(id: str,
+                         input: SessionModifyLabelsIn,
+                         db: Annotated[Database, Depends(mongo_db_client)]) -> mongodb_model.Session:
+    db.sessions.update_one(
+        {"id": id},
+        {"$set": {"labels": input.labels}}
+    )
     return get_session_by_id(id, db)
 
 

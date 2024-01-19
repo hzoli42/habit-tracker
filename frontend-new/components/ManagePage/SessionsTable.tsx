@@ -2,11 +2,11 @@
 
 "use client"
 
-import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
+import { ColumnDef, Row, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
 import { LabelCombobox } from "../TrackPage/LabelCombobox"
 import { useUser } from "@auth0/nextjs-auth0/client"
-import { useEffect, useState } from "react"
+import { Key, useEffect, useState } from "react"
 import { useAtom } from "jotai"
 import { labelsAtom } from "@/atoms/jotai"
 
@@ -56,6 +56,48 @@ export const columns: ColumnDef<Session>[] = [
     },
 ]
 
+function SessionTableRow(data: { row: Row<Session> }) {
+    function onLabelsChange(selectedLabels: string[]) {
+        fetch(`http://0.0.0.0:5000/session/${data.row.original.id}/labels`, {
+            method: "POST",
+            mode: "cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                labels: selectedLabels
+            })
+        })
+    }
+
+    return (
+        <TableRow
+            key={data.row.id}
+            data-state={data.row.getIsSelected() && "selected"}
+        >
+            {data.row.getVisibleCells().map((cell) => {
+                console.log(cell)
+                console.log(cell.getValue())
+                if (cell.column.id == "labels") {
+                    const currentLabels = cell.getValue<string[]>()
+                    return (
+                        <TableCell>
+                            <LabelCombobox startingLabels={currentLabels} onLabelsChange={onLabelsChange} />
+                        </TableCell>
+                    )
+
+                } else {
+                    return (
+                        <TableCell key={cell.id}>
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                    )
+                }
+            })}
+        </TableRow>
+    )
+}
+
+
+
 export default function DataTable() {
     const { user, error, isLoading } = useUser();
     const [data, setData] = useState<Session[]>([])
@@ -95,10 +137,6 @@ export default function DataTable() {
             })
     }, [isLoading])
 
-    function onLabelsChange(selectedLabels: string[], session_id: string) {
-
-    }
-
     return (
         <div className="rounded-md border">
             <Table>
@@ -123,30 +161,7 @@ export default function DataTable() {
                 <TableBody>
                     {table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map((row) => (
-                            <TableRow
-                                key={row.id}
-                                data-state={row.getIsSelected() && "selected"}
-                            >
-                                {row.getVisibleCells().map((cell) => {
-                                    console.log(cell)
-                                    console.log(cell.getValue())
-                                    if (cell.column.id == "labels") {
-                                        const currentLabels = cell.getValue<string[]>()
-                                        return (
-                                            <TableCell>
-                                                <LabelCombobox startingLabels={currentLabels} />
-                                            </TableCell>
-                                        )
-
-                                    } else {
-                                        return (
-                                            <TableCell key={cell.id}>
-                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                            </TableCell>
-                                        )
-                                    }
-                                })}
-                            </TableRow>
+                            <SessionTableRow row={row} />
                         ))
                     ) : (
                         <TableRow>
