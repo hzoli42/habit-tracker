@@ -1,7 +1,10 @@
 'use client'
 
+import { labelsAtom } from "@/atoms/jotai";
 import Stopwatch from "@/components/TrackPage/Stopwatch";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { useAtom } from "jotai";
+import { useEffect } from "react";
 
 
 
@@ -19,8 +22,17 @@ export type Action = {
 
 export default function Home() {
   const { user, error, isLoading } = useUser();
+  const [labels, setLabels] = useAtom(labelsAtom)
 
   if (error) return <div>{error.message}</div>;
+
+  useEffect(() => {
+    if (isLoading) {
+      return
+    }
+    setLabels(user?.sub)
+  }, [isLoading])
+
 
   return (
     <div className="flex items-center container mx-auto max-w-screen-lg my-2">
@@ -34,5 +46,5 @@ export default function Home() {
         </ul>
       </article>
     </div>
-  ) 
+  )
 }

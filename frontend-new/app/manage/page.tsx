@@ -1,61 +1,20 @@
 'use client'
-import SessionsTable, { Session, columns } from "@/components/ManagePage/SessionsTable";
+import { labelsAtom } from "@/atoms/jotai";
+import SessionsTable from "@/components/ManagePage/SessionsTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { useEffect, useState } from "react";
-
-
-export type SessionResponse = {
-    id: string,
-    title: string,
-    user_id: string,
-    labels: string[],
-    actions: [
-        {
-            timestamp: number,
-            stopwatch_time: {
-                hours: number,
-                minutes: number,
-                seconds: number
-            },
-            event: string
-        }
-    ]
-}
+import { useAtom } from "jotai";
+import { useEffect } from "react";
 
 export default function Home() {
     const { user, error, isLoading } = useUser();
-    const [data, setData] = useState<Session[]>([])
-
+    const [labels, setLabels] = useAtom(labelsAtom)
 
     useEffect(() => {
         if (isLoading) {
             return
         }
-        console.log(user)
-        fetch(`http://0.0.0.0:5000/session/all/${user?.sub}`, {
-            method: "GET",
-            mode: "cors",
-            headers: { "Content-Type": "application/json" },
-        })
-            .then(response => response.json())
-            .then(response_data => {
-                setData(response_data.sessions
-                    .map((session: SessionResponse) => {
-                        const start = session.actions.filter(a => a.event == "start")[0]
-                        const stop = session.actions.filter(a => a.event == "stop")[0]
-                        const durationObject = new Date(stop.timestamp * 1000 - start.timestamp * 1000)
-                        return {
-                            id: session.id,
-                            title: session.title,
-                            labels: session.labels,
-                            duration: `${durationObject.getUTCHours()}h ${durationObject.getUTCMinutes()}m ${durationObject.getUTCSeconds()}s`,
-                            date: new Date(start.timestamp * 1000).toDateString()
-                        }
-                    })
-
-                )
-            })
+        setLabels(user?.sub)
     }, [isLoading])
 
     return (
@@ -68,7 +27,7 @@ export default function Home() {
                     </TabsList>
                     <TabsContent value="sessions">
                         <article className="prose lg:prose-xl py-4"><h1>Sessions</h1></article>
-                        <SessionsTable columns={columns} data={data} />
+                        <SessionsTable />
                     </TabsContent>
                     <TabsContent value="analysis">
                         <div></div>

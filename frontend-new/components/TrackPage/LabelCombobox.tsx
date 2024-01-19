@@ -17,38 +17,51 @@ import {
 } from "@/components/ui/popover"
 import Chip from '@mui/material/Chip'
 import { Dispatch, SetStateAction, useState } from "react"
+import { useUser } from "@auth0/nextjs-auth0/client"
+import { useAtom } from "jotai"
+import { labelsAtom } from "@/atoms/jotai"
 
 
 export type LabelComboboxProps = {
-    labels: string[]
-    setLabels: Dispatch<SetStateAction<string[]>>
-    labelValues: string[]
-    setLabelValues: Dispatch<SetStateAction<string[]>>
+    startingLabels?: string[]
 }
 
-export function LabelCombobox({ labels, setLabels, labelValues, setLabelValues }: LabelComboboxProps) {
+export function LabelCombobox({ startingLabels }: LabelComboboxProps) {
     const [open, setOpen] = useState(false)
     const [labelSearchInput, setLabelSearchInput] = useState("")
-
+    const [selectedLabels, setSelectedLabels] = useState<string[]>(startingLabels ?? [])
+    const { user, error, isLoading } = useUser();
+    const [labels, setLabels] = useAtom(labelsAtom)
 
 
     function handleDelete(currentValue: string) {
         console.info("You clicked the delete button on a Chip component")
-        setLabelValues(labelValues.filter(v => v != currentValue))
+        setSelectedLabels(selectedLabels.filter(v => v != currentValue))
     }
 
     function onSelectLabel(currentValue: string) {
-        let newValues: string[] = []
-        !labelValues.includes(currentValue)
-            ? newValues = labelValues.concat([currentValue])
-            : newValues = labelValues.filter(v => v != currentValue)
-        setLabelValues(newValues)
+        let newCurrentLabels: string[] = []
+        !selectedLabels.includes(currentValue)
+            ? newCurrentLabels = selectedLabels.concat([currentValue])
+            : newCurrentLabels = selectedLabels.filter(v => v != currentValue)
+        setSelectedLabels(newCurrentLabels)
     }
 
-    function addNewLabel() {
-        if (!labelValues.includes(labelSearchInput)) {
-            setLabelValues(labelValues.concat(labelSearchInput))
+    async function addNewLabel() {
+        const newLabels = labels.concat([labelSearchInput])
+        await fetch(`http://0.0.0.0:5000/user/${user?.sub}/labels`, {
+            method: "POST",
+            mode: "cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                id: `${user?.sub}`,
+                labels: newLabels,
+            })
+        })
+        if (!selectedLabels.includes(labelSearchInput)) {
+            setSelectedLabels(selectedLabels.concat([labelSearchInput]))
         }
+        setLabels(user?.sub)
     }
 
     return (
@@ -61,11 +74,11 @@ export function LabelCombobox({ labels, setLabels, labelValues, setLabelValues }
                     className="flex justify-between flex-wrap h-auto"
                 >
                     {
-                        labelValues.length != 0
-                            ? labelValues.map(value => <Chip label={value} onDelete={() => handleDelete(value)} />)
+                        selectedLabels.length != 0
+                            ? selectedLabels.map(value => <Chip label={value} onDelete={() => handleDelete(value)} />)
                             : "Select labels..."
                     }
-                    {labelValues.length == 0 && <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />}
+                    {selectedLabels.length == 0 && <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0">
@@ -92,7 +105,7 @@ export function LabelCombobox({ labels, setLabels, labelValues, setLabelValues }
                                     <Check
                                         className={cn(
                                             "mr-2 h-4 w-4",
-                                            labelValues.includes(label) ? "opacity-100" : "opacity-0"
+                                            selectedLabels.includes(label) ? "opacity-100" : "opacity-0"
                                         )}
                                     />
                                     {label}
