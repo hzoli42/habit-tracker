@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Button } from '@mui/material';
 import { Action, StopwatchTime } from "../../app/page";
-import { LabelCombobox } from "./LabelCombobox";
+import { LabelCombobox } from "../utils/LabelCombobox";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Input } from "../ui/input";
 
