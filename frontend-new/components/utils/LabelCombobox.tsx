@@ -77,14 +77,15 @@ export function LabelCombobox({ startingLabels, onLabelsChange }: LabelComboboxP
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="flex justify-between flex-wrap h-auto"
+                    className="flex justify-between flex-wrap h-auto group w-full"
                 >
                     {
                         selectedLabels.length != 0
                             ? selectedLabels.map(value => <Chip label={value} onDelete={() => handleDelete(value)} />)
                             : "Select labels..."
                     }
-                    {selectedLabels.length == 0 && <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />}
+
+                    <ChevronsUpDown className="hidden group-hover:block shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0">

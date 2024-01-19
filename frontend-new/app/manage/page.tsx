@@ -1,6 +1,6 @@
 'use client'
 import { labelsAtom } from "@/atoms/jotai";
-import SessionsTable, { Session, columns } from "@/components/ManagePage/SessionsTableColumns";
+import { Session, columns } from "@/components/ManagePage/SessionsTableColumns";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DataTable } from "@/components/utils/DataTable";
 import { useUser } from "@auth0/nextjs-auth0/client";

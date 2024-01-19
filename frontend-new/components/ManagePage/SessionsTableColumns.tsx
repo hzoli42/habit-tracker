@@ -9,6 +9,8 @@ import { useUser } from "@auth0/nextjs-auth0/client"
 import { Key, useEffect, useState } from "react"
 import { useAtom } from "jotai"
 import { labelsAtom } from "@/atoms/jotai"
+import { Button } from "../ui/button"
+import { ChevronsUpDown } from "lucide-react"
 
 
 export type SessionResponse = {
@@ -41,6 +43,22 @@ export const columns: ColumnDef<Session>[] = [
     {
         accessorKey: "title",
         header: "Title",
+        cell: ({ row }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    role="combobox"
+                    aria-expanded={open}
+                    className="flex justify-between flex-wrap h-auto group w-full"
+                >
+                    {
+                        row.original.title
+                    }
+
+                    <ChevronsUpDown className="hidden group-hover:block shrink-0 opacity-50" />
+                </Button>
+            )
+        }
     },
     {
         accessorKey: "labels",
