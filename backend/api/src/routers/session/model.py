@@ -20,5 +20,9 @@ class SessionModifyLabelsIn(BaseModel):
     labels: list[str]
 
 
+class SessionModifyTitleIn(BaseModel):
+    title: str
+
+
 class SessionAllOut(BaseModel):
     sessions: list[Session]

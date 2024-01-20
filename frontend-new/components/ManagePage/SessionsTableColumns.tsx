@@ -44,18 +44,29 @@ export const columns: ColumnDef<Session>[] = [
         accessorKey: "title",
         header: "Title",
         cell: ({ row }) => {
+            const onTitleChange = (title: string) => {
+                fetch(`http://0.0.0.0:5000/session/${row.original.id}/title`, {
+                    method: "POST",
+                    mode: "cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        title: title
+                    })
+                })
+            }
+
             return (
                 <Button
                     variant="ghost"
                     role="combobox"
-                    aria-expanded={open}
                     className="flex justify-between flex-wrap h-auto group w-full"
                 >
                     {
-                        row.original.title
+                        <input
+                            className="focus:outline focus:placeholder:text-white w-full placeholder:text-black"
+                            placeholder={row.original.title}
+                            onBlur={(e) => onTitleChange(e.currentTarget.value)} />
                     }
-
-                    <ChevronsUpDown className="hidden group-hover:block shrink-0 opacity-50" />
                 </Button>
             )
         }
