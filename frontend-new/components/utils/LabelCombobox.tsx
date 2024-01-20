@@ -82,7 +82,7 @@ export function LabelCombobox({ startingLabels, onLabelsChange }: LabelComboboxP
                     {
                         selectedLabels.length != 0
                             ? selectedLabels.map(value => <Chip label={value} onDelete={() => handleDelete(value)} />)
-                            : "Select labels..."
+                            : <p className="text-gray-500">Select labels...</p>
                     }
 
                     <ChevronsUpDown className="hidden group-hover:block shrink-0 opacity-50" />

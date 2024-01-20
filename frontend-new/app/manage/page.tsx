@@ -1,6 +1,7 @@
 'use client'
 import { labelsAtom } from "@/atoms/jotai";
 import { Session, columns } from "@/components/ManagePage/SessionsTableColumns";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DataTable } from "@/components/utils/DataTable";
 import { useUser } from "@auth0/nextjs-auth0/client";
@@ -72,7 +73,12 @@ export default function Home() {
                         <TabsTrigger value="analysis">Analysis</TabsTrigger>
                     </TabsList>
                     <TabsContent value="sessions">
-                        <article className="prose lg:prose-xl py-4"><h1>Sessions</h1></article>
+                        <article className="prose lg:prose-xl py-2"><h1>Sessions</h1></article>
+                        <div className="flex justify-end p-4">
+                            <Button variant="ghost" className="items-center">
+                                <p className="text-[50px] text-gray-500">+</p>
+                            </Button>
+                        </div>
                         <DataTable data={data} columns={columns} />
                     </TabsContent>
                     <TabsContent value="analysis">

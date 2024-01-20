@@ -3,13 +3,11 @@
 import { Separator } from "@/components/ui/separator"
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { LoginButton } from "./LoginButton";
+import MenuButton from "./MenuButton";
 import { useAuth0 } from "@auth0/auth0-react";
-import { LogoutButton } from "./LogoutButton";
 import { useUser } from "@auth0/nextjs-auth0/client";
 
 export default function Navbar() {
-    const { isAuthenticated } = useAuth0();
     const { user, error, isLoading } = useUser();
 
 
@@ -22,11 +20,13 @@ export default function Navbar() {
                         <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
                         <DropdownMenuContent>
                             <DropdownMenuItem>
-                                {(!user) ? <LoginButton /> : <LogoutButton />}
+                                {(!user)
+                                    ? <MenuButton value="Login" link="/auth/api/login" />
+                                    : <MenuButton value="Logout" link="/auth/api/logout" />}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem><a href="/track">Track</a></DropdownMenuItem>
-                            <DropdownMenuItem><a href="/manage">Manage</a></DropdownMenuItem>
+                            <DropdownMenuItem><MenuButton value="Track" link="/track" /></DropdownMenuItem>
+                            <DropdownMenuItem><MenuButton value="Manage" link="/manage" /></DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
