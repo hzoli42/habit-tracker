@@ -6,20 +6,6 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 
-
-
-export type StopwatchTime = {
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
-
-export type Action = {
-  timestamp: number;
-  stopwatch_time: StopwatchTime;
-  event: string;
-}
-
 export default function Home() {
   const { user, error, isLoading } = useUser();
   const [labels, setLabels] = useAtom(labelsAtom)

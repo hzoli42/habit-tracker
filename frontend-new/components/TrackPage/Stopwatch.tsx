@@ -1,5 +1,4 @@
 'use client'
-import { Action, StopwatchTime } from "@/app/page";
 import StopwatchButtons from "./StopwatchInputs";
 import StopwatchClock from "./StopwatchClock";
 import { useEffect, useState } from "react";
@@ -9,6 +8,11 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import StopwatchInputs from "./StopwatchInputs";
 
 
+export type StopwatchTime = {
+    hours: number,
+    minutes: number,
+    seconds: number
+}
 
 export default function Stopwatch() {
     const [time, setTime] = useState<StopwatchTime>({ hours: 0, minutes: 0, seconds: 0 })

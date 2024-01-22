@@ -1,9 +1,10 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Button } from '@mui/material';
-import { Action, StopwatchTime } from "../../app/page";
 import { LabelCombobox } from "../utils/LabelCombobox";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Input } from "../ui/input";
+import { StopwatchTime } from "./Stopwatch";
+import { Action } from "@/app/track/page";
 
 
 export type StopwatchButtonProps = {
@@ -23,7 +24,7 @@ export default function StopwatchInputs({ isRunning, setIsRunning, time, setTime
 
     function newAction(action: string): Action {
         const currentTime = Date.now() / 1000
-        return { timestamp: currentTime, stopwatch_time: time, event: action }
+        return { timestamp: currentTime, event: action }
     }
 
     async function start() {
@@ -82,7 +83,7 @@ export default function StopwatchInputs({ isRunning, setIsRunning, time, setTime
     return (
         <div className="grid grid-cols-1 content-center gap-4">
             <Input placeholder="Title" onChange={e => setTitle(e.target.value)} />
-            <LabelCombobox />
+            <LabelCombobox onLabelsChange={(selectedLabels) => setLabelValues(selectedLabels)} />
             {
                 !isRunning
                     ? <Button className="bg-green-400" variant="contained" onClick={start} fullWidth>Start</Button>

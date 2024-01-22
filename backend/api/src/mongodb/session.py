@@ -3,15 +3,8 @@ from uuid import UUID
 from pydantic import BaseModel
 
 
-class StopwatchTime(BaseModel):
-    hours: int
-    minutes: int
-    seconds: int
-
-
 class Action(BaseModel):
     timestamp: float
-    stopwatch_time: StopwatchTime
     event: str
 
 

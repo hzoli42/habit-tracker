@@ -17,11 +17,6 @@ export type SessionResponse = {
     actions: [
         {
             timestamp: number,
-            stopwatch_time: {
-                hours: number,
-                minutes: number,
-                seconds: number
-            },
             event: string
         }
     ]

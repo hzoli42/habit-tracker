@@ -29,7 +29,6 @@ export default function NewSessionDialog() {
                 labels: labels,
                 action: {
                     timestamp: startTime,
-                    stopwatch_time: { hours: 0, minutes: 0, seconds: 0 },
                     event: "start"
                 }
             })
@@ -46,7 +45,6 @@ export default function NewSessionDialog() {
                 id: sessionId,
                 action: {
                     timestamp: endTime,
-                    stopwatch_time: { hours: 0, minutes: 0, seconds: 0 },
                     event: "stop"
                 }
             })
