@@ -69,8 +69,9 @@ export default function Home() {
                         <TabsTrigger value="analysis">Analysis</TabsTrigger>
                     </TabsList>
                     <TabsContent value="sessions">
-                        <article className="prose lg:prose-xl py-2"><h1>Sessions</h1></article>
-                        <div className="flex justify-end">
+                        <div className="flex justify-between pt-6 pb-2">
+                            <article className="prose lg:prose-xl"><h1>Sessions</h1></article>
+
                             <NewSessionDialog />
                         </div>
                         <DataTable data={data} columns={columns} />
