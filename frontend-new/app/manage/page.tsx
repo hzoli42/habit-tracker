@@ -69,9 +69,8 @@ export default function Home() {
                         <TabsTrigger value="analysis">Analysis</TabsTrigger>
                     </TabsList>
                     <TabsContent value="sessions">
-                        <div className="flex justify-between pt-6 pb-2">
+                        <div className="flex justify-between pt-6 pb-4">
                             <article className="prose lg:prose-xl"><h1>Sessions</h1></article>
-
                             <NewSessionDialog />
                         </div>
                         <DataTable data={data} columns={columns} />

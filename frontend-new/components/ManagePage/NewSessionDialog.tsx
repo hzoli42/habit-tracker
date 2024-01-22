@@ -54,7 +54,11 @@ export default function NewSessionDialog() {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger><p className="text-[50px] text-gray-500">+</p></DialogTrigger>
+            <DialogTrigger>
+                <Button className="bg-green-500 hover:bg-green-600">
+                    + New
+                </Button>
+            </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Enter session details</DialogTitle>
