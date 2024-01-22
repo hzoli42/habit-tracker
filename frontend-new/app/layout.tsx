@@ -1,6 +1,10 @@
+'use client'
 import Navbar from '@/components/utils/Navbar'
 import './globals.css'
 import { UserProvider } from '@auth0/nextjs-auth0/client';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+
 
 export default function RootLayout({
   children,
@@ -11,10 +15,12 @@ export default function RootLayout({
 
     <html lang="en">
       <UserProvider>
-        <body>
-          <Navbar />
-          {children}
-        </body>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <body>
+            <Navbar />
+            {children}
+          </body>
+        </LocalizationProvider>
       </UserProvider>
     </html>
   )

@@ -1,5 +1,6 @@
 'use client'
 import { labelsAtom } from "@/atoms/jotai";
+import NewSessionDialog from "@/components/ManagePage/NewSessionDialog";
 import { Session, columns } from "@/components/ManagePage/SessionsTableColumns";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -74,10 +75,8 @@ export default function Home() {
                     </TabsList>
                     <TabsContent value="sessions">
                         <article className="prose lg:prose-xl py-2"><h1>Sessions</h1></article>
-                        <div className="flex justify-end p-4">
-                            <Button variant="ghost" className="items-center">
-                                <p className="text-[50px] text-gray-500">+</p>
-                            </Button>
+                        <div className="flex justify-end">
+                            <NewSessionDialog />
                         </div>
                         <DataTable data={data} columns={columns} />
                     </TabsContent>

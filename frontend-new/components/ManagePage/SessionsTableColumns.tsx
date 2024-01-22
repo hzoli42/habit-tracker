@@ -2,15 +2,10 @@
 
 "use client"
 
-import { ColumnDef, Row, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
+import { ColumnDef } from "@tanstack/react-table"
 import { LabelCombobox } from "../utils/LabelCombobox"
-import { useUser } from "@auth0/nextjs-auth0/client"
-import { Key, useEffect, useState } from "react"
-import { useAtom } from "jotai"
-import { labelsAtom } from "@/atoms/jotai"
 import { Button } from "../ui/button"
-import { ChevronsUpDown } from "lucide-react"
+import { Input } from "../ui/input"
 
 
 export type SessionResponse = {
@@ -62,7 +57,7 @@ export const columns: ColumnDef<Session>[] = [
                     className="flex justify-between flex-wrap h-auto group w-full"
                 >
                     {
-                        <input
+                        <Input
                             className="focus:outline focus:placeholder:text-white w-full placeholder:text-black"
                             placeholder={row.original.title}
                             onBlur={(e) => onTitleChange(e.currentTarget.value)} />
