@@ -67,8 +67,8 @@ export default function StopwatchClock({ time, setTime, setStopwatchDirection, i
     return (
         <Tabs defaultValue="stopwatch" onValueChange={handleTabChange}>
             <TabsList>
-                <TabsTrigger value="stopwatch">Stopwatch</TabsTrigger>
-                <TabsTrigger value="timer">Timer</TabsTrigger>
+                <TabsTrigger value="stopwatch" disabled={isRunning}>Stopwatch</TabsTrigger>
+                <TabsTrigger value="timer" disabled={isRunning}>Timer</TabsTrigger>
             </TabsList>
             <TabsContent value="stopwatch">
                 <div className="flex justify-center items-end px-8">
