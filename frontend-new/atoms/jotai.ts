@@ -16,3 +16,5 @@ export const labelsAtom = atom(
             })
     }
 )
+
+export const editedSessionsAtom = atom<Map<string, {title: string, labels: string[]}>>(new Map())

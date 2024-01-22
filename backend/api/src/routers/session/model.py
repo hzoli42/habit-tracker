@@ -16,12 +16,9 @@ class SessionActionIn(BaseModel):
     action: Action
 
 
-class SessionModifyLabelsIn(BaseModel):
-    labels: list[str]
-
-
-class SessionModifyTitleIn(BaseModel):
+class SessionModifyIn(BaseModel):
     title: str
+    labels: list[str]
 
 
 class SessionAllOut(BaseModel):

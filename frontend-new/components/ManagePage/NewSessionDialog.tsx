@@ -1,3 +1,4 @@
+'use client'
 import { DateTimeField } from "@mui/x-date-pickers";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
@@ -54,7 +55,7 @@ export default function NewSessionDialog() {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger>
+            <DialogTrigger asChild>
                 <Button className="bg-green-500 hover:bg-green-600">
                     + New
                 </Button>

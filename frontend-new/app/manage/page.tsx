@@ -1,5 +1,5 @@
 'use client'
-import { labelsAtom } from "@/atoms/jotai";
+import { editedSessionsAtom, labelsAtom } from "@/atoms/jotai";
 import NewSessionDialog from "@/components/ManagePage/NewSessionDialog";
 import { Session, columns } from "@/components/ManagePage/SessionsTableColumns";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,7 @@ export type SessionResponse = {
 export default function Home() {
     const { user, error, isLoading } = useUser();
     const [labels, setLabels] = useAtom(labelsAtom)
+    const [editedSessions, setEditedSessions] = useAtom(editedSessionsAtom)
     const [data, setData] = useState<Session[]>([])
 
     useEffect(() => {
@@ -34,6 +35,22 @@ export default function Home() {
         setLabels(user?.sub)
         getData()
     }, [isLoading])
+
+    function updateEditedSessions() {
+        console.log(editedSessions)
+        editedSessions.forEach(({ title, labels }, id) => {
+            fetch(`http://0.0.0.0:5000/session/${id}`, {
+                method: "POST",
+                mode: "cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    title: title,
+                    labels: labels
+                })
+            })
+        })
+        setEditedSessions(new Map())
+    }
 
     function getData() {
         fetch(`http://0.0.0.0:5000/session/all/${user?.sub}`, {
@@ -71,7 +88,13 @@ export default function Home() {
                     <TabsContent value="sessions">
                         <div className="flex justify-between pt-6 pb-4">
                             <article className="prose lg:prose-xl"><h1>Sessions</h1></article>
-                            <NewSessionDialog />
+                            <div className="flex justify-center gap-4 items-center">
+                                {editedSessions.size != 0 && <Button className="bg-yellow-400 hover:bg-yellow-500" onClick={updateEditedSessions}>
+                                    Save edited sessions
+                                </Button>}
+                                <NewSessionDialog />
+                            </div>
+
                         </div>
                         <DataTable data={data} columns={columns} />
                     </TabsContent>

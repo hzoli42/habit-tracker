@@ -6,6 +6,8 @@ import { ColumnDef } from "@tanstack/react-table"
 import { LabelCombobox } from "../utils/LabelCombobox"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
+import { useAtom } from "jotai"
+import { editedSessionsAtom } from "@/atoms/jotai"
 
 
 export type SessionResponse = {
@@ -34,15 +36,12 @@ export const columns: ColumnDef<Session>[] = [
         accessorKey: "title",
         header: "Title",
         cell: ({ row }) => {
-            const onTitleChange = (title: string) => {
-                fetch(`http://0.0.0.0:5000/session/${row.original.id}/title`, {
-                    method: "POST",
-                    mode: "cors",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        title: title
-                    })
-                })
+            const [sessions, setSessions] = useAtom(editedSessionsAtom)
+            const updateSessionTitle = (newTitle: string) => {
+                const labels = sessions.get(row.original.id)?.labels ?? row.original.labels
+                const newSessions = new Map(sessions).set(row.original.id, { title: newTitle, labels: labels })
+                console.log('session title change')
+                setSessions(newSessions)
             }
 
             return (
@@ -55,7 +54,7 @@ export const columns: ColumnDef<Session>[] = [
                         <Input
                             className="focus:outline focus:placeholder:text-white w-full placeholder:text-black"
                             placeholder={row.original.title}
-                            onBlur={(e) => onTitleChange(e.currentTarget.value)} />
+                            onBlur={(e) => updateSessionTitle(e.currentTarget.value)} />
                     }
                 </Button>
             )
@@ -65,15 +64,12 @@ export const columns: ColumnDef<Session>[] = [
         accessorKey: "labels",
         header: "Labels",
         cell: ({ row }) => {
+            const [sessions, setSessions] = useAtom(editedSessionsAtom)
             const onLabelsChange = (selectedLabels: string[]) => {
-                fetch(`http://0.0.0.0:5000/session/${row.original.id}/labels`, {
-                    method: "POST",
-                    mode: "cors",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        labels: selectedLabels
-                    })
-                })
+                const title = sessions.get(row.original.id)?.title ?? row.original.title
+                const newSessions = new Map(sessions).set(row.original.id, { title: title, labels: selectedLabels })
+                console.log('session labels change')
+                setSessions(newSessions)
             }
             return <LabelCombobox startingLabels={row.original.labels} onLabelsChange={onLabelsChange} />
         },
