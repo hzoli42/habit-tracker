@@ -25,9 +25,10 @@ import { labelsAtom } from "@/atoms/jotai"
 export type LabelComboboxProps = {
     startingLabels?: string[]
     onLabelsChange?: (selectedLabels: string[]) => void
+    disabled: boolean
 }
 
-export function LabelCombobox({ startingLabels, onLabelsChange }: LabelComboboxProps) {
+export function LabelCombobox({ startingLabels, onLabelsChange, disabled }: LabelComboboxProps) {
     const [open, setOpen] = useState(false)
     const [labelSearchInput, setLabelSearchInput] = useState("")
     const [selectedLabels, setSelectedLabels] = useState<string[]>(startingLabels ?? [])
@@ -72,7 +73,7 @@ export function LabelCombobox({ startingLabels, onLabelsChange }: LabelComboboxP
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
+            <PopoverTrigger asChild disabled={disabled}>
                 <Button
                     variant="outline"
                     role="combobox"

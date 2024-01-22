@@ -14,8 +14,8 @@ export type StopwatchButtonProps = {
 export default function StopwatchInputs({ isRunning, setIsRunning, onTitleChange, onLabelsChange }: StopwatchButtonProps) {
     return (
         <div className="grid grid-cols-1 content-center gap-4">
-            <Input placeholder="Title" onChange={e => onTitleChange(e.target.value)} />
-            <LabelCombobox onLabelsChange={(selectedLabels) => onLabelsChange(selectedLabels)} />
+            <Input placeholder="Title" onChange={e => onTitleChange(e.target.value)} disabled={isRunning} />
+            <LabelCombobox onLabelsChange={(selectedLabels) => onLabelsChange(selectedLabels)} disabled={isRunning} />
             {
                 !isRunning
                     ? <Button className="bg-green-400" variant="contained" onClick={() => setIsRunning(true)} fullWidth>Start</Button>
