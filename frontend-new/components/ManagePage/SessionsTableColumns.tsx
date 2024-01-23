@@ -52,7 +52,7 @@ export const columns: ColumnDef<Session>[] = [
                 >
                     {
                         <Input
-                            className="focus:outline focus:placeholder:text-white w-full placeholder:text-black"
+                            className="focus:outline focus:placeholder:text-slate-400 w-full placeholder:text-black"
                             placeholder={row.original.title}
                             onBlur={(e) => updateSessionTitle(e.currentTarget.value)} />
                     }
@@ -71,7 +71,7 @@ export const columns: ColumnDef<Session>[] = [
                 console.log('session labels change')
                 setSessions(newSessions)
             }
-            return <LabelCombobox startingLabels={row.original.labels} onLabelsChange={onLabelsChange} />
+            return <LabelCombobox disabled={false} startingLabels={row.original.labels} onLabelsChange={onLabelsChange} />
         },
     },
     {

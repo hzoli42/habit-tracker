@@ -81,7 +81,7 @@ export default function NewSessionDialog() {
                             Labels
                         </Label>
                         <div className="col-span-3">
-                            <LabelCombobox onLabelsChange={(selectedLabels) => setLabels(selectedLabels)} />
+                            <LabelCombobox disabled={false} onLabelsChange={(selectedLabels) => setLabels(selectedLabels)} />
                         </div>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">

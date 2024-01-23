@@ -78,7 +78,8 @@ export default function Stopwatch() {
         const hoursNew = hoursInc > 59 ? hoursInc % 60 : (hoursInc < 0 ? (hoursInc + 60) % 60 : hoursInc)
 
         setTime({ hours: hoursNew, minutes: minutesNew, seconds: secondsNew });
-        if (hoursNew == 0 && minutesNew == 0 && secondsNew == 0) {
+        if (hoursNew == 0 && minutesNew == 0 && secondsNew == 0 && stopwatchDirection == -1) {
+            console.log('Stopping session because timer reached 0')
             stop(sessionId)
         }
     }
@@ -96,9 +97,13 @@ export default function Stopwatch() {
     }, [isRunning, time]);
 
     useEffect(() => {
+        if (isLoading) {
+            return
+        }
         if (isRunning) {
             start(user?.sub ?? "", title, selectedLabels).then(sessionId => setSessionId(sessionId))
         } else {
+            console.log('Stopping session because isRunning changed back to false')
             stop(sessionId)
             setTitle("Untitled")
             setSelectedLabels([])

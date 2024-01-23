@@ -64,12 +64,16 @@ export default function Home() {
                     .map((session: SessionResponse) => {
                         const start = session.actions.filter(a => a.event == "start")[0]
                         const stop = session.actions.filter(a => a.event == "stop")[0]
-                        const durationObject = new Date(stop.timestamp * 1000 - start.timestamp * 1000)
+                        let duration = "This session does not have an end time"
+                        if (stop != null) {
+                            const durationObject = new Date(stop.timestamp * 1000 - start.timestamp * 1000)
+                            duration = `${durationObject.getUTCHours()}h ${durationObject.getUTCMinutes()}m ${durationObject.getUTCSeconds()}s`
+                        }
                         return {
                             id: session.id,
                             title: session.title,
                             labels: session.labels,
-                            duration: `${durationObject.getUTCHours()}h ${durationObject.getUTCMinutes()}m ${durationObject.getUTCSeconds()}s`,
+                            duration: duration,
                             date: new Date(start.timestamp * 1000).toDateString()
                         }
                     })
