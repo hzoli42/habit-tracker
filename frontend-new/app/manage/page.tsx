@@ -1,6 +1,7 @@
 'use client'
 import { editedSessionsAtom, labelsAtom } from "@/atoms/jotai";
 import NewSessionDialog from "@/components/ManagePage/NewSessionDialog";
+import SessionAnalysisLineChart from "@/components/ManagePage/SessionAnalysisLineChart";
 import { Session, columns } from "@/components/ManagePage/SessionsTableColumns";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -103,7 +104,7 @@ export default function Home() {
                         <DataTable data={data} columns={columns} />
                     </TabsContent>
                     <TabsContent value="analysis">
-                        <div></div>
+                        <SessionAnalysisLineChart />
                     </TabsContent>
                 </Tabs>
             </div>
