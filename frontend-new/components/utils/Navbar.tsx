@@ -21,8 +21,8 @@ export default function Navbar() {
                         <DropdownMenuContent>
                             <DropdownMenuItem>
                                 {(!user)
-                                    ? <MenuButton value="Login" link="/auth/api/login" />
-                                    : <MenuButton value="Logout" link="/auth/api/logout" />}
+                                    ? <MenuButton value="Login" link="/api/auth/login" />
+                                    : <MenuButton value="Logout" link="/api/auth/logout" />}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem><MenuButton value="Track" link="/track" /></DropdownMenuItem>

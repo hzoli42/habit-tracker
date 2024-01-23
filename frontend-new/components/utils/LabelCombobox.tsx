@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
+import { Check } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -86,7 +86,6 @@ export function LabelCombobox({ startingLabels, onLabelsChange, disabled }: Labe
                             :
                             <>
                                 <p className="text-gray-500">Select labels...</p>
-                                <ChevronsUpDown className="hidden group-hover:block shrink-0 opacity-50" />
                             </>
 
                     }
