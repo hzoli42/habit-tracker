@@ -4,6 +4,11 @@ const labelsPrimitiveAtom = atom<string[]>([])
 export const labelsAtom = atom(
     (get) => get(labelsPrimitiveAtom),
     async (get, set, user_id)  => {
+        console.log(user_id)
+        if (user_id == undefined) {
+            set(labelsPrimitiveAtom, [])
+            return
+        }
         fetch(`http://0.0.0.0:5000/user/${user_id}/labels`, {
             method: "GET",
             mode: "cors",
