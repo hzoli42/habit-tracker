@@ -1,6 +1,7 @@
 'use client'
 import { editedSessionsAtom, labelsAtom } from "@/atoms/jotai";
 import NewSessionDialog from "@/components/ManagePage/NewSessionDialog";
+import SessionAnalysisBarChart from "@/components/ManagePage/SessionAnalysisBarChart";
 import SessionAnalysisLineChart from "@/components/ManagePage/SessionAnalysisLineChart";
 import { Session, columns } from "@/components/ManagePage/SessionsTableColumns";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,7 @@ export type SessionResponse = {
     ]
 }
 
-const dummyData = [
+const dummyDataLines = [
     {
         date: new Date(1705964401000),
         duration: 8
@@ -57,6 +58,55 @@ const dummyData = [
         duration: 2
     }
 ]
+
+const dummyDataBars = [
+    {
+        date: new Date(1706050801000),
+        duration: 8,
+        label: "maths"
+    },
+    {
+        date: new Date(1706050801000),
+        duration: 7,
+        label: "physics"
+    },
+    {
+        date: new Date(1706050801000),
+        duration: 4,
+        label: "physics"
+    },
+    {
+        date: new Date(1705964401000),
+        duration: 6,
+        label: "history"
+    },
+    {
+        date: new Date(1705878001000),
+        duration: 5,
+        label: "maths"
+    },
+    {
+        date: new Date(1705791601000),
+        duration: 5,
+        label: "history"
+    },
+    {
+        date: new Date(1705791601000),
+        duration: 7,
+        label: "maths"
+    },
+    {
+        date: new Date(1705705201000),
+        duration: 9,
+        label: "physics"
+    },
+    {
+        date: new Date(1705705201000),
+        duration: 2,
+        label: "maths"
+    }
+]
+
 
 export default function Home() {
     const { user, error, isLoading } = useUser();
@@ -139,7 +189,8 @@ export default function Home() {
                         <DataTable data={data} columns={columns} />
                     </TabsContent>
                     <TabsContent value="analysis">
-                        <SessionAnalysisLineChart title="Total work time" data={dummyData} />
+                        <SessionAnalysisLineChart title="Total work time" data={dummyDataLines} />
+                        <SessionAnalysisBarChart title="Total work time by label" data={dummyDataBars} />
                     </TabsContent>
                 </Tabs>
             </div>
