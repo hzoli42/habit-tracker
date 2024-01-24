@@ -6,7 +6,7 @@ import { WidthFull } from "@mui/icons-material";
 
 export default function SessionAnalysisBarChart({ title, data }: { title: string, data: { date: Date, duration: number, label: string }[] }) {
     function formatDate(value: Date, index: number): string {
-        return `${value.getUTCDay().toString()}/${value.getUTCMonth()}/${value.getUTCFullYear()}`
+        return `${value.getUTCDay()}/${value.getUTCMonth()}/${value.getUTCFullYear()}`
     }
 
     let dataMap = new Map<string, Map<string, number>>()
