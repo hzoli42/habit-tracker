@@ -8,6 +8,12 @@ import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { useAtom } from "jotai"
 import { LabelData, editedSessionsAtom } from "@/atoms/jotai"
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
+import { DateTimeField } from "@mui/x-date-pickers"
+import dayjs from "dayjs"
+import { Label } from "recharts"
+import { useState } from "react"
 
 
 export type SessionResponse = {
@@ -85,4 +91,32 @@ export const columns: ColumnDef<Session>[] = [
         accessorKey: "date",
         header: "Date",
     },
+    {
+        accessorKey: "delete",
+        header: "",
+        cell: ({ row }) => {
+            const onSessionDelete = () => {
+
+            }
+            const [open, setOpen] = useState(false)
+            return (
+                <Dialog open={open} onOpenChange={setOpen}>
+                    <DialogTrigger asChild>
+                        <Button variant="ghost">
+                            <DeleteIcon className="hover:fill-red-600" onClick={onSessionDelete} />
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle className="flex justify-center">Are you sure you want to delete this session?</DialogTitle>
+                        </DialogHeader>
+                        <div className="flex justify-center gap-12 pt-6">
+                            <Button onClick={onSessionDelete}>Yes</Button>
+                            <Button onClick={() => setOpen(false)}>No</Button>
+                        </div>
+                    </DialogContent>
+                </Dialog>
+            )
+        }
+    }
 ]
