@@ -14,7 +14,6 @@ const labelsPrimitiveAtom = atom<LabelData[]>([])
 export const labelsAtom = atom(
     (get) => get(labelsPrimitiveAtom),
     async (get, set, user_id)  => {
-        console.log(user_id)
         if (user_id == undefined) {
             set(labelsPrimitiveAtom, [])
             return
@@ -36,3 +35,61 @@ export const labelsAtom = atom(
 )
 
 export const editedSessionsAtom = atom<Map<string, {title: string, label: LabelData}>>(new Map())
+
+export type Session = {
+    id: string
+    title: string
+    label: LabelData
+    duration: string
+    date: string
+}
+
+export type SessionResponse = {
+    id: string,
+    title: string,
+    user_id: string,
+    label: LabelData,
+    actions: [
+        {
+            timestamp: number,
+            event: string
+        }
+    ]
+}
+
+const userAllSessionsPrimitiveAtom = atom<Session[]>([])
+export const userAllSessionsAtom = atom(
+    (get) => get(userAllSessionsPrimitiveAtom),
+    async (get, set, user_id) => {
+        if (user_id == undefined) {
+            set(userAllSessionsPrimitiveAtom, [])
+            return
+        }
+        fetch(`http://0.0.0.0:5000/session/all/${user_id}`, {
+            method: "GET",
+            mode: "cors",
+            headers: { "Content-Type": "application/json" },
+        })
+            .then(response => response.json())
+            .then(response_data => {
+                set(userAllSessionsPrimitiveAtom, response_data.sessions
+                    .map((session: SessionResponse) => {
+                        const start = session.actions.filter(a => a.event == "start")[0]
+                        const stop = session.actions.filter(a => a.event == "stop")[0]
+                        let duration = "This session does not have an end time"
+                        if (stop != null) {
+                            const durationObject = new Date(stop.timestamp * 1000 - start.timestamp * 1000)
+                            duration = `${durationObject.getUTCHours()}h ${durationObject.getUTCMinutes()}m ${durationObject.getUTCSeconds()}s`
+                        }
+                        return {
+                            id: session.id,
+                            title: session.title,
+                            label: session.label,
+                            duration: duration,
+                            date: new Date(start.timestamp * 1000).toDateString()
+                        }
+                    })
+                )
+            })
+    }
+)

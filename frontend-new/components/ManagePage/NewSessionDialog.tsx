@@ -8,7 +8,8 @@ import { LabelCombobox } from "../utils/LabelCombobox";
 import dayjs from "dayjs";
 import { FormEvent, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { LabelData } from "@/atoms/jotai";
+import { LabelData, userAllSessionsAtom } from "@/atoms/jotai";
+import { useAtom } from "jotai";
 
 export default function NewSessionDialog() {
     const [open, setOpen] = useState(false);
@@ -17,6 +18,7 @@ export default function NewSessionDialog() {
     const [startTime, setStartTime] = useState(0)
     const [endTime, setEndTime] = useState(0)
     const { user, error, isLoading } = useUser();
+    const [userAllSessions, setUserAllSessions] = useAtom(userAllSessionsAtom)
 
 
     async function onDialogSubmit() {
@@ -52,6 +54,7 @@ export default function NewSessionDialog() {
             })
         })
         setOpen(false)
+        setUserAllSessions(user?.sub)
     }
 
     return (
