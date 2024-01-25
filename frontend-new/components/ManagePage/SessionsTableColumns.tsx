@@ -38,6 +38,9 @@ export const columns: ColumnDef<Session>[] = [
         cell: ({ row }) => {
             const [sessions, setSessions] = useAtom(editedSessionsAtom)
             const updateSessionTitle = (newTitle: string) => {
+                if (newTitle == "") {
+                    return
+                }
                 const label = sessions.get(row.original.id)?.label ?? row.original.label
                 const newSessions = new Map(sessions).set(row.original.id, { title: newTitle, label: label })
                 console.log('session title change')
