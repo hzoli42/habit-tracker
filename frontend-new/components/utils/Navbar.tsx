@@ -27,6 +27,7 @@ export default function Navbar() {
                             <DropdownMenuSeparator />
                             <DropdownMenuItem><MenuButton value="Track" link="/track" /></DropdownMenuItem>
                             <DropdownMenuItem><MenuButton value="Manage" link="/manage" /></DropdownMenuItem>
+                            <DropdownMenuItem><MenuButton value="Statistics" link="/statistics" /></DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

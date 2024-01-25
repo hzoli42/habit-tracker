@@ -1,7 +1,6 @@
-import { CardHeader } from "@mui/material";
+'use client'
 import { Card, CardContent, CardDescription, CardTitle } from "../ui/card";
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
-import { WidthFull } from "@mui/icons-material";
 
 
 export default function SessionAnalysisLineChart({ title, data }: { title: string, data: { date: Date, duration: number }[] }) {

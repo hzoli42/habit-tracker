@@ -1,7 +1,6 @@
-import { CardHeader } from "@mui/material";
+'use client'
+import { ResponsiveContainer, CartesianGrid, Bar, XAxis, YAxis, BarChart } from "recharts";
 import { Card, CardContent, CardDescription, CardTitle } from "../ui/card";
-import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
-import { WidthFull } from "@mui/icons-material";
 
 
 export default function SessionAnalysisBarChart({ title, data }: { title: string, data: { date: Date, duration: number, label: string }[] }) {
