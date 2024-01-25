@@ -37,7 +37,7 @@ def user_add_labels(input: UserAddLabelsIn,
                     db: Annotated[Database, Depends(mongo_db_client)]) -> mongodb_model.User:
     db.users.update_one(
         {"id": input.id},
-        {"$addToSet": {"labels": {"$each": input.labels}}}
+        {"$set": {"labels": [l.__dict__ for l in input.labels]}}
     )
 
     return get_user_by_id(input.id, db)

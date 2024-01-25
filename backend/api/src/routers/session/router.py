@@ -21,7 +21,7 @@ async def start_session(input: SessionStartIn,
         user_id=input.user_id,
         actions=[input.action],
         title=input.title,
-        labels=input.labels
+        label=input.label
     )
 
     db.sessions.insert_one(document.dict())
@@ -57,7 +57,7 @@ async def modify_session_title(id: str,
                                db: Annotated[Database, Depends(mongo_db_client)]) -> mongodb_model.Session:
     db.sessions.update_one(
         {"id": id},
-        {"$set": {"title": input.title, "labels": input.labels}}
+        {"$set": {"title": input.title, "label": input.label.__dict__}}
     )
     return get_session_by_id(id, db)
 

@@ -1,14 +1,14 @@
 from dataclasses import dataclass
 
+from pydantic import BaseModel
 
-@dataclass
-class LabelData:
+
+class LabelData(BaseModel):
     labelName: str
     labelColor: str
 
 
-@dataclass
-class User:
+class User(BaseModel):
     id: str
     email: str
     name: str

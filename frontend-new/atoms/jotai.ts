@@ -1,6 +1,16 @@
 import { atom } from 'jotai'
 
-const labelsPrimitiveAtom = atom<string[]>([])
+export type LabelData = {
+    labelName: string
+    labelColor: string
+}
+
+export type LabelsResponse = {
+    id: string
+    labels: LabelData[]
+}
+
+const labelsPrimitiveAtom = atom<LabelData[]>([])
 export const labelsAtom = atom(
     (get) => get(labelsPrimitiveAtom),
     async (get, set, user_id)  => {
@@ -15,11 +25,14 @@ export const labelsAtom = atom(
             headers: { "Content-Type": "application/json" },
         })
             .then(response => response.json())
-            .then(data => {
+            .then((data: LabelsResponse) => {
                 console.log(`Id = ${data.id}, Labels = ${data.labels}`)
-                set(labelsPrimitiveAtom, data.labels)
+                const labelsProcessed = data.labels.map((ld, i, a) => { 
+                    return {labelName: ld.labelName, labelColor: ld.labelColor}
+                })
+                set(labelsPrimitiveAtom, labelsProcessed)
             })
     }
 )
 
-export const editedSessionsAtom = atom<Map<string, {title: string, labels: string[]}>>(new Map())
+export const editedSessionsAtom = atom<Map<string, {title: string, label: LabelData}>>(new Map())

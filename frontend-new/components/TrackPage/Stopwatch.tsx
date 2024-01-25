@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { LabelCombobox } from "../utils/LabelCombobox";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import StopwatchInputs from "./StopwatchInputs";
+import { LabelData } from "@/atoms/jotai";
 
 
 export type StopwatchTime = {
@@ -24,7 +25,7 @@ export function newAction(action: string): Action {
     return { timestamp: currentTime, event: action }
 }
 
-export async function start(user: string, title: string, labels: string[]): Promise<string> {
+export async function start(user: string, title: string, label: LabelData | undefined): Promise<string> {
     return await fetch('http://0.0.0.0:5000/session/start', {
         method: "POST",
         mode: "cors",
@@ -32,7 +33,7 @@ export async function start(user: string, title: string, labels: string[]): Prom
         body: JSON.stringify({
             user_id: user,
             title: title,
-            labels: labels,
+            label: label ?? { labelName: "Undefind", labelColor: "9B9B9B" },
             action: newAction("start")
         })
     })
@@ -61,7 +62,7 @@ export default function Stopwatch() {
     const [isRunning, setIsRunning] = useState<boolean>(false)
     const [stopwatchDirection, setStopwatchDirection] = useState<number>(1)
     const [title, setTitle] = useState<string>("Untitled")
-    const [selectedLabels, setSelectedLabels] = useState<string[]>([])
+    const [selectedLabel, setSelectedLabel] = useState<LabelData | undefined>(undefined)
     const { user, error, isLoading } = useUser();
     const [sessionId, setSessionId] = useState<string>("")
 
@@ -101,12 +102,12 @@ export default function Stopwatch() {
             return
         }
         if (isRunning) {
-            start(user?.sub ?? "", title, selectedLabels).then(sessionId => setSessionId(sessionId))
+            start(user?.sub ?? "", title, selectedLabel).then(sessionId => setSessionId(sessionId))
         } else {
             console.log('Stopping session because isRunning changed back to false')
             stop(sessionId)
             setTitle("Untitled")
-            setSelectedLabels([])
+            setSelectedLabel(undefined)
             setTime({ hours: 0, minutes: 0, seconds: 0 })
         }
     }, [isRunning])
@@ -121,7 +122,7 @@ export default function Stopwatch() {
                     isRunning={isRunning}
                     setIsRunning={setIsRunning}
                     onTitleChange={(title) => setTitle(title)}
-                    onLabelsChange={(labels) => setSelectedLabels(labels)}
+                    onLabelChange={(label) => setSelectedLabel(label)}
                 />
             </div>
         </>

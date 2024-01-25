@@ -7,14 +7,14 @@ import { LabelCombobox } from "../utils/LabelCombobox"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { useAtom } from "jotai"
-import { editedSessionsAtom } from "@/atoms/jotai"
+import { LabelData, editedSessionsAtom } from "@/atoms/jotai"
 
 
 export type SessionResponse = {
     id: string,
     title: string,
     user_id: string,
-    labels: string[],
+    label: LabelData,
     actions: [
         {
             timestamp: number,
@@ -26,7 +26,7 @@ export type SessionResponse = {
 export type Session = {
     id: string
     title: string
-    labels: string[]
+    label: LabelData
     duration: string
     date: string
 }
@@ -38,8 +38,8 @@ export const columns: ColumnDef<Session>[] = [
         cell: ({ row }) => {
             const [sessions, setSessions] = useAtom(editedSessionsAtom)
             const updateSessionTitle = (newTitle: string) => {
-                const labels = sessions.get(row.original.id)?.labels ?? row.original.labels
-                const newSessions = new Map(sessions).set(row.original.id, { title: newTitle, labels: labels })
+                const label = sessions.get(row.original.id)?.label ?? row.original.label
+                const newSessions = new Map(sessions).set(row.original.id, { title: newTitle, label: label })
                 console.log('session title change')
                 setSessions(newSessions)
             }
@@ -65,13 +65,13 @@ export const columns: ColumnDef<Session>[] = [
         header: "Labels",
         cell: ({ row }) => {
             const [sessions, setSessions] = useAtom(editedSessionsAtom)
-            const onLabelsChange = (selectedLabels: string[]) => {
+            const onLabelChange = (selectedLabel: LabelData) => {
                 const title = sessions.get(row.original.id)?.title ?? row.original.title
-                const newSessions = new Map(sessions).set(row.original.id, { title: title, labels: selectedLabels })
+                const newSessions = new Map(sessions).set(row.original.id, { title: title, label: selectedLabel })
                 console.log('session labels change')
                 setSessions(newSessions)
             }
-            return <LabelCombobox disabled={false} startingLabels={row.original.labels} onLabelsChange={onLabelsChange} />
+            return <LabelCombobox disabled={false} startingLabel={row.original.label} onLabelChange={onLabelChange} />
         },
     },
     {

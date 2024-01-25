@@ -8,11 +8,12 @@ import { LabelCombobox } from "../utils/LabelCombobox";
 import dayjs from "dayjs";
 import { FormEvent, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { LabelData } from "@/atoms/jotai";
 
 export default function NewSessionDialog() {
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState("")
-    const [labels, setLabels] = useState<string[]>([])
+    const [label, setLabel] = useState<LabelData | undefined>(undefined)
     const [startTime, setStartTime] = useState(0)
     const [endTime, setEndTime] = useState(0)
     const { user, error, isLoading } = useUser();
@@ -27,7 +28,7 @@ export default function NewSessionDialog() {
             body: JSON.stringify({
                 user_id: user ? user.sub : "undefined",
                 title: title,
-                labels: labels,
+                label: label,
                 action: {
                     timestamp: startTime,
                     event: "start"
@@ -81,7 +82,7 @@ export default function NewSessionDialog() {
                             Labels
                         </Label>
                         <div className="col-span-3">
-                            <LabelCombobox disabled={false} onLabelsChange={(selectedLabels) => setLabels(selectedLabels)} />
+                            <LabelCombobox disabled={false} onLabelChange={(selectedLabel) => setLabel(selectedLabel)} />
                         </div>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">

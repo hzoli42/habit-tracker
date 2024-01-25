@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from api.src.mongodb.session import Session, Action
+from api.src.mongodb.user import LabelData
 
 #######################################################################################################################
 
@@ -7,7 +8,7 @@ from api.src.mongodb.session import Session, Action
 class SessionStartIn(BaseModel):
     user_id: str
     title: str
-    labels: list[str]
+    label: LabelData
     action: Action
 
 
@@ -18,7 +19,7 @@ class SessionActionIn(BaseModel):
 
 class SessionModifyIn(BaseModel):
     title: str
-    labels: list[str]
+    label: LabelData
 
 
 class SessionAllOut(BaseModel):
