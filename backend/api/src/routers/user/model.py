@@ -5,21 +5,24 @@ from api.src.mongodb.user import LabelData
 
 @dataclass
 class UserNewIn:
-    id: str
+    sub: str
     name: str
     email: str
     nickname: str
 
 
 @dataclass
-class UserAddLabelsIn:
-    id: str
+class UserUpdateLabelsIn:
+    labels: list[LabelData]
+
+
+@dataclass
+class UserUpdateLabelsOut:
     labels: list[LabelData]
 
 
 @dataclass
 class UserDeleteLabelsIn:
-    id: str
     labels: list[LabelData]
 
 

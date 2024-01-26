@@ -28,14 +28,14 @@ export default function Home() {
 
     function updateEditedSessions() {
         console.log(editedSessions)
-        editedSessions.forEach(({ title, label }, id) => {
+        editedSessions.forEach(({ title, label_id }, id) => {
             fetch(`http://0.0.0.0:5000/session/${id}`, {
                 method: "POST",
                 mode: "cors",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     title: title,
-                    label: label
+                    label_id: label_id
                 })
             })
         })

@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 
 class LabelData(BaseModel):
+    id: str
     labelName: str
     labelColor: str
 
@@ -22,6 +23,7 @@ class User(BaseModel):
             email=d["email"],
             name=d["name"],
             nickname=d["nickname"],
-            labels=[LabelData(labelName=x["labelName"],
+            labels=[LabelData(id=x["id"],
+                              labelName=x["labelName"],
                               labelColor=x["labelColor"]) for x in d["labels"]]
         )

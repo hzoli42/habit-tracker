@@ -8,7 +8,7 @@ from api.src.mongodb.user import LabelData
 class SessionStartIn(BaseModel):
     user_id: str
     title: str
-    label: LabelData
+    label_id: str
     action: Action
 
 
@@ -19,7 +19,7 @@ class SessionActionIn(BaseModel):
 
 class SessionModifyIn(BaseModel):
     title: str
-    label: LabelData
+    label_id: str
 
 
 class SessionAllOut(BaseModel):

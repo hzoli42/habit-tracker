@@ -14,9 +14,9 @@ import { useAtom } from "jotai";
 export default function NewSessionDialog() {
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState("")
-    const [label, setLabel] = useState<LabelData | undefined>(undefined)
-    const [startTime, setStartTime] = useState(0)
-    const [endTime, setEndTime] = useState(0)
+    const [label, setLabel] = useState<string | undefined>(undefined)
+    const [startTime, setStartTime] = useState(dayjs().unix())
+    const [endTime, setEndTime] = useState(dayjs().unix())
     const { user, error, isLoading } = useUser();
     const [userAllSessions, setUserAllSessions] = useAtom(userAllSessionsAtom)
 
@@ -30,7 +30,7 @@ export default function NewSessionDialog() {
             body: JSON.stringify({
                 user_id: user ? user.sub : "undefined",
                 title: title,
-                label: label,
+                label_id: label,
                 action: {
                     timestamp: startTime,
                     event: "start"
@@ -95,8 +95,8 @@ export default function NewSessionDialog() {
                         <div className="col-span-3">
                             <DateTimeField
                                 id="start"
-                                defaultValue={dayjs()}
-                                onChange={(dayjs) => setStartTime(dayjs ? dayjs.unix() : 0)}
+                                value={dayjs.unix(startTime)}
+                                onChange={(value) => setStartTime(value ? value.unix() : 0)}
                             />
                         </div>
                     </div>
@@ -107,8 +107,8 @@ export default function NewSessionDialog() {
                         <div className="col-span-3">
                             <DateTimeField
                                 id="stop"
-                                defaultValue={dayjs()}
-                                onChange={(dayjs) => setEndTime(dayjs ? dayjs.unix() : 0)}
+                                value={dayjs.unix(endTime)}
+                                onChange={(value) => setEndTime(value ? value.unix() : 0)}
                             />
                         </div>
                     </div>

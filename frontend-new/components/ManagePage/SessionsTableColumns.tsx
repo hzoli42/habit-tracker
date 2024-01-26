@@ -26,8 +26,8 @@ export const sessionColumns: ColumnDef<Session>[] = [
                 if (newTitle == "") {
                     return
                 }
-                const label = sessions.get(row.original.id)?.label ?? row.original.label
-                const newSessions = new Map(sessions).set(row.original.id, { title: newTitle, label: label })
+                const label_id = sessions.get(row.original.id)?.label_id ?? row.original.label_id
+                const newSessions = new Map(sessions).set(row.original.id, { title: newTitle, label_id: label_id })
                 console.log('session title change')
                 setSessions(newSessions)
             }
@@ -53,13 +53,13 @@ export const sessionColumns: ColumnDef<Session>[] = [
         header: "Labels",
         cell: ({ row }) => {
             const [sessions, setSessions] = useAtom(editedSessionsAtom)
-            const onLabelChange = (selectedLabel: LabelData) => {
+            const onLabelChange = (selectedLabel: string) => {
                 const title = sessions.get(row.original.id)?.title ?? row.original.title
-                const newSessions = new Map(sessions).set(row.original.id, { title: title, label: selectedLabel })
+                const newSessions = new Map(sessions).set(row.original.id, { title: title, label_id: selectedLabel })
                 console.log('session labels change')
                 setSessions(newSessions)
             }
-            return <LabelCombobox disabled={false} startingLabel={row.original.label} onLabelChange={onLabelChange} />
+            return <LabelCombobox disabled={false} startingLabel={row.original.label_id} onLabelChange={onLabelChange} />
         },
     },
     {

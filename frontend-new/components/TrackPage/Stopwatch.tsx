@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { LabelCombobox } from "../utils/LabelCombobox";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import StopwatchInputs from "./StopwatchInputs";
-import { LabelData } from "@/atoms/jotai";
+import { LabelData, labelsAtom } from "@/atoms/jotai";
+import { useAtom } from "jotai";
 
 
 export type StopwatchTime = {
@@ -25,7 +26,7 @@ export function newAction(action: string): Action {
     return { timestamp: currentTime, event: action }
 }
 
-export async function start(user: string, title: string, label: LabelData | undefined): Promise<string> {
+export async function start(user: string, title: string, label: string | undefined): Promise<string> {
     return await fetch('http://0.0.0.0:5000/session/start', {
         method: "POST",
         mode: "cors",
@@ -33,7 +34,7 @@ export async function start(user: string, title: string, label: LabelData | unde
         body: JSON.stringify({
             user_id: user,
             title: title,
-            label: label ?? { labelName: "Undefind", labelColor: "9B9B9B" },
+            label_id: label ?? "",
             action: newAction("start")
         })
     })
@@ -58,11 +59,12 @@ export async function stop(sessionId: string) {
 
 
 export default function Stopwatch() {
+    const [labels, setLabels] = useAtom(labelsAtom)
     const [time, setTime] = useState<StopwatchTime>({ hours: 0, minutes: 0, seconds: 0 })
     const [isRunning, setIsRunning] = useState<boolean>(false)
     const [stopwatchDirection, setStopwatchDirection] = useState<number>(1)
     const [title, setTitle] = useState<string>("Untitled")
-    const [selectedLabel, setSelectedLabel] = useState<LabelData | undefined>(undefined)
+    const [selectedLabel, setSelectedLabel] = useState<string | undefined>(undefined)
     const { user, error, isLoading } = useUser();
     const [sessionId, setSessionId] = useState<string>("")
 

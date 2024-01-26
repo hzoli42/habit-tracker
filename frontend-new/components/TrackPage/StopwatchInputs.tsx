@@ -9,7 +9,7 @@ export type StopwatchButtonProps = {
     isRunning: boolean
     setIsRunning: Dispatch<SetStateAction<boolean>>
     onTitleChange: (title: string) => void
-    onLabelChange: (label: LabelData) => void
+    onLabelChange: (label: string) => void
 }
 
 export default function StopwatchInputs({ isRunning, setIsRunning, onTitleChange, onLabelChange }: StopwatchButtonProps) {

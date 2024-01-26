@@ -22,7 +22,7 @@ async def start_session(input: SessionStartIn,
         user_id=input.user_id,
         actions=[input.action],
         title=input.title,
-        label=input.label
+        label_id=input.label_id
     )
 
     db.sessions.insert_one(document.dict())
@@ -58,7 +58,7 @@ async def modify_session(id: str,
                          db: Annotated[Database, Depends(mongo_db_client)]) -> mongodb_model.Session:
     db.sessions.update_one(
         {"id": id},
-        {"$set": {"title": input.title, "label": input.label.__dict__}}
+        {"$set": {"title": input.title, "label_id": input.label_id}}
     )
     return get_session_by_id(id, db)
 
@@ -72,12 +72,12 @@ async def delete_session(id: str,
 
 @router.get("/session/all/{user_id}")
 async def user_all_session(user_id: str,
-                           db: Annotated[Database, Depends(mongo_db_client)]) -> SessionAllOut:
+                           db: Annotated[Database, Depends(mongo_db_client)]) -> list[mongodb_model.Session]:
     sessions = db.sessions.find({"user_id": f"{user_id}"})
     result = []
     for s in [s for s in sessions if 'id' in s]:
         result.append(mongodb_model.Session.from_dict(s))
-    return SessionAllOut(sessions=result)
+    return result
 
 
 def get_session_by_id(id: str, db: Database) -> mongodb_model.Session:

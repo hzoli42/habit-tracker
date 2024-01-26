@@ -14,7 +14,7 @@ class Session(BaseModel):
     id: str
     title: str
     user_id: str
-    label: LabelData
+    label_id: str
     actions: list[Action]
 
     @classmethod
@@ -23,7 +23,6 @@ class Session(BaseModel):
             id=d["id"],
             title=d["title"],
             user_id=d["user_id"],
-            label=LabelData(
-                labelName=d["label"]["labelName"], labelColor=d["label"]["labelColor"]),
+            label_id=d["label_id"],
             actions=[Action(**a) for a in d["actions"]]
         )
