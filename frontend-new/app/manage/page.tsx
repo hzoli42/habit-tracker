@@ -1,5 +1,5 @@
 'use client'
-import { LabelData, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/atoms/jotai";
+import { LabelData, editedLabelsAtom, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/atoms/jotai";
 import { labelColumns } from "@/components/ManagePage/LabelsTableColumns";
 import NewSessionDialog from "@/components/ManagePage/NewSessionDialog";
 import { sessionColumns } from "@/components/ManagePage/SessionsTableColumns";
@@ -15,6 +15,7 @@ export default function Home() {
     const { user, error, isLoading } = useUser();
     const [labels, setLabels] = useAtom(labelsAtom)
     const [editedSessions, setEditedSessions] = useAtom(editedSessionsAtom)
+    const [editedLabels, setEditedLabels] = useAtom(editedLabelsAtom)
     const [userAllSessions, setUserAllSessions] = useAtom(userAllSessionsAtom)
 
     useEffect(() => {
@@ -43,6 +44,35 @@ export default function Home() {
         setUserAllSessions(user?.sub)
     }
 
+    function updateEditedLabels() {
+        console.log(labels)
+        let newLabelsData: LabelData[] = []
+        labels.forEach(l => {
+            if (editedLabels.has(l.id)) {
+                const editedLabelData = editedLabels.get(l.id)
+                newLabelsData.push({
+                    id: l.id,
+                    labelName: editedLabelData?.name ?? "Error",
+                    labelColor: editedLabelData?.color ?? "#000000"
+                })
+            } else {
+                newLabelsData.push(l)
+            }
+        })
+
+        fetch(`http://0.0.0.0:5000/user/${user?.sub}/labels`, {
+            method: "POST",
+            mode: "cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                labels: newLabelsData
+            })
+        })
+
+        setEditedLabels(new Map())
+        setLabels(user?.sub)
+    }
+
     return (
         <main>
             <div className="container mx-auto max-w-screen-lg">
@@ -68,8 +98,8 @@ export default function Home() {
                         <div className="flex justify-between pt-6 pb-4">
                             <article className="prose lg:prose-xl"><h1>Sessions</h1></article>
                             <div className="flex justify-center gap-4 items-center">
-                                {editedSessions.size != 0 && <Button className="bg-yellow-400 hover:bg-yellow-500" onClick={updateEditedSessions}>
-                                    Save edited sessions
+                                {editedLabels.size != 0 && <Button className="bg-yellow-400 hover:bg-yellow-500" onClick={updateEditedLabels}>
+                                    Save edited labels
                                 </Button>}
                                 <NewSessionDialog />
                             </div>

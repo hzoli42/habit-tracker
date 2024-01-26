@@ -84,19 +84,6 @@ def user_delete_labels(user_id: str,
     return get_user_by_id(user_id, db)
 
 
-@router.delete("/user/{user_id}/labels/{label_id}")
-def user_delete_label_by_id(user_id: str,
-                            label_id: str,
-                            input: UserDeleteLabelsIn,
-                            db: Annotated[Database, Depends(mongo_db_client)]) -> mongodb_model.User:
-    db.users.update_one(
-        {"id": user_id},
-        {"$pullAll": {"labels": [x for x in input.labels if x.id == label_id]}}
-    )
-
-    return get_user_by_id(user_id, db)
-
-
 def get_user_by_id(id: str, db: Database) -> mongodb_model.User:
     user = db.users.find_one({"id": f"{id}"})
     if not user:

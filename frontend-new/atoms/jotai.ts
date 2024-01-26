@@ -35,7 +35,7 @@ export const labelsAtom = atom(
     }
 )
 
-export const editedLabelsAtom = atom<{title: string, label_id: LabelData}[]>([])
+export const editedLabelsAtom = atom<Map<string, {name: string, color: string}>>(new Map())
 
 export type Session = {
     id: string
