@@ -41,47 +41,56 @@ const dummyDataBars = [
     {
         date: new Date(1706050801000),
         duration: 8,
-        label: "maths"
+        labelName: "maths",
+        labelColor: "#000000"
     },
     {
         date: new Date(1706050801000),
         duration: 7,
-        label: "physics"
+        labelName: "physics",
+        labelColor: "#000000"
     },
     {
         date: new Date(1706050801000),
         duration: 4,
-        label: "physics"
+        labelName: "physics",
+        labelColor: "#6b6b6b"
     },
     {
         date: new Date(1705964401000),
         duration: 6,
-        label: "history"
+        labelName: "history",
+        labelColor: "#ffffff"
     },
     {
         date: new Date(1705878001000),
         duration: 5,
-        label: "maths"
+        labelName: "maths",
+        labelColor: "#6b6b6b"
     },
     {
         date: new Date(1705791601000),
         duration: 5,
-        label: "history"
+        labelName: "history",
+        labelColor: "#6b6b6b"
     },
     {
         date: new Date(1705791601000),
         duration: 7,
-        label: "maths"
+        labelName: "maths",
+        labelColor: "#ffffff"
     },
     {
         date: new Date(1705705201000),
         duration: 9,
-        label: "physics"
+        labelName: "physics",
+        labelColor: "#ffffff"
     },
     {
         date: new Date(1705705201000),
         duration: 2,
-        label: "maths"
+        labelName: "maths",
+        labelColor: "#6b6b6b"
     }
 ]
 
