@@ -42,7 +42,8 @@ export type Session = {
     title: string
     label_id: string
     duration: string
-    date: string
+    start_date: Date
+    end_date: Date
 }
 
 export type SessionResponse = {
@@ -87,7 +88,8 @@ export const userAllSessionsAtom = atom(
                             title: session.title,
                             label_id: session.label_id,
                             duration: duration,
-                            date: new Date(start.timestamp * 1000).toDateString()
+                            start_date: new Date(start.timestamp * 1000),
+                            end_date: new Date(stop.timestamp * 1000)
                         }
                     })
                 )

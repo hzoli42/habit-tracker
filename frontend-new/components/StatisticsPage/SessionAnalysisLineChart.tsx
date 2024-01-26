@@ -5,7 +5,7 @@ import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis } fro
 
 export default function SessionAnalysisLineChart({ title, data }: { title: string, data: { date: Date, duration: number }[] }) {
     function formatDate(value: Date, index: number): string {
-        return `${value.getDay()}/${value.getMonth()}/${value.getFullYear()}`
+        return `${value.toDateString()}`
     }
 
     return (

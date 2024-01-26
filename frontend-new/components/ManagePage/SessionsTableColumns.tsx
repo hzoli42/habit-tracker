@@ -69,6 +69,9 @@ export const sessionColumns: ColumnDef<Session>[] = [
     {
         accessorKey: "date",
         header: "Date",
+        cell: ({ row }) => {
+            return row.original.start_date.toDateString()
+        }
     },
     {
         accessorKey: "delete",

@@ -1,5 +1,11 @@
+'use client'
+
+import { userAllSessionsAtom } from "@/atoms/jotai"
 import SessionAnalysisBarChart from "@/components/StatisticsPage/SessionAnalysisBarChart"
 import SessionAnalysisLineChart from "@/components/StatisticsPage/SessionAnalysisLineChart"
+import { useUser } from "@auth0/nextjs-auth0/client"
+import { useAtom } from "jotai"
+import { useEffect } from "react"
 
 
 const dummyDataLines = [
@@ -96,10 +102,23 @@ const dummyDataBars = [
 
 
 export default function Home() {
+    const [userAllSessions, setUserAllSessions] = useAtom(userAllSessionsAtom)
+    const { user, error, isLoading } = useUser();
+
+    useEffect(() => {
+        setUserAllSessions(user?.sub)
+    }, [isLoading])
+
+    function getLinesData() {
+        return userAllSessions.map(s => ({ date: s.start_date, duration: s.end_date.getUTCSeconds() - s.start_date.getUTCSeconds() }))
+    }
+
+    console.log(getLinesData())
+
     return (
         <main>
             <div>
-                <SessionAnalysisLineChart title="Total work time" data={dummyDataLines} />
+                <SessionAnalysisLineChart title="Total work time" data={getLinesData()} />
                 <SessionAnalysisBarChart title="Total work time by label" data={dummyDataBars} />
             </div>
         </main>
