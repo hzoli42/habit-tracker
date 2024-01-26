@@ -7,7 +7,7 @@ import { LabelCombobox } from "../utils/LabelCombobox"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { useAtom } from "jotai"
-import { LabelData, Session, editedSessionsAtom, userAllSessionsAtom } from "@/atoms/jotai"
+import { LabelData, editedSessionsAtom, userAllSessionsAtom } from "@/atoms/jotai"
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { DateTimeField } from "@mui/x-date-pickers"
@@ -15,60 +15,36 @@ import dayjs from "dayjs"
 import { Label } from "recharts"
 import { useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
+import ColorPicker from "../utils/ColorPicker"
 
-export const sessionColumns: ColumnDef<Session>[] = [
+
+export const labelColumns: ColumnDef<LabelData>[] = [
     {
-        accessorKey: "title",
-        header: "Title",
+        accessorKey: "name",
+        header: "Name",
         cell: ({ row }) => {
-            const [sessions, setSessions] = useAtom(editedSessionsAtom)
-            const updateSessionTitle = (newTitle: string) => {
-                if (newTitle == "") {
-                    return
-                }
-                const label = sessions.get(row.original.id)?.label ?? row.original.label
-                const newSessions = new Map(sessions).set(row.original.id, { title: newTitle, label: label })
-                console.log('session title change')
-                setSessions(newSessions)
-            }
-
             return (
-                <Button
-                    variant="ghost"
-                    role="combobox"
-                    className="flex justify-between flex-wrap h-auto group w-full"
-                >
-                    {
-                        <Input
-                            className="focus:outline focus:placeholder:text-slate-400 w-full placeholder:text-black"
-                            placeholder={row.original.title}
-                            onBlur={(e) => updateSessionTitle(e.currentTarget.value)} />
-                    }
-                </Button>
+                <div style={{ backgroundColor: `${row.original.labelColor}` }} className="flex min-h-[20px] rounded-lg px-2 py-1 inline">
+                    <p className="text-white">{row.original.labelName}</p>
+                </div>
             )
         }
     },
     {
-        accessorKey: "labels",
-        header: "Labels",
+        accessorKey: "color",
+        header: "Color",
         cell: ({ row }) => {
-            const [sessions, setSessions] = useAtom(editedSessionsAtom)
-            const onLabelChange = (selectedLabel: LabelData) => {
-                const title = sessions.get(row.original.id)?.title ?? row.original.title
-                const newSessions = new Map(sessions).set(row.original.id, { title: title, label: selectedLabel })
-                console.log('session labels change')
-                setSessions(newSessions)
-            }
-            return <LabelCombobox disabled={false} startingLabel={row.original.label} onLabelChange={onLabelChange} />
+            return (
+                <div>
+                    <Button
+                        variant="ghost"
+                        className="gap-x-2 w-full h-auto justify-start"
+                    >
+                        <ColorPicker initialColor={row.original.labelColor} onColorChange={(color) => (setNewLabelColor(color))} />
+                    </Button>
+                </div>
+            )
         },
-    },
-    {
-        accessorKey: "duration",
-        header: "Duration",
-    },
-    {
-        accessorKey: "date",
-        header: "Date",
     },
     {
         accessorKey: "delete",

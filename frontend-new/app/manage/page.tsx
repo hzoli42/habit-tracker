@@ -1,7 +1,8 @@
 'use client'
 import { LabelData, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/atoms/jotai";
+import { labelColumns } from "@/components/ManagePage/LabelsTableColumns";
 import NewSessionDialog from "@/components/ManagePage/NewSessionDialog";
-import { Session, columns } from "@/components/ManagePage/SessionsTableColumns";
+import { sessionColumns } from "@/components/ManagePage/SessionsTableColumns";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DataTable } from "@/components/utils/DataTable";
@@ -61,7 +62,7 @@ export default function Home() {
                             </div>
 
                         </div>
-                        <DataTable data={userAllSessions} columns={columns} />
+                        <DataTable data={userAllSessions} columns={sessionColumns} />
                     </TabsContent>
                     <TabsContent value="analysis">
                         <div className="flex justify-between pt-6 pb-4">
@@ -74,7 +75,7 @@ export default function Home() {
                             </div>
 
                         </div>
-                        <DataTable data={userAllSessions} columns={columns} />
+                        <DataTable data={labels} columns={labelColumns} />
                     </TabsContent>
                 </Tabs>
             </div>

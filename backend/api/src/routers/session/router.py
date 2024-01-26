@@ -1,6 +1,7 @@
 
 from typing import Annotated, Callable
 from fastapi import APIRouter, Depends, HTTPException
+import pymongo
 from .model import SessionActionIn, SessionAllOut, SessionModifyIn, SessionStartIn
 from api.src.dependencies import mongo_db_client, uuid_generator
 
@@ -52,14 +53,21 @@ async def get_session(id: str,
 
 
 @router.post("/session/{id}")
-async def modify_session_title(id: str,
-                               input: SessionModifyIn,
-                               db: Annotated[Database, Depends(mongo_db_client)]) -> mongodb_model.Session:
+async def modify_session(id: str,
+                         input: SessionModifyIn,
+                         db: Annotated[Database, Depends(mongo_db_client)]) -> mongodb_model.Session:
     db.sessions.update_one(
         {"id": id},
         {"$set": {"title": input.title, "label": input.label.__dict__}}
     )
     return get_session_by_id(id, db)
+
+
+@router.delete("/session/{id}")
+async def delete_session(id: str,
+                         db: Annotated[Database, Depends(mongo_db_client)]) -> int:
+    result = db.sessions.delete_one({"id": id})
+    return result.deleted_count
 
 
 @router.get("/session/all/{user_id}")

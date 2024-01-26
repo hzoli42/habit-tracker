@@ -34,8 +34,6 @@ export const labelsAtom = atom(
     }
 )
 
-export const editedSessionsAtom = atom<Map<string, {title: string, label: LabelData}>>(new Map())
-
 export type Session = {
     id: string
     title: string
@@ -93,3 +91,5 @@ export const userAllSessionsAtom = atom(
             })
     }
 )
+
+export const editedSessionsAtom = atom<Map<string, {title: string, label: LabelData}>>(new Map())
