@@ -8,5 +8,5 @@
 ## Deploying on AWS
 
 - Linux machine requires: sudo apt-get install -y libkrb5-dev
-
+- Guid to deploy backend on AWS EC2: https://medium.com/@vanyamyshkin/deploy-python-fastapi-for-free-on-aws-ec2-050b46744366
 
