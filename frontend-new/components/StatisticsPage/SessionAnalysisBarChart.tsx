@@ -12,7 +12,7 @@ export default function SessionAnalysisBarChart({ title, data }: {
     }[]
 }) {
     function formatDate(value: Date, index: number): string {
-        return `${value.getUTCDay()}/${value.getUTCMonth()}/${value.getUTCFullYear()}`
+        return `${value.toDateString()}`
     }
 
     let dataMap = new Map<string, Map<string, { duration: number, color: string }>>()
@@ -54,7 +54,6 @@ export default function SessionAnalysisBarChart({ title, data }: {
                         {
                             labelsList.map(l => {
                                 const datakey = `pairs.${l}.duration`
-                                console.log(barChartData)
                                 return (
                                     < Bar stackId="pairs" dataKey={datakey}>
                                         {
@@ -67,7 +66,6 @@ export default function SessionAnalysisBarChart({ title, data }: {
                                                 )
                                             })
                                         }
-
                                     </Bar>
                                 )
                             })

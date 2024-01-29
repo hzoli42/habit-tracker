@@ -1,6 +1,6 @@
 'use client'
 
-import { userAllSessionsAtom } from "@/atoms/jotai"
+import { labelsAtom, userAllSessionsAtom } from "@/atoms/jotai"
 import SessionAnalysisBarChart from "@/components/StatisticsPage/SessionAnalysisBarChart"
 import SessionAnalysisLineChart from "@/components/StatisticsPage/SessionAnalysisLineChart"
 import { useUser } from "@auth0/nextjs-auth0/client"
@@ -103,23 +103,38 @@ const dummyDataBars = [
 
 export default function Home() {
     const [userAllSessions, setUserAllSessions] = useAtom(userAllSessionsAtom)
+    const [labels, setLabels] = useAtom(labelsAtom)
+
     const { user, error, isLoading } = useUser();
 
     useEffect(() => {
         setUserAllSessions(user?.sub)
+        setLabels(user?.sub)
     }, [isLoading])
 
     function getLinesData() {
-        return userAllSessions.map(s => ({ date: s.start_date, duration: s.end_date.getUTCSeconds() - s.start_date.getUTCSeconds() }))
+        return userAllSessions.map(s => ({ date: s.start_date, duration: s.end_date.valueOf() - s.start_date.valueOf() }))
     }
 
-    console.log(getLinesData())
+    function getBarsData() {
+        return userAllSessions.map(s => (
+            {
+                date: s.start_date,
+                duration: s.end_date.valueOf() - s.start_date.valueOf(),
+                labelName: labels.find(l => l.id === s.label_id)?.labelName ?? "Error",
+                labelColor: labels.find(l => l.id === s.label_id)?.labelColor ?? "Error"
+            }
+        ))
+    }
+
+    // console.log(getLinesData())
+    getBarsData().forEach(x => console.log(x.date, x.duration, x.labelName, x.labelColor))
 
     return (
         <main>
             <div>
                 <SessionAnalysisLineChart title="Total work time" data={getLinesData()} />
-                <SessionAnalysisBarChart title="Total work time by label" data={dummyDataBars} />
+                <SessionAnalysisBarChart title="Total work time by label" data={getBarsData()} />
             </div>
         </main>
     )
