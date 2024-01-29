@@ -5,3 +5,8 @@
 3. User can login to access only information relevant to them
 4. User can view advanced analytics of their sessions over time corellated with data from Google Fit or other health trackers/monitors
 
+## Deploying on AWS
+
+- Linux machine requires: sudo apt-get install -y libkrb5-dev
+
+
