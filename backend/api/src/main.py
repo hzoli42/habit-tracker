@@ -6,8 +6,12 @@ import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-app.include_router(session_router)
-app.include_router(user_router)
+
+api_v1 = FastAPI()
+api_v1.include_router(session_router)
+api_v1.include_router(user_router)
+
+app.mount("/api/v1", api_v1)
 
 origins = [
     "http://0.0.0.0:3000",
@@ -15,7 +19,7 @@ origins = [
     "http://localhost:3000"
 ]
 
-app.add_middleware(
+api_v1.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
