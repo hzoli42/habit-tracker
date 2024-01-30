@@ -6,3 +6,4 @@ __pycache__
 .fake
 .next/
 node_modules
+env/
