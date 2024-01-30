@@ -10,5 +10,6 @@
 
 ## Deploying on AWS
 - Linux machine requires: sudo apt-get install -y libkrb5-dev
-- Guid to deploy backend on AWS EC2: https://medium.com/@vanyamyshkin/deploy-python-fastapi-for-free-on-aws-ec2-050b46744366
+- Guide to deploy backend on AWS EC2: https://medium.com/@vanyamyshkin/deploy-python-fastapi-for-free-on-aws-ec2-050b46744366
+- Guide to deploy frontend on AWS EC2: https://medium.com/@mudasirhaji/deploying-a-next-js-app-manually-on-aws-ec2-a-step-by-step-guide-58b266ff1c52
 
