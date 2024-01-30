@@ -27,7 +27,7 @@ export function newAction(action: string): Action {
 }
 
 export async function start(user: string, title: string, label: string | undefined): Promise<string> {
-    return await fetch('http://0.0.0.0:5000/session/start', {
+    return await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/session/start`, {
         method: "POST",
         mode: "cors",
         headers: { "Content-Type": "application/json" },
@@ -46,7 +46,7 @@ export async function start(user: string, title: string, label: string | undefin
 }
 
 export async function stop(sessionId: string) {
-    await fetch('http://0.0.0.0:5000/session/stop', {
+    await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/session/stop`, {
         method: "POST",
         mode: "cors",
         headers: { "Content-Type": "application/json" },

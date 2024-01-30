@@ -83,7 +83,7 @@ export const labelColumns: ColumnDef<LabelData>[] = [
             const [labels, setLabels] = useAtom(labelsAtom)
             const { user, error, isLoading } = useUser();
             const onLabelDelete = async () => {
-                await fetch(`http://0.0.0.0:5000/user/${user?.sub}/labels`, {
+                await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/user/${user?.sub}/labels`, {
                     method: "POST",
                     mode: "cors",
                     headers: { "Content-Type": "application/json" },

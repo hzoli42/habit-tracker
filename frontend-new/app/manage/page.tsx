@@ -30,7 +30,7 @@ export default function Home() {
     function updateEditedSessions() {
         console.log(editedSessions)
         editedSessions.forEach(({ title, label_id }, id) => {
-            fetch(`http://0.0.0.0:5000/session/${id}`, {
+            fetch(`${process.env.NEXT_PUBLIC_API_BASE}/session/${id}`, {
                 method: "POST",
                 mode: "cors",
                 headers: { "Content-Type": "application/json" },
@@ -60,7 +60,7 @@ export default function Home() {
             }
         })
 
-        fetch(`http://0.0.0.0:5000/user/${user?.sub}/labels`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE}/user/${user?.sub}/labels`, {
             method: "POST",
             mode: "cors",
             headers: { "Content-Type": "application/json" },

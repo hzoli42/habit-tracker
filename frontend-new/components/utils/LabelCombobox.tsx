@@ -63,7 +63,7 @@ export function LabelCombobox({ startingLabel, onLabelChange, disabled }: LabelC
         setOpen(false)
         const newLabel = { id: "", labelName: labelSearchInput, labelColor: newLabelColor }
         const newLabels = labels.concat(newLabel)
-        await fetch(`http://0.0.0.0:5000/user/${user?.sub}/labels`, {
+        await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/user/${user?.sub}/labels`, {
             method: "POST",
             mode: "cors",
             headers: { "Content-Type": "application/json" },

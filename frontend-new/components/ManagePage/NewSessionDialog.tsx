@@ -23,7 +23,7 @@ export default function NewSessionDialog() {
 
     async function onDialogSubmit() {
         let sessionId = ""
-        await fetch('http://0.0.0.0:5000/session/start', {
+        await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/session/start`, {
             method: "POST",
             mode: "cors",
             headers: { "Content-Type": "application/json" },
@@ -41,7 +41,7 @@ export default function NewSessionDialog() {
             .then(data => {
                 sessionId = data.id
             })
-        await fetch('http://0.0.0.0:5000/session/stop', {
+        await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/session/stop`, {
             method: "POST",
             mode: "cors",
             headers: { "Content-Type": "application/json" },

@@ -19,7 +19,8 @@ export const labelsAtom = atom(
             set(labelsPrimitiveAtom, [])
             return
         }
-        fetch(`http://0.0.0.0:5000/user/${user_id}/labels`, {
+        console.log(process.env.NEXT_PUBLIC_API_BASE)
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE}/user/${user_id}/labels`, {
             method: "GET",
             mode: "cors",
             headers: { "Content-Type": "application/json" },
@@ -67,7 +68,7 @@ export const userAllSessionsAtom = atom(
             set(userAllSessionsPrimitiveAtom, [])
             return
         }
-        fetch(`http://0.0.0.0:5000/session/all/${user_id}`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_BASE}/session/all/${user_id}`, {
             method: "GET",
             mode: "cors",
             headers: { "Content-Type": "application/json" },
@@ -81,7 +82,7 @@ export const userAllSessionsAtom = atom(
                         let duration = "This session does not have an end time"
                         if (stop != null) {
                             const durationObject = new Date(stop.timestamp * 1000 - start.timestamp * 1000)
-                            duration = `${durationObject.getUTCHours()}h ${durationObject.getUTCMinutes()}m ${durationObject.getUTCSeconds()}s`
+                            duration = `${durationObject.getHours()}h ${durationObject.getMinutes()}m ${durationObject.getSeconds()}s`
                         }
                         return {
                             id: session.id,

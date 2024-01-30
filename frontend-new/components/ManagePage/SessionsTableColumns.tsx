@@ -81,7 +81,7 @@ export const sessionColumns: ColumnDef<Session>[] = [
             const [userAllSessions, setUserAllSessions] = useAtom(userAllSessionsAtom)
             const { user, error, isLoading } = useUser();
             const onSessionDelete = async () => {
-                await fetch(`http://0.0.0.0:5000/session/${row.original.id}`, {
+                await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/session/${row.original.id}`, {
                     method: "DELETE",
                     mode: "cors",
                     headers: { "Content-Type": "application/json" },
