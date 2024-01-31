@@ -15,7 +15,6 @@ app.mount("/api/v1", api_v1)
 
 origins = [
     "http://0.0.0.0:3000",
-    "http://habit-tracker:3000",
     "http://localhost:3000",
     "http://habit-tracker.zoltanhanesz.com"
 ]

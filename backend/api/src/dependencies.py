@@ -2,12 +2,13 @@ from typing import Callable
 import uuid
 from pymongo import MongoClient
 from pymongo.database import Database
+from api.src.config import settings
 
 
 async def mongo_db_client() -> Database:
-    connection_string = "mongodb+srv://hzoli42:COJYnwYB6adsMfUf@hzoli42habittracker.dau5pmq.mongodb.net/?retryWrites=true&w=majority"
-    client = MongoClient(connection_string, uuidRepresentation='standard')
-    db = client.habit_tracker
+    client = MongoClient(settings.mongo_connection_string,
+                         uuidRepresentation='standard')
+    db = client[settings.mongo_db_name]
     return db
 
 
