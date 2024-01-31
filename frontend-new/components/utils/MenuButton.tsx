@@ -5,9 +5,9 @@ import { Button } from "../ui/button";
 
 export default function MenuButton({ value, link }: { value: string, link: string }) {
   return (
-    <Button variant="ghost">
-      <a href={link}>{value}</a>
-    </Button>
+    <a href={link} className="w-full py-2">
+      {value}
+    </a>
   );
 
 }

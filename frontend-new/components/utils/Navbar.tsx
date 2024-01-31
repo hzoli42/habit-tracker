@@ -18,7 +18,7 @@ export default function Navbar() {
                 <div className="mr-2 font-mono">
                     <DropdownMenu>
                         <DropdownMenuTrigger>Menu</DropdownMenuTrigger>
-                        <DropdownMenuContent>
+                        <DropdownMenuContent className="w-32">
                             <DropdownMenuItem>
                                 {(!user)
                                     ? <MenuButton value="Login" link="/api/auth/login" />
