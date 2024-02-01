@@ -2,6 +2,7 @@
 
 import { labelsAtom } from "@/atoms/jotai";
 import { Button } from "@/components/ui/button";
+import { createUserIfNew } from "@/lib/api_utils";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
@@ -13,9 +14,10 @@ export default function Home() {
   if (error) return <div>{error.message}</div>;
 
   useEffect(() => {
-    if (isLoading) {
+    if (isLoading || user === undefined) {
       return
     }
+    // createUserIfNew(user).then(() => setLabels(user?.sub))
     setLabels(user?.sub)
   }, [isLoading])
 

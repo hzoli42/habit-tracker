@@ -22,6 +22,7 @@ import { useAtom } from "jotai"
 import { LabelData, labelsAtom } from "@/atoms/jotai"
 import ColorPicker from "./ColorPicker"
 import AddIcon from '@mui/icons-material/Add';
+import { createUserIfNew } from "@/lib/api_utils"
 
 
 export type LabelComboboxProps = {
@@ -40,9 +41,10 @@ export function LabelCombobox({ startingLabel, onLabelChange, disabled }: LabelC
     const [newLabelColor, setNewLabelColor] = useState("#000000")
 
     useEffect(() => {
-        if (isLoading) {
+        if (isLoading || user === undefined) {
             return
         }
+        // createUserIfNew(user).then(() => setLabels(user?.sub))
         setLabels(user?.sub)
     }, [isLoading])
 
@@ -80,21 +82,6 @@ export function LabelCombobox({ startingLabel, onLabelChange, disabled }: LabelC
         setLabels(user?.sub)
         onLabelChange ? onLabelChange(newLabel.id) : null
     }
-
-    // async function modifyLabelColor(labelName: string, labelColor: string) {
-    //     const newLabel = { labelName: labelName, labelColor: labelColor }
-    //     const newLabels = labels.filter(l => l.labelName != labelName).concat(newLabel)
-    //     await fetch(`http://0.0.0.0:5000/user/${user?.sub}/labels`, {
-    //         method: "POST",
-    //         mode: "cors",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify({
-    //             id: `${user?.sub}`,
-    //             labels: newLabels,
-    //         })
-    //     })
-    //     setLabels(user?.sub)
-    // }
 
     return (
         <Popover open={open} onOpenChange={setOpen}>

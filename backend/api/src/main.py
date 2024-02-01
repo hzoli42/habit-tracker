@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from api.src.routers.session.router import router as session_router
-from api.src.routers.user.router import router as user_router
+from api.src.routers.label.router import router as user_router
 
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware

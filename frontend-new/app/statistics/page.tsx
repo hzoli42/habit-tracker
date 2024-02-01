@@ -3,6 +3,7 @@
 import { labelsAtom, userAllSessionsAtom } from "@/atoms/jotai"
 import SessionAnalysisBarChart from "@/components/StatisticsPage/SessionAnalysisBarChart"
 import SessionAnalysisLineChart from "@/components/StatisticsPage/SessionAnalysisLineChart"
+import { createUserIfNew } from "@/lib/api_utils"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import { useAtom } from "jotai"
 import { useEffect } from "react"
@@ -108,8 +109,17 @@ export default function Home() {
     const { user, error, isLoading } = useUser();
 
     useEffect(() => {
+        if (isLoading || user === undefined) {
+            return
+        }
+
+        // createUserIfNew(user).then(() => {
+        //     setUserAllSessions(user?.sub)
+        //     setLabels(user?.sub)
+        // })
         setUserAllSessions(user?.sub)
         setLabels(user?.sub)
+
     }, [isLoading])
 
     function getLinesData() {

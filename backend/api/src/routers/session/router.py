@@ -25,7 +25,7 @@ async def start_session(input: SessionStartIn,
         label_id=input.label_id
     )
 
-    db.sessions.insert_one(document.dict())
+    db.sessions.insert_one(document.model_dump())
     return get_session_by_id(session_id, db)
 
 
@@ -40,7 +40,7 @@ async def action_session(input: SessionActionIn,
 
     db.sessions.update_one(
         {"id": input.id},
-        {"$push": {"actions": input.action.dict()}}
+        {"$push": {"actions": input.action.model_dump()}}
     )
 
     return get_session_by_id(input.id, db)

@@ -2,6 +2,7 @@
 
 import { labelsAtom } from "@/atoms/jotai";
 import Stopwatch from "@/components/TrackPage/Stopwatch";
+import { createUserIfNew } from "@/lib/api_utils";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
@@ -11,9 +12,10 @@ export default function Home() {
   const [labels, setLabels] = useAtom(labelsAtom)
 
   useEffect(() => {
-    if (isLoading) {
+    if (isLoading || user === undefined) {
       return
     }
+    // createUserIfNew(user).then(() => setLabels(user?.sub))
     setLabels(user?.sub)
   }, [isLoading])
 

@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 from api.src.mongodb.session import Session, Action
-from api.src.mongodb.user import LabelData
 
 #######################################################################################################################
 

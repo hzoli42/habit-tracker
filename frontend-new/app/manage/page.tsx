@@ -6,6 +6,7 @@ import { sessionColumns } from "@/components/ManagePage/SessionsTableColumns";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DataTable } from "@/components/utils/DataTable";
+import { createUserIfNew } from "@/lib/api_utils";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
@@ -19,12 +20,15 @@ export default function Home() {
     const [userAllSessions, setUserAllSessions] = useAtom(userAllSessionsAtom)
 
     useEffect(() => {
-        if (isLoading) {
+        if (isLoading || user === undefined) {
             return
         }
+        // createUserIfNew(user).then(() => {
+        //     setLabels(user?.sub)
+        //     setUserAllSessions(user?.sub)
+        // })
         setLabels(user?.sub)
         setUserAllSessions(user?.sub)
-        console.log(userAllSessions)
     }, [isLoading])
 
     function updateEditedSessions() {

@@ -2,8 +2,6 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from api.src.mongodb.user import LabelData
-
 
 class Action(BaseModel):
     timestamp: float

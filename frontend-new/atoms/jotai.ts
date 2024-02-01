@@ -1,3 +1,4 @@
+import { createUserIfNew } from '@/lib/api_utils'
 import { atom } from 'jotai'
 
 export type LabelData = {
