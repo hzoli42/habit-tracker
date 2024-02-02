@@ -9,7 +9,7 @@ import { DataTable } from "@/components/utils/DataTable";
 import { postLabelUpdate, postSessionModify } from "@/lib/api_utils";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAtom } from "jotai";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 
 export default function Home() {
@@ -26,6 +26,19 @@ export default function Home() {
         setLabels(user?.sub)
         setUserAllSessions(user?.sub)
     }, [isLoading])
+
+    useEffect(() => {
+        console.log("Labels atom updated - should force rerender")
+    }, [labels])
+
+    useEffect(() => {
+        console.log("Sessions atom updated - should force rerender")
+    }, [userAllSessions])
+
+    useEffect(() => {
+        console.log("Editedlabels atom updated - should force rerender")
+    }, [editedLabels])
+
 
     function updateEditedSessions() {
         let sessionUpdates: Promise<Response>[] = []

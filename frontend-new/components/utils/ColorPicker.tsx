@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "../ui/button"
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Popover, PopoverTrigger } from "../ui/popover";
@@ -11,6 +11,10 @@ export default function ColorPicker({ initialColor, onColorChange }: {
 }) {
     const [color, setColor] = useState(initialColor)
     const [open, setOpen] = useState(false)
+
+    useEffect(() => {
+        setColor(initialColor)
+    }, [initialColor])
 
     function handleChange(color: ColorResult, event: React.ChangeEvent<HTMLInputElement>) {
         setColor(color.hex)

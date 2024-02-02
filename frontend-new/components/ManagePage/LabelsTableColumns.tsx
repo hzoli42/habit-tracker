@@ -29,21 +29,18 @@ export const labelColumns: ColumnDef<Label>[] = [
                 const newEditedLabels = new Map(editedLabels).set(row.original.id, { name: newName, color: color })
                 setEditedLabels(newEditedLabels)
             }
-
             return (
                 <Button
                     variant="ghost"
                     role="combobox"
                     className="flex justify-between flex-wrap h-auto group w-full"
                 >
-                    {
-                        <Input
-                            className="focus:outline focus:placeholder:text-slate-400 w-full placeholder:text-white"
-                            placeholder={row.original.name}
-                            onBlur={(e) => updateLabelName(e.currentTarget.value)}
-                            style={{ backgroundColor: `${row.original.color}` }}
-                        />
-                    }
+                    <Input
+                        className="focus:outline focus:placeholder:text-slate-100 w-full placeholder:text-white focus:text-white text-white"
+                        placeholder={row.original.name}
+                        onBlur={(e) => updateLabelName(e.currentTarget.value)}
+                        style={{ backgroundColor: `${row.original.color}` }}
+                    />
                 </Button >
             )
         }
@@ -53,12 +50,12 @@ export const labelColumns: ColumnDef<Label>[] = [
         header: "Color",
         cell: ({ row }) => {
             const [editedLabels, setEditedLabels] = useAtom(editedLabelsAtom)
+
             const updateLabelColor = (newColor: string) => {
                 const name = editedLabels.get(row.original.id)?.name ?? row.original.name
                 const newEditedLabels = new Map(editedLabels).set(row.original.id, { name: name, color: newColor })
                 setEditedLabels(newEditedLabels)
             }
-
             return (
                 <div>
                     <Button
