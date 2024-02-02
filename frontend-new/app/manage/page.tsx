@@ -1,6 +1,7 @@
 'use client'
 import { editedLabelsAtom, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/atoms/jotai";
 import { labelColumns } from "@/components/ManagePage/LabelsTableColumns";
+import NewLabelDialog from "@/components/ManagePage/NewLabelDialog";
 import NewSessionDialog from "@/components/ManagePage/NewSessionDialog";
 import { sessionColumns } from "@/components/ManagePage/SessionsTableColumns";
 import { Button } from "@/components/ui/button";
@@ -68,7 +69,7 @@ export default function Home() {
                 <Tabs defaultValue="sessions">
                     <TabsList>
                         <TabsTrigger value="sessions">Sessions</TabsTrigger>
-                        <TabsTrigger value="analysis">Labels</TabsTrigger>
+                        <TabsTrigger value="labels">Labels</TabsTrigger>
                     </TabsList>
                     <TabsContent value="sessions">
                         <div className="flex justify-between pt-6 pb-4">
@@ -83,14 +84,14 @@ export default function Home() {
                         </div>
                         <DataTable data={userAllSessions} columns={sessionColumns} />
                     </TabsContent>
-                    <TabsContent value="analysis">
+                    <TabsContent value="labels">
                         <div className="flex justify-between pt-6 pb-4">
-                            <article className="prose lg:prose-xl"><h1>Sessions</h1></article>
+                            <article className="prose lg:prose-xl"><h1>Labels</h1></article>
                             <div className="flex justify-center gap-4 items-center">
                                 {editedLabels.size != 0 && <Button className="bg-yellow-400 hover:bg-yellow-500" onClick={updateEditedLabels}>
                                     Save edited labels
                                 </Button>}
-                                <NewSessionDialog />
+                                <NewLabelDialog />
                             </div>
 
                         </div>
