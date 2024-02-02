@@ -7,7 +7,7 @@ import { LabelCombobox } from "../utils/LabelCombobox"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { useAtom } from "jotai"
-import { LabelData, Session, editedSessionsAtom, userAllSessionsAtom } from "@/atoms/jotai"
+import { Session, editedSessionsAtom, userAllSessionsAtom } from "@/atoms/jotai"
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { DateTimeField } from "@mui/x-date-pickers"
@@ -15,6 +15,7 @@ import dayjs from "dayjs"
 import { Label } from "recharts"
 import { useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
+import { deleteSessionById } from "@/lib/api_utils"
 
 export const sessionColumns: ColumnDef<Session>[] = [
     {
@@ -26,8 +27,8 @@ export const sessionColumns: ColumnDef<Session>[] = [
                 if (newTitle == "") {
                     return
                 }
-                const label_id = sessions.get(row.original.id)?.label_id ?? row.original.label_id
-                const newSessions = new Map(sessions).set(row.original.id, { title: newTitle, label_id: label_id })
+                const label_id = sessions.get(row.original.id)?.labelId ?? row.original.label_id
+                const newSessions = new Map(sessions).set(row.original.id, { title: newTitle, labelId: label_id })
                 console.log('session title change')
                 setSessions(newSessions)
             }
@@ -55,7 +56,7 @@ export const sessionColumns: ColumnDef<Session>[] = [
             const [sessions, setSessions] = useAtom(editedSessionsAtom)
             const onLabelChange = (selectedLabel: string) => {
                 const title = sessions.get(row.original.id)?.title ?? row.original.title
-                const newSessions = new Map(sessions).set(row.original.id, { title: title, label_id: selectedLabel })
+                const newSessions = new Map(sessions).set(row.original.id, { title: title, labelId: selectedLabel })
                 console.log('session labels change')
                 setSessions(newSessions)
             }
@@ -81,13 +82,9 @@ export const sessionColumns: ColumnDef<Session>[] = [
             const [userAllSessions, setUserAllSessions] = useAtom(userAllSessionsAtom)
             const { user, error, isLoading } = useUser();
             const onSessionDelete = async () => {
-                await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/session/${row.original.id}`, {
-                    method: "DELETE",
-                    mode: "cors",
-                    headers: { "Content-Type": "application/json" },
-                })
+                await deleteSessionById(row.original.id)
                 setOpen(false)
-                setUserAllSessions(user?.sub)
+                setUserAllSessions(user?.sub ?? undefined)
             }
 
             return (

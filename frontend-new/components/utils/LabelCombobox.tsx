@@ -19,10 +19,10 @@ import Chip from '@mui/material/Chip'
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import { useAtom } from "jotai"
-import { LabelData, labelsAtom } from "@/atoms/jotai"
+import { Label, labelsAtom } from "@/atoms/jotai"
 import ColorPicker from "./ColorPicker"
 import AddIcon from '@mui/icons-material/Add';
-import { createUserIfNew } from "@/lib/api_utils"
+import { postNewLabel } from "@/lib/api_utils"
 
 
 export type LabelComboboxProps = {
@@ -37,15 +37,15 @@ export function LabelCombobox({ startingLabel, onLabelChange, disabled }: LabelC
     const [open, setOpen] = useState(false)
     const [labelSearchInput, setLabelSearchInput] = useState("")
     const [selectedLabel, setSelectedLabel] = useState<string | undefined>(startingLabel)
-    const [selectedLabelData, setSelectedLabelData] = useState<LabelData | undefined>(undefined)
+    const [selectedLabelData, setSelectedLabelData] = useState<Label | undefined>(undefined)
     const [newLabelColor, setNewLabelColor] = useState("#000000")
 
     useEffect(() => {
-        if (isLoading || user === undefined) {
+        if (isLoading) {
             return
         }
-        // createUserIfNew(user).then(() => setLabels(user?.sub))
-        setLabels(user?.sub)
+        setLabels(user?.sub ?? undefined)
+        console.log(labels)
     }, [isLoading])
 
     useEffect(() => {
@@ -55,7 +55,8 @@ export function LabelCombobox({ startingLabel, onLabelChange, disabled }: LabelC
 
 
     function onSelectLabel(currentValue: string) {
-        const newSelectedLabel = labels.find(ld => ld.id === currentValue) ?? { id: "", labelName: "Error", labelColor: "9B9B9B" }
+        const newSelectedLabel = labels.find(ld => ld.id === currentValue) ??
+            { id: "", user_id: "", name: "Error", color: "9B9B9B" }
         setSelectedLabel(newSelectedLabel.id)
         setSelectedLabelData(newSelectedLabel)
         onLabelChange ? onLabelChange(newSelectedLabel.id) : null
@@ -63,24 +64,14 @@ export function LabelCombobox({ startingLabel, onLabelChange, disabled }: LabelC
 
     async function addNewLabel() {
         setOpen(false)
-        const newLabel = { id: "", labelName: labelSearchInput, labelColor: newLabelColor }
-        const newLabels = labels.concat(newLabel)
-        await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/user/${user?.sub}/labels`, {
-            method: "POST",
-            mode: "cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                id: `${user?.sub}`,
-                labels: newLabels,
-            })
-        })
+        postNewLabel(user?.sub, labelSearchInput, newLabelColor)
             .then(response => response.json())
-            .then(data => {
-                setSelectedLabel(data[0].id)
-                setSelectedLabelData({ id: data[0].id, labelName: data[0].labelName, labelColor: data[0].labelColor })
+            .then((data: Label) => {
+                setSelectedLabel(data.id)
+                setSelectedLabelData(data)
+                setLabels(user?.sub ?? undefined)
+                onLabelChange ? onLabelChange(data.id) : null
             })
-        setLabels(user?.sub)
-        onLabelChange ? onLabelChange(newLabel.id) : null
     }
 
     return (
@@ -95,8 +86,8 @@ export function LabelCombobox({ startingLabel, onLabelChange, disabled }: LabelC
                     {
                         selectedLabel != undefined && selectedLabelData != undefined
                             ?
-                            <div style={{ backgroundColor: `${selectedLabelData.labelColor}` }} className="flex min-h-[20px] rounded-lg px-2 py-1 inline">
-                                <p className="text-white">{selectedLabelData.labelName}</p>
+                            <div style={{ backgroundColor: `${selectedLabelData.color}` }} className="flex min-h-[20px] rounded-lg px-2 py-1 inline">
+                                <p className="text-white">{selectedLabelData.name}</p>
                             </div>
                             : <>
                                 <p className="text-gray-500">Select a label</p>
@@ -138,11 +129,10 @@ export function LabelCombobox({ startingLabel, onLabelChange, disabled }: LabelC
                                                 (selectedLabel ?? "") === label.id ? "opacity-100" : "opacity-0"
                                             )}
                                         />
-                                        <div style={{ backgroundColor: `${label.labelColor}` }} className="flex min-h-[20px] rounded-lg px-2 py-1 inline">
-                                            <p className="text-white">{label.labelName}</p>
+                                        <div style={{ backgroundColor: `${label.color}` }} className="flex min-h-[20px] rounded-lg px-2 py-1 inline">
+                                            <p className="text-white">{label.name}</p>
                                         </div>
                                     </CommandItem>
-                                    {/* <ColorPicker initialColor={label.labelColor} onColorChange={(color) => modifyLabelColor(label.labelName, color)} /> */}
                                 </div>
                             ))
                         }

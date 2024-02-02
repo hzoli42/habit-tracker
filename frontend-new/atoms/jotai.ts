@@ -1,36 +1,29 @@
-import { createUserIfNew } from '@/lib/api_utils'
+import { getAllUserLabels, getAllUserSessions } from '@/lib/api_utils'
 import { atom } from 'jotai'
 
-export type LabelData = {
+export type Label = {
     id: string
-    labelName: string
-    labelColor: string
+    user_id: string
+    name: string
+    color: string
 }
 
-export type LabelsResponse = {
-    id: string
-    labels: LabelData[]
-}
+export type LabelsResponse = Label[]
 
-const labelsPrimitiveAtom = atom<LabelData[]>([])
+const labelsPrimitiveAtom = atom<Label[]>([])
 export const labelsAtom = atom(
     (get) => get(labelsPrimitiveAtom),
-    async (get, set, user_id)  => {
-        if (user_id == undefined) {
+    async (get, set, user_id: string | undefined | null)  => {
+        if (user_id === undefined || user_id === null) {
             set(labelsPrimitiveAtom, [])
             return
         }
         console.log(process.env.NEXT_PUBLIC_API_BASE)
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE}/user/${user_id}/labels`, {
-            method: "GET",
-            mode: "cors",
-            headers: { "Content-Type": "application/json" },
-        })
+        getAllUserLabels(user_id)
             .then(response => response.json())
             .then((data: LabelsResponse) => {
-                console.log(`Id = ${data.id}, Labels = ${data.labels}`)
-                const labelsProcessed = data.labels.map((ld, i, a) => { 
-                    return {id: ld.id, labelName: ld.labelName, labelColor: ld.labelColor}
+                const labelsProcessed = data.map((ld, i, a) => { 
+                    return {id: ld.id, user_id: ld.user_id, name: ld.name, color: ld.color}
                 })
                 set(labelsPrimitiveAtom, labelsProcessed)
             })
@@ -64,16 +57,12 @@ export type SessionResponse = {
 const userAllSessionsPrimitiveAtom = atom<Session[]>([])
 export const userAllSessionsAtom = atom(
     (get) => get(userAllSessionsPrimitiveAtom),
-    async (get, set, user_id) => {
-        if (user_id == undefined) {
+    async (get, set, user_id: string | undefined | null) => {
+        if (user_id === undefined || user_id === null) {
             set(userAllSessionsPrimitiveAtom, [])
             return
         }
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE}/session/all/${user_id}`, {
-            method: "GET",
-            mode: "cors",
-            headers: { "Content-Type": "application/json" },
-        })
+        getAllUserSessions(user_id)
             .then(response => response.json())
             .then(response_data => {
                 set(userAllSessionsPrimitiveAtom, response_data
@@ -99,4 +88,4 @@ export const userAllSessionsAtom = atom(
     }
 )
 
-export const editedSessionsAtom = atom<Map<string, {title: string, label_id: string}>>(new Map())
+export const editedSessionsAtom = atom<Map<string, {title: string, labelId: string}>>(new Map())

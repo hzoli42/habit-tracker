@@ -3,22 +3,19 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { LabelCombobox } from "../utils/LabelCombobox"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { useAtom } from "jotai"
-import { LabelData, editedLabelsAtom, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/atoms/jotai"
+import { Label, editedLabelsAtom, labelsAtom, } from "@/atoms/jotai"
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
-import { DateTimeField } from "@mui/x-date-pickers"
-import dayjs from "dayjs"
-import { Label } from "recharts"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import ColorPicker from "../utils/ColorPicker"
+import { deleteLabel } from "@/lib/api_utils"
 
 
-export const labelColumns: ColumnDef<LabelData>[] = [
+export const labelColumns: ColumnDef<Label>[] = [
     {
         accessorKey: "name",
         header: "Name",
@@ -28,7 +25,7 @@ export const labelColumns: ColumnDef<LabelData>[] = [
                 if (newName == "") {
                     return
                 }
-                const color = editedLabels.get(row.original.id)?.color ?? row.original.labelColor
+                const color = editedLabels.get(row.original.id)?.color ?? row.original.color
                 const newEditedLabels = new Map(editedLabels).set(row.original.id, { name: newName, color: color })
                 setEditedLabels(newEditedLabels)
             }
@@ -42,9 +39,9 @@ export const labelColumns: ColumnDef<LabelData>[] = [
                     {
                         <Input
                             className="focus:outline focus:placeholder:text-slate-400 w-full placeholder:text-white"
-                            placeholder={row.original.labelName}
+                            placeholder={row.original.name}
                             onBlur={(e) => updateLabelName(e.currentTarget.value)}
-                            style={{ backgroundColor: `${row.original.labelColor}` }}
+                            style={{ backgroundColor: `${row.original.color}` }}
                         />
                     }
                 </Button >
@@ -57,7 +54,7 @@ export const labelColumns: ColumnDef<LabelData>[] = [
         cell: ({ row }) => {
             const [editedLabels, setEditedLabels] = useAtom(editedLabelsAtom)
             const updateLabelColor = (newColor: string) => {
-                const name = editedLabels.get(row.original.id)?.name ?? row.original.labelName
+                const name = editedLabels.get(row.original.id)?.name ?? row.original.name
                 const newEditedLabels = new Map(editedLabels).set(row.original.id, { name: name, color: newColor })
                 setEditedLabels(newEditedLabels)
             }
@@ -69,7 +66,7 @@ export const labelColumns: ColumnDef<LabelData>[] = [
                         className="gap-x-2 w-full h-auto justify-start"
                         asChild
                     >
-                        <ColorPicker initialColor={row.original.labelColor} onColorChange={updateLabelColor} />
+                        <ColorPicker initialColor={row.original.color} onColorChange={updateLabelColor} />
                     </Button>
                 </div>
             )
@@ -83,16 +80,10 @@ export const labelColumns: ColumnDef<LabelData>[] = [
             const [labels, setLabels] = useAtom(labelsAtom)
             const { user, error, isLoading } = useUser();
             const onLabelDelete = async () => {
-                await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/user/${user?.sub}/labels`, {
-                    method: "POST",
-                    mode: "cors",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        labels: labels.filter(l => l.id != row.original.id)
-                    })
+                deleteLabel(row.original.id).then(() => {
+                    setOpen(false)
+                    setLabels(user?.sub)
                 })
-                setOpen(false)
-                setLabels(user?.sub)
             }
 
             return (

@@ -8,8 +8,9 @@ import { LabelCombobox } from "../utils/LabelCombobox";
 import dayjs from "dayjs";
 import { FormEvent, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { LabelData, userAllSessionsAtom } from "@/atoms/jotai";
+import { userAllSessionsAtom } from "@/atoms/jotai";
 import { useAtom } from "jotai";
+import { postSessionStart, postSessionStop } from "@/lib/api_utils";
 
 export default function NewSessionDialog() {
     const [open, setOpen] = useState(false);
@@ -23,36 +24,12 @@ export default function NewSessionDialog() {
 
     async function onDialogSubmit() {
         let sessionId = ""
-        await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/session/start`, {
-            method: "POST",
-            mode: "cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                user_id: user ? user.sub : "undefined",
-                title: title,
-                label_id: label,
-                action: {
-                    timestamp: startTime,
-                    event: "start"
-                }
-            })
-        })
+        await postSessionStart(user?.sub, title, label, startTime)
             .then(response => response.json())
             .then(data => {
                 sessionId = data.id
             })
-        await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/session/stop`, {
-            method: "POST",
-            mode: "cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                id: sessionId,
-                action: {
-                    timestamp: endTime,
-                    event: "stop"
-                }
-            })
-        })
+        await postSessionStop(sessionId, endTime)
         setOpen(false)
         setUserAllSessions(user?.sub)
     }

@@ -1,15 +1,15 @@
 'use client'
-import { LabelData, editedLabelsAtom, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/atoms/jotai";
+import { editedLabelsAtom, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/atoms/jotai";
 import { labelColumns } from "@/components/ManagePage/LabelsTableColumns";
 import NewSessionDialog from "@/components/ManagePage/NewSessionDialog";
 import { sessionColumns } from "@/components/ManagePage/SessionsTableColumns";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DataTable } from "@/components/utils/DataTable";
-import { createUserIfNew } from "@/lib/api_utils";
+import { postLabelUpdate, postSessionModify } from "@/lib/api_utils";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 
 export default function Home() {
@@ -20,61 +20,33 @@ export default function Home() {
     const [userAllSessions, setUserAllSessions] = useAtom(userAllSessionsAtom)
 
     useEffect(() => {
-        if (isLoading || user === undefined) {
+        if (isLoading) {
             return
         }
-        // createUserIfNew(user).then(() => {
-        //     setLabels(user?.sub)
-        //     setUserAllSessions(user?.sub)
-        // })
         setLabels(user?.sub)
         setUserAllSessions(user?.sub)
     }, [isLoading])
 
     function updateEditedSessions() {
-        console.log(editedSessions)
-        editedSessions.forEach(({ title, label_id }, id) => {
-            fetch(`${process.env.NEXT_PUBLIC_API_BASE}/session/${id}`, {
-                method: "POST",
-                mode: "cors",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    title: title,
-                    label_id: label_id
-                })
-            })
+        let sessionUpdates: Promise<Response>[] = []
+        editedSessions.forEach(({ title, labelId }, sessionId) => {
+            sessionUpdates.push(postSessionModify(sessionId, title, labelId))
         })
-        setEditedSessions(new Map())
-        setUserAllSessions(user?.sub)
+        Promise.all(sessionUpdates).then(() => {
+            setEditedSessions(new Map())
+            setUserAllSessions(user?.sub)
+        })
     }
 
     function updateEditedLabels() {
-        console.log(labels)
-        let newLabelsData: LabelData[] = []
-        labels.forEach(l => {
-            if (editedLabels.has(l.id)) {
-                const editedLabelData = editedLabels.get(l.id)
-                newLabelsData.push({
-                    id: l.id,
-                    labelName: editedLabelData?.name ?? "Error",
-                    labelColor: editedLabelData?.color ?? "#000000"
-                })
-            } else {
-                newLabelsData.push(l)
-            }
+        let labelUpdates: Promise<Response>[] = []
+        editedLabels.forEach(({ name, color }, labelId) => {
+            labelUpdates.push(postLabelUpdate(labelId, name, color))
         })
-
-        fetch(`${process.env.NEXT_PUBLIC_API_BASE}/user/${user?.sub}/labels`, {
-            method: "POST",
-            mode: "cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                labels: newLabelsData
-            })
+        Promise.all(labelUpdates).then(() => {
+            setEditedLabels(new Map())
+            setLabels(user?.sub)
         })
-
-        setEditedLabels(new Map())
-        setLabels(user?.sub)
     }
 
     return (

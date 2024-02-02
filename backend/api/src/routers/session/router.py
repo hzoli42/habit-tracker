@@ -70,7 +70,7 @@ async def delete_session(id: str,
     return result.deleted_count
 
 
-@router.get("/session/all/{user_id}")
+@router.get("/session/user/{user_id}")
 async def user_all_session(user_id: str,
                            db: Annotated[Database, Depends(mongo_db_client)]) -> list[mongodb_model.Session]:
     sessions = db.sessions.find({"user_id": f"{user_id}"})
