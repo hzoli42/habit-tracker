@@ -4,8 +4,10 @@ import { labelsAtom, userAllSessionsAtom } from "@/atoms/jotai"
 import SessionAnalysisBarChart from "@/components/StatisticsPage/SessionAnalysisBarChart"
 import SessionAnalysisLineChart from "@/components/StatisticsPage/SessionAnalysisLineChart"
 import { useUser } from "@auth0/nextjs-auth0/client"
+import { Typography } from "@material-tailwind/react"
 import { useAtom } from "jotai"
 import { useEffect } from "react"
+import BuildIcon from '@mui/icons-material/Build';
 
 
 // const dummyDataLines = [
@@ -130,13 +132,15 @@ export default function Home() {
         ))
     }
 
-    getBarsData().forEach(x => console.log(x.date, x.duration, x.labelName, x.labelColor))
-
     return (
         <main>
             <div>
-                <SessionAnalysisLineChart title="Total work time" data={getLinesData()} />
-                <SessionAnalysisBarChart title="Total work time by label" data={getBarsData()} />
+                {/* <SessionAnalysisLineChart title="Total work time" data={getLinesData()} />
+                <SessionAnalysisBarChart title="Total work time by label" data={getBarsData()} /> */}
+                <Typography variant="h2" className="flex justify-center gap-4 p-8 items-center text-gray-500">
+                    <BuildIcon />
+                    Content coming soon!
+                </Typography>
             </div>
         </main>
     )

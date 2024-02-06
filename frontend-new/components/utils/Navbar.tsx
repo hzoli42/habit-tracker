@@ -6,7 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import MenuButton from "./MenuButton";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { Navbar, Typography } from "@material-tailwind/react";
+import { Navbar, Tooltip, Typography } from "@material-tailwind/react";
 import TimerIcon from '@mui/icons-material/Timer';
 import EditIcon from '@mui/icons-material/Edit';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
@@ -43,18 +43,27 @@ export default function AppNavbar() {
                 )}
                 {!isLoading && user?.sub !== undefined && (
                     <div className="flex justify-center gap-6 items-center">
-                        <Typography as="a" href="/track" variant="h6" className="flex gap-2 text-black">
-                            <TimerIcon className="fill-black" />
-                            Track
-                        </Typography>
-                        <Typography as="a" href="/manage" variant="h6" className="flex gap-2 text-black">
-                            <EditIcon className="fill-black" />
-                            Manage
-                        </Typography>
-                        <Typography as="a" href="/statistics" variant="h6" className=" flex gap-2 text-black">
-                            <TrendingUpIcon className="fill-black" />
-                            Analyse
-                        </Typography>
+                        <Link href="/track">
+                            <Typography variant="h6" className="flex gap-2 text-black">
+                                <TimerIcon className="fill-black" />
+                                Track
+                            </Typography>
+                        </Link>
+                        <Link href="/manage">
+                            <Typography variant="h6" className="flex gap-2 text-black">
+                                <EditIcon className="fill-black" />
+                                Manage
+                            </Typography>
+                        </Link>
+                        {/* <Link href="/statistics"> */}
+                        <Tooltip content="Coming soon!" className="border-2 bg-white text-gray-500">
+                            <Typography variant="h6" className="flex gap-2 text-gray-500">
+                                <TrendingUpIcon />
+                                Analyse
+                            </Typography>
+                        </Tooltip>
+                        {/* </Link> */}
+
                         <a href="/api/auth/logout">
                             <Button variant="outline" className="bg-black hover:bg-black hover:opacity-75 border-2 border-black ms-4">
                                 <Typography variant="h6" className="text-white">
