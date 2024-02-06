@@ -5,6 +5,9 @@ import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { Provider } from 'jotai';
+import { ThemeProvider } from "@material-tailwind/react";
+import AppNavbar from '@/components/utils/Navbar';
+
 
 
 export default function RootLayout({
@@ -15,16 +18,18 @@ export default function RootLayout({
   return (
 
     <html lang="en">
-      <Provider>
-        <UserProvider>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <body>
-              <Navbar />
-              {children}
-            </body>
-          </LocalizationProvider>
-        </UserProvider>
-      </Provider>
+      <ThemeProvider>
+        <Provider>
+          <UserProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <body>
+                <AppNavbar />
+                {children}
+              </body>
+            </LocalizationProvider>
+          </UserProvider>
+        </Provider>
+      </ThemeProvider>
     </html>
   )
 }
