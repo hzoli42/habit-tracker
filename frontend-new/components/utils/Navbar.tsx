@@ -63,20 +63,22 @@ export default function AppNavbar() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <Link href="/track">
-                            <Typography variant="h6" className="flex gap-2 text-black">
+                            <Typography variant="h6" className="flex gap-2 text-black py-2">
                                 <TimerIcon className="fill-black" />
                                 Track
                             </Typography>
                         </Link>
+                        <DropdownMenuSeparator />
                         <Link href="/manage">
-                            <Typography variant="h6" className="flex gap-2 text-black">
+                            <Typography variant="h6" className="flex gap-2 text-black py-2">
                                 <EditIcon className="fill-black" />
                                 Manage
                             </Typography>
                         </Link>
+                        <DropdownMenuSeparator />
                         {/* <Link href="/statistics"> */}
                         <Tooltip content="Coming soon!" className="border-2 bg-white text-gray-500">
-                            <Typography variant="h6" className="flex gap-2 text-gray-500">
+                            <Typography variant="h6" className="flex gap-2 text-gray-500 py-2">
                                 <TrendingUpIcon />
                                 Analyse
                             </Typography>
@@ -84,7 +86,7 @@ export default function AppNavbar() {
                         {/* </Link> */}
                         <DropdownMenuSeparator className="my-2" />
                         <a href="/api/auth/logout">
-                            <Typography variant="h6" className="text-black flex justify-center">
+                            <Typography variant="h6" className="text-red-600 flex justify-center py-2">
                                 Log out
                             </Typography>
                         </a>

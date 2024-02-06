@@ -14,3 +14,10 @@
 - Guide to deploy frontend on AWS EC2: https://medium.com/@mudasirhaji/deploying-a-next-js-app-manually-on-aws-ec2-a-step-by-step-guide-58b266ff1c52
 - Additional guide for nginx frontend setup: https://medium.com/@asttle1997/deploying-your-next-js-app-to-ec2-with-nginx-and-pm2-7afc6d878f5b
 
+## Deploy commands
+- Stop current version of frontend: `pm2 delete frontend-new`
+- Deploy new version of frontend: `pm2 start npm --name frontend-new -- run start -- -p 3000`
+
+- Reload the daemon: `systemctl daemon-reload`
+- Restart gunicorn to apply changes in backend: `systemctl restart gunicorn`
+

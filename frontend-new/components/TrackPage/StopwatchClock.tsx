@@ -75,7 +75,7 @@ export default function StopwatchClock({ time, setTime, setStopwatchDirection, i
                 <TabsTrigger value="timer" disabled={isRunning}>Timer</TabsTrigger>
             </TabsList>
             <TabsContent value="stopwatch">
-                <div className="flex justify-center items-end px-8">
+                <div className="flex justify-center items-end px-8 pb-4">
                     {colouredDigits(time.hours)} <p className={`${lettersTextClassNames} pr-8 py-4`}>h</p>
                     {colouredDigits(time.minutes)} <p className={`${lettersTextClassNames} pr-8 py-4`}>m </p>
                     {colouredDigits(time.seconds)} <p className={`${lettersTextClassNames} pr-8 py-4`}>s </p>
@@ -84,7 +84,7 @@ export default function StopwatchClock({ time, setTime, setStopwatchDirection, i
             <TabsContent value="timer">
                 {
                     !isRunning
-                        ? <div className="flex justify-center items-end px-8 gap-1">
+                        ? <div className="flex justify-center items-end px-8 gap-1 pt-4 pb-8">
                             <input name="hoursInput" onChange={handleInputChange}
                                 className={`${digitsTextClassNames} ${inputWidthClassNames} ${inputHeightClassNames} border-none placeholder-slate-200 placeholder:text-center`}
                                 type="text" maxLength={2} pattern="[0-9]*" placeholder="00" />
@@ -98,7 +98,7 @@ export default function StopwatchClock({ time, setTime, setStopwatchDirection, i
                                 type="text" maxLength={2} pattern="[0-9]*" placeholder="00" />
                             <p className={`${lettersTextClassNames} pr-8`}>s</p>
                         </div>
-                        : <div className="flex justify-center items-end px-8">
+                        : <div className="flex justify-center items-end px-8 pb-4">
                             {colouredDigits(time.hours)} <p className={`${lettersTextClassNames} pr-8 py-4`}>h</p>
                             {colouredDigits(time.minutes)} <p className={`${lettersTextClassNames} pr-8 py-4`}>m </p>
                             {colouredDigits(time.seconds)} <p className={`${lettersTextClassNames} pr-8 py-4`}>s </p>
