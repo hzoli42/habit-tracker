@@ -4,6 +4,7 @@ import Image from "next/image"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Input } from "../ui/input";
 import { StopwatchTime } from "./Stopwatch";
+import { useViewport } from "@/lib/hooks";
 
 export type StopwatchTimerProps = {
     time: StopwatchTime,
@@ -18,21 +19,24 @@ export enum StopwatchMode {
 }
 
 export default function StopwatchClock({ time, setTime, setStopwatchDirection, isRunning }: StopwatchTimerProps) {
+    const { width } = useViewport()
+
     function colouredDigits(digits: number) {
         const firstDigit = Math.floor(digits / 10)
         const secondDigit = digits % 10
+        // const fontSize = width > 720 && width < 850 ? 80 : 100
 
         return (
             <>
                 {
                     firstDigit == 0 && !isRunning
-                        ? <p className="text-[100px] text-slate-200 px-1">{firstDigit}</p>
-                        : <p className="text-[100px] text-black-600 px-1">{firstDigit}</p>
+                        ? <p className="text-clock-n-xs sm:text-clock-n-sm md:text-clock-n-md lg:text-clock-n-lg text-slate-200 px-1">{firstDigit}</p>
+                        : <p className="text-clock-n-xs sm:text-clock-n-sm md:text-clock-n-md lg:text-clock-n-lg text-black-600 px-1">{firstDigit}</p>
                 }
                 {
                     secondDigit == 0 && !isRunning
-                        ? <p className="text-[100px] text-slate-200 px-1">{secondDigit}</p>
-                        : <p className="text-[100px] text-black-600 px-1">{secondDigit}</p>
+                        ? <p className="text-clock-n-xs sm:text-clock-n-sm md:text-clock-n-md lg:text-clock-n-lg text-slate-200 px-1">{secondDigit}</p>
+                        : <p className="text-clock-n-xs sm:text-clock-n-sm md:text-clock-n-md lg:text-clock-n-lg text-black-600 px-1">{secondDigit}</p>
                 }
             </>
         )
@@ -72,9 +76,9 @@ export default function StopwatchClock({ time, setTime, setStopwatchDirection, i
             </TabsList>
             <TabsContent value="stopwatch">
                 <div className="flex justify-center items-end px-8">
-                    {colouredDigits(time.hours)} <p className="text-[50px] pr-8 py-4">h</p>
-                    {colouredDigits(time.minutes)} <p className="text-[50px] pr-8 py-4">m </p>
-                    {colouredDigits(time.seconds)} <p className="text-[50px] pr-8 py-4">s </p>
+                    {colouredDigits(time.hours)} <p className="text-clock-l-xs sm:text-clock-l-sm md:text-clock-l-md lg:text-clock-l-lg pr-8 py-4">h</p>
+                    {colouredDigits(time.minutes)} <p className="text-clock-l-xs sm:text-clock-l-sm md:text-clock-l-md lg:text-clock-l-lg pr-8 py-4">m </p>
+                    {colouredDigits(time.seconds)} <p className="text-clock-l-xs sm:text-clock-l-sm md:text-clock-l-md lg:text-clock-l-lg pr-8 py-4">s </p>
                 </div>
             </TabsContent>
             <TabsContent value="timer">

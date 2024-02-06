@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { LabelCombobox } from "../utils/LabelCombobox";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import StopwatchInputs from "./StopwatchInputs";
-import { LabelData, labelsAtom } from "@/atoms/jotai";
+import { labelsAtom } from "@/atoms/jotai";
 import { useAtom } from "jotai";
 
 
@@ -116,8 +116,8 @@ export default function Stopwatch() {
 
     return (
         <>
-            <div className="grid grid-cols-4">
-                <div className="col-span-3">
+            <div className="grid grid-cols-1 md:grid-cols-4">
+                <div className="md:col-span-3">
                     <StopwatchClock time={time} setTime={setTime} setStopwatchDirection={setStopwatchDirection} isRunning={isRunning} />
                 </div>
                 <StopwatchInputs

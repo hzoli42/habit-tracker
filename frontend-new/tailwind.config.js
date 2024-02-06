@@ -18,6 +18,17 @@ module.exports = withMT({
         "2xl": "1400px",
       },
     },
+    fontSize: {
+      /** Custom font sizes for the clock */
+      'clock-n-xs': '50px',
+      'clock-n-sm': '90px',
+      'clock-n-md': '80px',
+      'clock-n-lg': '100px',
+      'clock-l-xs': '25px',
+      'clock-l-sm': '45px',
+      'clock-l-md': '40px',
+      'clock-l-lg': '50px',
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
