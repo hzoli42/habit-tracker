@@ -37,7 +37,7 @@ export const sessionColumns: ColumnDef<Session>[] = [
                 <Button
                     variant="ghost"
                     role="combobox"
-                    className="flex justify-between flex-wrap h-auto group w-full"
+                    className="flex justify-between flex-wrap h-auto group min-w-[200px]"
                 >
                     {
                         <Input
@@ -66,12 +66,15 @@ export const sessionColumns: ColumnDef<Session>[] = [
     {
         accessorKey: "duration",
         header: "Duration",
+        cell: ({ row }) => {
+            return <p className="min-w-[90px]">{row.original.duration}</p>
+        }
     },
     {
         accessorKey: "date",
         header: "Date",
         cell: ({ row }) => {
-            return row.original.start_date.toDateString()
+            return <p className="min-w-[150px]">{row.original.start_date.toDateString()}</p>
         }
     },
     {

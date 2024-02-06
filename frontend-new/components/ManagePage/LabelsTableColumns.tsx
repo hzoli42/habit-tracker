@@ -33,7 +33,7 @@ export const labelColumns: ColumnDef<Label>[] = [
                 <Button
                     variant="ghost"
                     role="combobox"
-                    className="flex justify-between flex-wrap h-auto group w-full"
+                    className="flex justify-between flex-wrap h-auto group min-w-[150px] w-full"
                 >
                     <Input
                         className="focus:outline focus:placeholder:text-slate-200 w-full placeholder:text-white focus:text-white text-white"

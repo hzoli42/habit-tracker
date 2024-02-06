@@ -40,13 +40,13 @@ export function LabelCombobox({ startingLabel, onLabelChange, disabled }: LabelC
     const [selectedLabelData, setSelectedLabelData] = useState<Label | undefined>(undefined)
     const [newLabelColor, setNewLabelColor] = useState("#000000")
 
-    useEffect(() => {
-        if (isLoading) {
-            return
-        }
-        setLabels(user?.sub ?? undefined)
-        console.log(labels)
-    }, [isLoading])
+    // useEffect(() => {
+    //     if (!isLoading) {
+    //         return
+    //     }
+    //     setLabels(user?.sub ?? undefined)
+    //     console.log(labels)
+    // }, [isLoading])
 
     useEffect(() => {
         const newSelectedLabelData = labels.find(ld => ld.id === selectedLabel)
