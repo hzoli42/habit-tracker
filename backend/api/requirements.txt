@@ -1,3 +1,4 @@
+annotated-types==0.6.0
 anyio==3.7.1
 autopep8==2.0.2
 certifi==2023.11.17
@@ -15,7 +16,9 @@ kafka-python==2.0.2
 mongomock==4.1.2
 packaging==23.2
 pycodestyle==2.10.0
-pydantic==1.10.8
+pydantic==2.6.0
+pydantic-settings==2.1.0
+pydantic_core==2.16.1
 pykerberos==1.2.4
 pymongo==4.3.3
 python-dotenv==1.0.0
