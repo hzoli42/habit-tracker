@@ -24,7 +24,9 @@ export default function RootLayout({
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <body>
                 <AppNavbar />
-                {children}
+                <div className="mx-auto max-w-screen-lg p-4">
+                  {children}
+                </div>
               </body>
             </LocalizationProvider>
           </UserProvider>

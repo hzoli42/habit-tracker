@@ -14,7 +14,7 @@ import { Button } from "../ui/button";
 
 
 export default function AppNavbar() {
-    const { user, error, isLoading } = useUser();
+    const { user, error, isLoading } = useUser()
 
     return (
         <Navbar className="mx-auto max-w-screen-lg p-4">
@@ -22,42 +22,48 @@ export default function AppNavbar() {
                 <Typography as="a" href="/" variant="h5" className="text-black">
                     Habit Tracker
                 </Typography>
-                {
-                    user?.sub === undefined
-                        ? (
-                            <div className="flex justify-center gap-6">
-                                <a href="/api/auth/login">
-                                    <Button variant="outline" className="bg-whiteborder-2 border-black">
-                                        <Typography variant="h6" className="text-black">
-                                            Login
-                                        </Typography>
-                                    </Button>
-                                </a>
-                                <a href="/api/auth/login?signup=true">
-                                    <Button variant="outline" className="bg-black hover:bg-black hover:opacity-75 border-2 border-black">
-                                        <Typography variant="h6" className="text-white">
-                                            Signup
-                                        </Typography>
-                                    </Button>
-                                </a>
-                            </div>
-                        )
-                        : (
-                            <div className="flex justify-center gap-6">
-                                <Typography as="a" href="/track" variant="h6" className="flex gap-2 text-black">
-                                    <TimerIcon className="fill-black" />
-                                    Track
+                {isLoading && <></>}
+                {!isLoading && user?.sub === undefined && (
+                    <div className="flex justify-center gap-6">
+                        <a href="/api/auth/login">
+                            <Button variant="outline" className="bg-whiteborder-2 border-black">
+                                <Typography variant="h6" className="text-black">
+                                    Log in
                                 </Typography>
-                                <Typography as="a" href="/manage" variant="h6" className="flex gap-2 text-black">
-                                    <EditIcon className="fill-black" />
-                                    Manage
+                            </Button>
+                        </a>
+                        <a href="/api/auth/login?signup=true">
+                            <Button variant="outline" className="bg-black hover:bg-black hover:opacity-75 border-2 border-black">
+                                <Typography variant="h6" className="text-white">
+                                    Sign up
                                 </Typography>
-                                <Typography as="a" href="/statistics" variant="h6" className=" flex gap-2 text-black">
-                                    <TrendingUpIcon className="fill-black" />
-                                    Analyse
+                            </Button>
+                        </a>
+                    </div>
+                )}
+                {!isLoading && user?.sub !== undefined && (
+                    <div className="flex justify-center gap-6 items-center">
+                        <Typography as="a" href="/track" variant="h6" className="flex gap-2 text-black">
+                            <TimerIcon className="fill-black" />
+                            Track
+                        </Typography>
+                        <Typography as="a" href="/manage" variant="h6" className="flex gap-2 text-black">
+                            <EditIcon className="fill-black" />
+                            Manage
+                        </Typography>
+                        <Typography as="a" href="/statistics" variant="h6" className=" flex gap-2 text-black">
+                            <TrendingUpIcon className="fill-black" />
+                            Analyse
+                        </Typography>
+                        <a href="/api/auth/logout">
+                            <Button variant="outline" className="bg-black hover:bg-black hover:opacity-75 border-2 border-black ms-4">
+                                <Typography variant="h6" className="text-white">
+                                    Log out
                                 </Typography>
-                            </div>
-                        )
+                            </Button>
+                        </a>
+                    </div>
+                )
                 }
 
             </div>

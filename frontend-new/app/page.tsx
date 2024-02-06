@@ -21,17 +21,15 @@ export default function Home() {
   }, [isLoading])
 
   return (
-    <div className="mx-auto max-w-screen-lg p-4">
-      <article className="prose">
-        <h1 className="pt-8">Welcome to Habit Tracker {(user) && user.name}!</h1>
-        <h3>You can use it:</h3>
-        <ul className="list-disc">
-          <li>As a stopwatch to track your work</li>
-          <li>As a timer to track specific time windows</li>
-          <li>(In the future) as a data-driven platform to optimise your work/study sessions</li>
-        </ul>
-        <p><b>Log in</b> or <b>sign up</b> to get started!</p>
-      </article>
-    </div>
+    <article className="prose">
+      <h1 className="pt-8">Welcome to Habit Tracker {(user) && user.name}!</h1>
+      <h3>You can use it:</h3>
+      <ul className="list-disc">
+        <li>As a stopwatch to track your work</li>
+        <li>As a timer to track specific time windows</li>
+        <li>(In the future) as a data-driven platform to optimise your work/study sessions</li>
+      </ul>
+      <p><b>Log in</b> or <b>sign up</b> to get started!</p>
+    </article>
   )
 }
