@@ -1,7 +1,6 @@
 'use client'
 
 import { labelsAtom } from "@/atoms/jotai";
-import { Button } from "@/components/ui/button";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAtom } from "jotai";
 import { useEffect } from "react";

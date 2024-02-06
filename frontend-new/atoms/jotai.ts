@@ -90,4 +90,4 @@ export const userAllSessionsAtom = atom(
 
 export const editedSessionsAtom = atom<Map<string, {title: string, labelId: string}>>(new Map())
 
-export const viewportAtom = atom<{width: number, height: number}>({width: window.innerWidth, height: window.innerHeight})
+export const viewportAtom = atom<{width: number, height: number}>({width: 0, height: 0})

@@ -10,7 +10,7 @@ import { DataTable } from "@/components/utils/DataTable";
 import { postLabelUpdate, postSessionModify } from "@/lib/api_utils";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 
 export default function Home() {

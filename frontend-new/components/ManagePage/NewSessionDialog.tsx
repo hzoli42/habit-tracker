@@ -1,12 +1,12 @@
 'use client'
 import { DateTimeField } from "@mui/x-date-pickers";
 import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { LabelCombobox } from "../utils/LabelCombobox";
 import dayjs from "dayjs";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { userAllSessionsAtom } from "@/atoms/jotai";
 import { useAtom } from "jotai";

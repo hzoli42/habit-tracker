@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction } from "react";
 import { Button } from '@mui/material';
 import { LabelCombobox } from "../utils/LabelCombobox";
 import { Input } from "../ui/input";
-import { LabelData } from "@/atoms/jotai";
 
 
 export type StopwatchButtonProps = {

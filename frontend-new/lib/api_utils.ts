@@ -1,5 +1,3 @@
-import { UserProfile } from "@auth0/nextjs-auth0/client";
-import { Tracing } from "trace_events";
 
 export function getAllUserSessions(userId: string | undefined | null): Promise<Response> {
     return fetch(`${process.env.NEXT_PUBLIC_API_BASE}/session/user/${userId ?? "undefined"}`, {

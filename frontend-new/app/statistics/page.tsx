@@ -1,13 +1,11 @@
 'use client'
 
 import { labelsAtom, userAllSessionsAtom } from "@/atoms/jotai"
-import SessionAnalysisBarChart from "@/components/StatisticsPage/SessionAnalysisBarChart"
-import SessionAnalysisLineChart from "@/components/StatisticsPage/SessionAnalysisLineChart"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import { Typography } from "@material-tailwind/react"
 import { useAtom } from "jotai"
 import { useEffect } from "react"
-import BuildIcon from '@mui/icons-material/Build';
+import BuildIcon from '@mui/icons-material/Build'
 
 
 // const dummyDataLines = [

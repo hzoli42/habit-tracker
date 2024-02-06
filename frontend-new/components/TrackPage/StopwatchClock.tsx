@@ -1,10 +1,6 @@
-import { Typography } from "@mui/material";
-import { Dispatch, SetStateAction, useState } from "react";
-import Image from "next/image"
+import { Dispatch, SetStateAction } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { Input } from "../ui/input";
 import { StopwatchTime } from "./Stopwatch";
-import { useViewport } from "@/lib/hooks";
 
 export type StopwatchTimerProps = {
     time: StopwatchTime,

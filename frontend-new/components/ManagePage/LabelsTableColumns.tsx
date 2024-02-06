@@ -7,7 +7,7 @@ import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { useAtom } from "jotai"
 import { Label, editedLabelsAtom, labelsAtom, } from "@/atoms/jotai"
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from '@mui/icons-material/Delete'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"

@@ -1,9 +1,6 @@
 'use client'
-import StopwatchButtons from "./StopwatchInputs";
 import StopwatchClock from "./StopwatchClock";
 import { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
-import { LabelCombobox } from "../utils/LabelCombobox";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import StopwatchInputs from "./StopwatchInputs";
 import { labelsAtom } from "@/atoms/jotai";

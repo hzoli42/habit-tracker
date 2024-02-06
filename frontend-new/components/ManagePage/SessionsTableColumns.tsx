@@ -8,11 +8,8 @@ import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { useAtom } from "jotai"
 import { Session, editedSessionsAtom, userAllSessionsAtom } from "@/atoms/jotai"
-import DeleteIcon from '@mui/icons-material/Delete';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
-import { DateTimeField } from "@mui/x-date-pickers"
-import dayjs from "dayjs"
-import { Label } from "recharts"
+import DeleteIcon from '@mui/icons-material/Delete'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import { deleteSessionById } from "@/lib/api_utils"

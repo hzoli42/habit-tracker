@@ -1,9 +1,8 @@
 'use client'
-import Navbar from '@/components/utils/Navbar'
-import './globals.css'
+import './globals.css';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Provider } from 'jotai';
 import { ThemeProvider } from "@material-tailwind/react";
 import AppNavbar from '@/components/utils/Navbar';
