@@ -19,24 +19,28 @@ export enum StopwatchMode {
 }
 
 export default function StopwatchClock({ time, setTime, setStopwatchDirection, isRunning }: StopwatchTimerProps) {
-    const { width } = useViewport()
+    const digitsTextClassNames = "text-clock-n-xs sm:text-clock-n-sm md:text-clock-n-md lg:text-clock-n-lg"
+    const lettersTextClassNames = "text-clock-l-xs sm:text-clock-l-sm md:text-clock-l-md lg:text-clock-l-lg"
+    const inputHeightClassNames = "h-clock-xs sm:h-clock-sm md:h-clock-md lg:h-clock-lg"
+    const inputWidthClassNames = "w-clock-xs sm:w-clock-sm md:w-clock-md lg:w-clock-lg"
 
     function colouredDigits(digits: number) {
         const firstDigit = Math.floor(digits / 10)
         const secondDigit = digits % 10
-        // const fontSize = width > 720 && width < 850 ? 80 : 100
+
+
 
         return (
             <>
                 {
                     firstDigit == 0 && !isRunning
-                        ? <p className="text-clock-n-xs sm:text-clock-n-sm md:text-clock-n-md lg:text-clock-n-lg text-slate-200 px-1">{firstDigit}</p>
-                        : <p className="text-clock-n-xs sm:text-clock-n-sm md:text-clock-n-md lg:text-clock-n-lg text-black-600 px-1">{firstDigit}</p>
+                        ? <p className={`${digitsTextClassNames} text-slate-200 px-1`}>{firstDigit}</p>
+                        : <p className={`${digitsTextClassNames} text-black-600 px-1`}>{firstDigit}</p>
                 }
                 {
                     secondDigit == 0 && !isRunning
-                        ? <p className="text-clock-n-xs sm:text-clock-n-sm md:text-clock-n-md lg:text-clock-n-lg text-slate-200 px-1">{secondDigit}</p>
-                        : <p className="text-clock-n-xs sm:text-clock-n-sm md:text-clock-n-md lg:text-clock-n-lg text-black-600 px-1">{secondDigit}</p>
+                        ? <p className={`${digitsTextClassNames} text-slate-200 px-1`}>{secondDigit}</p>
+                        : <p className={`${digitsTextClassNames} text-black-600 px-1`}>{secondDigit}</p>
                 }
             </>
         )
@@ -76,9 +80,9 @@ export default function StopwatchClock({ time, setTime, setStopwatchDirection, i
             </TabsList>
             <TabsContent value="stopwatch">
                 <div className="flex justify-center items-end px-8">
-                    {colouredDigits(time.hours)} <p className="text-clock-l-xs sm:text-clock-l-sm md:text-clock-l-md lg:text-clock-l-lg pr-8 py-4">h</p>
-                    {colouredDigits(time.minutes)} <p className="text-clock-l-xs sm:text-clock-l-sm md:text-clock-l-md lg:text-clock-l-lg pr-8 py-4">m </p>
-                    {colouredDigits(time.seconds)} <p className="text-clock-l-xs sm:text-clock-l-sm md:text-clock-l-md lg:text-clock-l-lg pr-8 py-4">s </p>
+                    {colouredDigits(time.hours)} <p className={`${lettersTextClassNames} pr-8 py-4`}>h</p>
+                    {colouredDigits(time.minutes)} <p className={`${lettersTextClassNames} pr-8 py-4`}>m </p>
+                    {colouredDigits(time.seconds)} <p className={`${lettersTextClassNames} pr-8 py-4`}>s </p>
                 </div>
             </TabsContent>
             <TabsContent value="timer">
@@ -86,22 +90,22 @@ export default function StopwatchClock({ time, setTime, setStopwatchDirection, i
                     !isRunning
                         ? <div className="flex justify-center items-end px-8 gap-1">
                             <input name="hoursInput" onChange={handleInputChange}
-                                className="text-[100px] w-[128px] h-[110px] border-none placeholder-slate-200"
+                                className={`${digitsTextClassNames} ${inputWidthClassNames} ${inputHeightClassNames} border-none placeholder-slate-200 placeholder:text-center`}
                                 type="text" maxLength={2} pattern="[0-9]*" placeholder="00" />
-                            <p className="text-[50px] pr-8 py-4">h</p>
+                            <p className={`${lettersTextClassNames} pr-8`}>h</p>
                             <input name="minutesInput" onChange={handleInputChange}
-                                className="text-[100px] w-[128px] h-[110px] border-none placeholder-slate-200"
+                                className={`${digitsTextClassNames} ${inputWidthClassNames} ${inputHeightClassNames} border-none placeholder-slate-200 placeholder:text-center`}
                                 type="text" maxLength={2} pattern="[0-9]*" placeholder="00" />
-                            <p className="text-[50px] pr-8 py-4">m</p>
+                            <p className={`${lettersTextClassNames} pr-8`}>m</p>
                             <input name="secondsInput" onChange={handleInputChange}
-                                className="text-[100px] w-[128px] h-[110px] border-none placeholder-slate-200"
+                                className={`${digitsTextClassNames} ${inputWidthClassNames} ${inputHeightClassNames} border-none placeholder-slate-200 placeholder:text-center`}
                                 type="text" maxLength={2} pattern="[0-9]*" placeholder="00" />
-                            <p className="text-[50px] pr-8 py-4">s</p>
+                            <p className={`${lettersTextClassNames} pr-8`}>s</p>
                         </div>
                         : <div className="flex justify-center items-end px-8">
-                            {colouredDigits(time.hours)} <p className="text-[50px] pr-8 py-4">h</p>
-                            {colouredDigits(time.minutes)} <p className="text-[50px] pr-8 py-4">m </p>
-                            {colouredDigits(time.seconds)} <p className="text-[50px] pr-8 py-4">s </p>
+                            {colouredDigits(time.hours)} <p className={`${lettersTextClassNames} pr-8 py-4`}>h</p>
+                            {colouredDigits(time.minutes)} <p className={`${lettersTextClassNames} pr-8 py-4`}>m </p>
+                            {colouredDigits(time.seconds)} <p className={`${lettersTextClassNames} pr-8 py-4`}>s </p>
                         </div>
                 }
             </TabsContent>

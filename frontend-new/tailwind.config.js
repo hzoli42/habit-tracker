@@ -84,6 +84,18 @@ module.exports = withMT({
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      width: {
+        'clock-xs': '60px',
+        'clock-sm': '114px',
+        'clock-md': '92px',
+        'clock-lg': '120px',
+      },
+      height: {
+        'clock-xs': '55px',
+        'clock-sm': '100px',
+        'clock-md': '86px',
+        'clock-lg': '110px',
+      }
     },
   },
   plugins: [
