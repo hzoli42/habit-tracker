@@ -5,6 +5,10 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import StopwatchInputs from "./StopwatchInputs";
 import { labelsAtom } from "@/atoms/jotai";
 import { useAtom } from "jotai";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { Button } from "../ui/button";
+import useSound from "use-sound";
+import alarmSound from '../../sounds/alarm_sound.mp3';
 
 
 export type StopwatchTime = {
@@ -23,8 +27,8 @@ export function newAction(action: string): Action {
     return { timestamp: currentTime, event: action }
 }
 
-export async function start(user: string, title: string, label: string | undefined): Promise<string> {
-    return await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/session/start`, {
+export function startSession(user: string, title: string, label: string | undefined): Promise<string> {
+    return fetch(`${process.env.NEXT_PUBLIC_API_BASE}/session/start`, {
         method: "POST",
         mode: "cors",
         headers: { "Content-Type": "application/json" },
@@ -42,7 +46,7 @@ export async function start(user: string, title: string, label: string | undefin
         })
 }
 
-export async function stop(sessionId: string) {
+export async function stopSession(sessionId: string) {
     await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/session/stop`, {
         method: "POST",
         mode: "cors",
@@ -64,6 +68,8 @@ export default function Stopwatch() {
     const [selectedLabel, setSelectedLabel] = useState<string | undefined>(undefined)
     const { user, error, isLoading } = useUser();
     const [sessionId, setSessionId] = useState<string>("")
+    const [timerExpiredDialogOpen, setTimerExpiredDialogOpen] = useState(false)
+    const [playAlarm, { stop }] = useSound(alarmSound, { volume: 0.5 })
 
     function timeStep() {
         const secondsInc = time.seconds + stopwatchDirection
@@ -80,7 +86,9 @@ export default function Stopwatch() {
         setTime({ hours: hoursNew, minutes: minutesNew, seconds: secondsNew });
         if (hoursNew == 0 && minutesNew == 0 && secondsNew == 0 && stopwatchDirection == -1) {
             console.log('Stopping session because timer reached 0')
-            stop(sessionId)
+            setTimerExpiredDialogOpen(true)
+            playAlarm()
+            setIsRunning(false)
         }
     }
 
@@ -101,10 +109,10 @@ export default function Stopwatch() {
             return
         }
         if (isRunning) {
-            start(user?.sub ?? "", title, selectedLabel).then(sessionId => setSessionId(sessionId))
+            startSession(user?.sub ?? "", title, selectedLabel).then(sessionId => setSessionId(sessionId))
         } else {
             console.log('Stopping session because isRunning changed back to false')
-            stop(sessionId)
+            stopSession(sessionId)
             setTitle("Untitled")
             setSelectedLabel(undefined)
             setTime({ hours: 0, minutes: 0, seconds: 0 })
@@ -124,6 +132,19 @@ export default function Stopwatch() {
                     onLabelChange={(label) => setSelectedLabel(label)}
                 />
             </div>
+            <Dialog open={timerExpiredDialogOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Your timer has expired!</DialogTitle>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <Button onClick={() => {
+                            setTimerExpiredDialogOpen(false)
+                            stop()
+                        }}>Close</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </>
     )
 }
