@@ -38,7 +38,7 @@ export const sessionColumns: ColumnDef<Session>[] = [
                 >
                     {
                         <Input
-                            className="focus:outline focus:placeholder:text-slate-400 w-full placeholder:text-black"
+                            className="focus:outline focus:placeholder:text-gray-500 w-full placeholder:text-black"
                             placeholder={row.original.title}
                             onBlur={(e) => updateSessionTitle(e.currentTarget.value)} />
                     }

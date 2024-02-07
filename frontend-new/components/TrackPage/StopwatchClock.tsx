@@ -30,12 +30,12 @@ export default function StopwatchClock({ time, setTime, setStopwatchDirection, i
             <>
                 {
                     firstDigit == 0 && !isRunning
-                        ? <p className={`${digitsTextClassNames} text-slate-200 px-1`}>{firstDigit}</p>
+                        ? <p className={`${digitsTextClassNames} text-gray-500 px-1`}>{firstDigit}</p>
                         : <p className={`${digitsTextClassNames} text-black-600 px-1`}>{firstDigit}</p>
                 }
                 {
                     secondDigit == 0 && !isRunning
-                        ? <p className={`${digitsTextClassNames} text-slate-200 px-1`}>{secondDigit}</p>
+                        ? <p className={`${digitsTextClassNames} text-gray-500 px-1`}>{secondDigit}</p>
                         : <p className={`${digitsTextClassNames} text-black-600 px-1`}>{secondDigit}</p>
                 }
             </>
@@ -86,15 +86,15 @@ export default function StopwatchClock({ time, setTime, setStopwatchDirection, i
                     !isRunning
                         ? <div className="flex justify-center items-end px-8 gap-1 pt-4 pb-8">
                             <input name="hoursInput" onChange={handleInputChange}
-                                className={`${digitsTextClassNames} ${inputWidthClassNames} ${inputHeightClassNames} border-none placeholder-slate-200 placeholder:text-center`}
+                                className={`${digitsTextClassNames} ${inputWidthClassNames} ${inputHeightClassNames} border-none placeholder-gray-500 placeholder:text-center`}
                                 type="text" maxLength={2} pattern="[0-9]*" placeholder="00" />
                             <p className={`${lettersTextClassNames} pr-8`}>h</p>
                             <input name="minutesInput" onChange={handleInputChange}
-                                className={`${digitsTextClassNames} ${inputWidthClassNames} ${inputHeightClassNames} border-none placeholder-slate-200 placeholder:text-center`}
+                                className={`${digitsTextClassNames} ${inputWidthClassNames} ${inputHeightClassNames} border-none placeholder-gray-500 placeholder:text-center`}
                                 type="text" maxLength={2} pattern="[0-9]*" placeholder="00" />
                             <p className={`${lettersTextClassNames} pr-8`}>m</p>
                             <input name="secondsInput" onChange={handleInputChange}
-                                className={`${digitsTextClassNames} ${inputWidthClassNames} ${inputHeightClassNames} border-none placeholder-slate-200 placeholder:text-center`}
+                                className={`${digitsTextClassNames} ${inputWidthClassNames} ${inputHeightClassNames} border-none placeholder-gray-500 placeholder:text-center`}
                                 type="text" maxLength={2} pattern="[0-9]*" placeholder="00" />
                             <p className={`${lettersTextClassNames} pr-8`}>s</p>
                         </div>

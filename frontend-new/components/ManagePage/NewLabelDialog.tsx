@@ -43,7 +43,7 @@ export default function NewSessionDialog() {
                         className="flex justify-between flex-wrap h-auto group w-full"
                     >
                         <Input
-                            className="focus:outline placeholder:text-slate-200 focus:placeholder:text-slate-200 w-full  focus:text-white text-white"
+                            className="focus:outline placeholder:text-gray-500 focus:placeholder:text-gray-500 w-full  focus:text-white text-white"
                             placeholder="Enter label name"
                             style={{ backgroundColor: `${color}` }}
                             onChange={(e) => setName(e.currentTarget.value)}

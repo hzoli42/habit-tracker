@@ -36,7 +36,7 @@ export const labelColumns: ColumnDef<Label>[] = [
                     className="flex justify-between flex-wrap h-auto group min-w-[150px] w-full"
                 >
                     <Input
-                        className="focus:outline focus:placeholder:text-slate-200 w-full placeholder:text-white focus:text-white text-white"
+                        className="focus:outline focus:placeholder:text-gray-500 w-full placeholder:text-white focus:text-white text-white"
                         placeholder={row.original.name}
                         onBlur={(e) => updateLabelName(e.currentTarget.value)}
                         style={{ backgroundColor: `${row.original.color}` }}
