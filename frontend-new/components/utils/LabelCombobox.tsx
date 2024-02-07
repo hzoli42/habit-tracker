@@ -39,7 +39,7 @@ export function LabelCombobox({ startingLabel, onLabelChange, disabled }: LabelC
     const [labelSearchInput, setLabelSearchInput] = useState("")
     const [selectedLabel, setSelectedLabel] = useState<string | undefined>(startingLabel)
     const [selectedLabelData, setSelectedLabelData] = useState<Label | undefined>(undefined)
-    const [newLabelColor, setNewLabelColor] = useState("#000000")
+    const [newLabelColor, setNewLabelColor] = useState("#F5F3E7")
 
     // useEffect(() => {
     //     if (!isLoading) {
@@ -84,7 +84,7 @@ export function LabelCombobox({ startingLabel, onLabelChange, disabled }: LabelC
                             ?
                             <div style={{ backgroundColor: `${selectedLabelData.color}` }}
                                 className="min-h-[20px] rounded-md px-2 py-1">
-                                <p className="text-white">{selectedLabelData.name}</p>
+                                <p>{selectedLabelData.name}</p>
                             </div>
                             : <>
                                 <p className="text-gray-500">Select a label</p>
@@ -105,7 +105,7 @@ export function LabelCombobox({ startingLabel, onLabelChange, disabled }: LabelC
                             >
                                 <AddIcon className="fill-black" />
                                 <div style={{ backgroundColor: newLabelColor }} className="flex min-h-[20px] rounded-lg px-2 py-1 inline">
-                                    <p className="text-white">{labelSearchInput}</p>
+                                    <p>{labelSearchInput}</p>
                                 </div>
                             </Button>
                             <ColorPicker initialColor={newLabelColor} onColorChange={(color) => (setNewLabelColor(color))} />
@@ -128,7 +128,7 @@ export function LabelCombobox({ startingLabel, onLabelChange, disabled }: LabelC
                                             )}
                                         />
                                         <div style={{ backgroundColor: `${label.color}` }} className="flex min-h-[20px] rounded-lg px-2 py-1 inline">
-                                            <p className="text-white">{label.name}</p>
+                                            <p>{label.name}</p>
                                         </div>
                                     </CommandItem>
                                 </div>
