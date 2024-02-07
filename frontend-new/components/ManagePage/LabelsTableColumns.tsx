@@ -13,6 +13,7 @@ import { useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import ColorPicker from "../utils/ColorPicker"
 import { deleteLabel } from "@/lib/api_utils"
+import { TextField } from "@mui/material"
 
 
 export const labelColumns: ColumnDef<Label>[] = [
@@ -30,18 +31,10 @@ export const labelColumns: ColumnDef<Label>[] = [
                 setEditedLabels(newEditedLabels)
             }
             return (
-                <Button
-                    variant="ghost"
-                    role="combobox"
-                    className="flex justify-between flex-wrap h-auto group min-w-[150px] w-full"
-                >
-                    <Input
-                        className="focus:outline focus:placeholder:text-gray-500 w-full placeholder:text-white focus:text-white text-white"
-                        placeholder={row.original.name}
-                        onBlur={(e) => updateLabelName(e.currentTarget.value)}
-                        style={{ backgroundColor: `${row.original.color}` }}
-                    />
-                </Button >
+                <TextField variant="standard" defaultValue={row.original.name} placeholder={row.original.name}
+                    onBlur={(e) => updateLabelName(e.currentTarget.value)}
+                    style={{ backgroundColor: `${row.original.color}`, minWidth: "200px", width: "100%", paddingLeft: "10px", borderRadius: "6px", paddingTop: "5px" }}
+                    InputProps={{ disableUnderline: true }} />
             )
         }
     },

@@ -13,6 +13,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import { deleteSessionById } from "@/lib/api_utils"
+import { TitleTextField } from "../utils/TitleTextField"
+
 
 export const sessionColumns: ColumnDef<Session>[] = [
     {
@@ -31,18 +33,9 @@ export const sessionColumns: ColumnDef<Session>[] = [
             }
 
             return (
-                <Button
-                    variant="ghost"
-                    role="combobox"
-                    className="flex justify-between flex-wrap h-auto group min-w-[200px]"
-                >
-                    {
-                        <Input
-                            className="focus:outline focus:placeholder:text-gray-500 w-full placeholder:text-black"
-                            placeholder={row.original.title}
-                            onBlur={(e) => updateSessionTitle(e.currentTarget.value)} />
-                    }
-                </Button>
+                <TitleTextField variant="standard" defaultValue={row.original.title} placeholder={row.original.title}
+                    onBlur={(e) => updateSessionTitle(e.currentTarget.value)}
+                    style={{ minWidth: "200px" }} />
             )
         }
     },

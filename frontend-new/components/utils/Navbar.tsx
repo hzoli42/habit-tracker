@@ -3,7 +3,6 @@
 import { Separator } from "@/components/ui/separator"
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import MenuButton from "./MenuButton";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Navbar, Tooltip, Typography } from "@material-tailwind/react";
