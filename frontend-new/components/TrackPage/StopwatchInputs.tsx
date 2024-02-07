@@ -21,8 +21,8 @@ export default function StopwatchInputs({ isRunning, setIsRunning, onTitleChange
             <LabelCombobox onLabelChange={(selectedLabel) => onLabelChange(selectedLabel)} disabled={isRunning} />
             {
                 !isRunning
-                    ? <Button className="bg-green-400" variant="contained" onClick={() => setIsRunning(true)} fullWidth>Start</Button>
-                    : <Button className="bg-red-400" variant="contained" onClick={() => setIsRunning(false)} fullWidth>Stop</Button>
+                    ? <Button className="bg-green-400 mt-2" variant="contained" onClick={() => setIsRunning(true)} fullWidth>Start</Button>
+                    : <Button className="bg-red-400 mt-2" variant="contained" onClick={() => setIsRunning(false)} fullWidth>Stop</Button>
             }
         </div>
     );

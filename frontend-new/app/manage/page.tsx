@@ -75,7 +75,7 @@ export default function Home() {
                         <div className="flex justify-between pt-6 pb-4">
                             <article className="prose lg:prose-xl"><h1>Sessions</h1></article>
                             <div className="flex justify-center gap-4 items-center">
-                                {editedSessions.size != 0 && <Button className="bg-yellow-400 hover:bg-yellow-500" onClick={updateEditedSessions}>
+                                {editedSessions.size != 0 && <Button className="bg-amber-500 hover:bg-amber-600" onClick={updateEditedSessions}>
                                     Save edited sessions
                                 </Button>}
                                 <NewSessionDialog />

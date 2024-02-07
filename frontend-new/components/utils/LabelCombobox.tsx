@@ -23,7 +23,8 @@ import { Label, labelsAtom } from "@/atoms/jotai"
 import ColorPicker from "./ColorPicker"
 import AddIcon from '@mui/icons-material/Add';
 import { postNewLabel } from "@/lib/api_utils"
-
+import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 export type LabelComboboxProps = {
     startingLabel?: string
@@ -56,7 +57,7 @@ export function LabelCombobox({ startingLabel, onLabelChange, disabled }: LabelC
 
     function onSelectLabel(currentValue: string) {
         const newSelectedLabel = labels.find(ld => ld.id === currentValue) ??
-            { id: "", user_id: "", name: "Error", color: "9B9B9B" }
+            { id: "", user_id: "", name: "Error", color: "#9E9E9E" }
         setSelectedLabel(newSelectedLabel.id)
         setSelectedLabelData(newSelectedLabel)
         onLabelChange ? onLabelChange(newSelectedLabel.id) : null
@@ -76,28 +77,25 @@ export function LabelCombobox({ startingLabel, onLabelChange, disabled }: LabelC
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild disabled={disabled}>
-                <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={open}
-                    className="flex justify-between flex-wrap h-auto group w-full truncate"
-                >
+            <PopoverTrigger disabled={disabled}>
+                <div className=" flex justify-start min-w-[130px]">
                     {
                         selectedLabel != undefined && selectedLabelData != undefined
                             ?
-                            <div style={{ backgroundColor: `${selectedLabelData.color}` }} className="flex min-h-[20px] rounded-lg px-2 py-1 inline">
+                            <div style={{ backgroundColor: `${selectedLabelData.color}` }}
+                                className="min-h-[20px] rounded-md px-2 py-1">
                                 <p className="text-white">{selectedLabelData.name}</p>
                             </div>
                             : <>
                                 <p className="text-gray-500">Select a label</p>
+                                <ArrowDropDownIcon style={{ color: "#9E9E9E", marginLeft: "5px" }} />
                             </>
                     }
-                </Button>
+                </div>
             </PopoverTrigger>
             <PopoverContent className="p-0 w-auto min-w-sm max-w-lg">
                 <Command>
-                    <CommandInput placeholder="Select labels..." onValueChange={(v) => setLabelSearchInput(v)} />
+                    <CommandInput className="placeholder-gray-500" placeholder="Select labels..." onValueChange={(v) => setLabelSearchInput(v)} />
                     <CommandEmpty>
                         <div className="flex justify-between w-full px-2 items-center">
                             <Button
