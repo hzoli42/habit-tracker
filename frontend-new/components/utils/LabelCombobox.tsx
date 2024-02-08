@@ -25,10 +25,12 @@ import AddIcon from '@mui/icons-material/Add';
 import { postNewLabel } from "@/lib/api_utils"
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import CloseIcon from '@mui/icons-material/Close';
+import { IconButton } from "@mui/material"
 
 export type LabelComboboxProps = {
     selectedLabel?: Label
-    onLabelChange?: (selectedLabel: Label) => void
+    onLabelChange?: (selectedLabel: Label | undefined) => void
     disabled: boolean
 }
 
@@ -37,22 +39,17 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
     const { user, error, isLoading } = useUser();
     const [open, setOpen] = useState(false)
     const [labelSearchInput, setLabelSearchInput] = useState("")
-    // const [selectedLabel, setSelectedLabel] = useState<string | undefined>(startingLabel)
-    // const [selectedLabelData, setSelectedLabelData] = useState<Label | undefined>(undefined)
     const [newLabelColor, setNewLabelColor] = useState("#F5F3E7")
 
-    // useEffect(() => {
-    //     const newSelectedLabelData = labels.find(ld => ld.id === selectedLabel)
-    //     setSelectedLabelData(newSelectedLabelData)
-    // }, [labels])
-
-
-    function onSelectLabel(currentValue: string) {
+    function onSelectLabel(currentValue: string | undefined) {
         setOpen(false)
+        if (currentValue === undefined) {
+            onLabelChange ? onLabelChange(currentValue) : null
+            return
+        }
+
         const newSelectedLabel = labels.find(ld => ld.id === currentValue) ??
             { id: "", user_id: "", name: "Error", color: "#9E9E9E" }
-        // // setSelectedLabel(newSelectedLabel.id)
-        // setSelectedLabelData(newSelectedLabel)
         onLabelChange ? onLabelChange(newSelectedLabel) : null
     }
 
@@ -61,8 +58,6 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
         postNewLabel(user?.sub, labelSearchInput, newLabelColor)
             .then(response => response.json())
             .then((data: Label) => {
-                // setSelectedLabel(data.id)
-                // setSelectedLabelData(data)
                 setLabels(user?.sub ?? undefined).then(() => {
                     const newLabel = labels.find(ld => ld.id === data.id) ?? { id: "", user_id: "", name: "Error", color: "#9E9E9E" }
                     onLabelChange ? onLabelChange(newLabel) : null
@@ -75,7 +70,7 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
             <PopoverTrigger disabled={disabled}>
                 <div className=" flex justify-start min-w-[130px]">
                     {
-                        selectedLabel != undefined
+                        selectedLabel !== undefined
                             ?
                             <div style={{ backgroundColor: `${selectedLabel.color}` }}
                                 className="min-h-[20px] rounded-md px-2 py-1">
@@ -114,18 +109,21 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
                                         key={label.id}
                                         value={label.id}
                                         onSelect={onSelectLabel}
-                                        className="flex justify-start items-center w-full"
+                                        className="flex justify-start items-center items-center w-full"
                                     >
-                                        <Check
-                                            className={cn(
-                                                "mr-2 h-4 w-4",
-                                                (selectedLabel ?? "") === label.id ? "opacity-100" : "opacity-0"
-                                            )}
-                                        />
+                                        {(selectedLabel?.id ?? "") === label.id &&
+                                            <Check className={cn("mr-2 h-4 w-4")} />
+                                        }
+
                                         <div style={{ backgroundColor: `${label.color}` }} className="flex min-h-[20px] rounded-lg px-2 py-1 inline">
                                             <p>{label.name}</p>
                                         </div>
                                     </CommandItem>
+                                    {(selectedLabel?.id ?? "") === label.id &&
+                                        <IconButton style={{ borderRadius: 0 }} onClick={() => onSelectLabel(undefined)}>
+                                            <CloseIcon className={cn("h-4 w-4")} />
+                                        </IconButton>
+                                    }
                                 </div>
                             ))
                         }

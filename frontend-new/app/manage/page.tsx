@@ -46,7 +46,7 @@ export default function Home() {
     function updateEditedSessions() {
         let sessionUpdates: Promise<Response>[] = []
         editedSessions.forEach(({ title, labelId }, sessionId) => {
-            sessionUpdates.push(postSessionModify(sessionId, title, labelId))
+            sessionUpdates.push(postSessionModify(sessionId, title, labelId ?? ""))
         })
         Promise.all(sessionUpdates).then(() => {
             setUserAllSessions(user?.sub)

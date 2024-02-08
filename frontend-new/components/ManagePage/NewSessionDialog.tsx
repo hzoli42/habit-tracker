@@ -35,7 +35,7 @@ export default function NewSessionDialog() {
         setUserAllSessions(user?.sub)
     }
 
-    function handleLabelChange(selectedLabel: LabelAtom) {
+    function handleLabelChange(selectedLabel: LabelAtom | undefined) {
         setLabel(selectedLabel)
     }
 

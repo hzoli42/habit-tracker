@@ -50,14 +50,14 @@ export const sessionColumns: ColumnDef<Session>[] = [
             useEffect(() => {
                 setCurrentLabel(labels.find(ld => ld.id === row.original.label_id))
             }, [labels])
-            const onLabelChange = (selectedLabel: Label) => {
+            const handleLabelChange = (selectedLabel: Label | undefined) => {
                 const title = sessions.get(row.original.id)?.title ?? row.original.title
-                const newSessions = new Map(sessions).set(row.original.id, { title: title, labelId: selectedLabel.id })
-                setCurrentLabel(labels.find(ld => ld.id === selectedLabel.id))
+                const newSessions = new Map(sessions).set(row.original.id, { title: title, labelId: selectedLabel?.id ?? undefined })
+                setCurrentLabel(labels.find(ld => ld.id === selectedLabel?.id))
                 console.log(`New label is ${currentLabel?.id}, ${currentLabel?.name}, ${currentLabel?.color}`)
                 setSessions(newSessions)
             }
-            return <LabelCombobox disabled={false} selectedLabel={currentLabel} onLabelChange={onLabelChange} />
+            return <LabelCombobox disabled={false} selectedLabel={currentLabel} onLabelChange={handleLabelChange} />
         },
     },
     {
