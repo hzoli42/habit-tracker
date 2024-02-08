@@ -8,11 +8,12 @@ import { labelsAtom } from "@/atoms/jotai";
 import { useAtom } from "jotai";
 import { postNewLabel } from "@/lib/api_utils";
 import ColorPicker from "../utils/ColorPicker";
+import { TextField } from "@mui/material";
 
 export default function NewSessionDialog() {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState("N/A")
-    const [color, setColor] = useState("#000000")
+    const [color, setColor] = useState("#F5F3E7")
     const { user, error, isLoading } = useUser();
     const [labels, setLabels] = useAtom(labelsAtom)
 
@@ -36,19 +37,11 @@ export default function NewSessionDialog() {
                 <DialogHeader>
                     <DialogTitle>Enter label details</DialogTitle>
                 </DialogHeader>
-                <div className="flex items-center gap-4 py-4">
-                    <Button
-                        variant="ghost"
-                        role="combobox"
-                        className="flex justify-between flex-wrap h-auto group w-full"
-                    >
-                        <Input
-                            className="focus:outline placeholder:text-gray-500 focus:placeholder:text-gray-500 w-full  focus:text-white text-white"
-                            placeholder="Enter label name"
-                            style={{ backgroundColor: `${color}` }}
-                            onChange={(e) => setName(e.currentTarget.value)}
-                        />
-                    </Button >
+                <div className="flex items-center gap-4 py-4 justify-between h-auto">
+                    <TextField variant="standard" placeholder="Enter label name"
+                        style={{ backgroundColor: `${color}`, minWidth: "200px", width: "100%", paddingLeft: "10px", borderRadius: "6px", paddingTop: "5px" }}
+                        InputProps={{ disableUnderline: true }}
+                        onChange={(e) => setName(e.currentTarget.value)} />
                     <Button
                         variant="ghost"
                         className="gap-x-2 w-full h-auto justify-start"

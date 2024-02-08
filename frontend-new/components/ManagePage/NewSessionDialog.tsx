@@ -8,14 +8,15 @@ import { LabelCombobox } from "../utils/LabelCombobox";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { userAllSessionsAtom } from "@/atoms/jotai";
+import { userAllSessionsAtom, Label as LabelAtom } from "@/atoms/jotai";
 import { useAtom } from "jotai";
 import { postSessionStart, postSessionStop } from "@/lib/api_utils";
+import { TitleTextField } from "../utils/TitleTextField";
 
 export default function NewSessionDialog() {
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState("")
-    const [label, setLabel] = useState<string | undefined>(undefined)
+    const [label, setLabel] = useState<LabelAtom | undefined>(undefined)
     const [startTime, setStartTime] = useState(dayjs().unix())
     const [endTime, setEndTime] = useState(dayjs().unix())
     const { user, error, isLoading } = useUser();
@@ -24,7 +25,7 @@ export default function NewSessionDialog() {
 
     async function onDialogSubmit() {
         let sessionId = ""
-        await postSessionStart(user?.sub, title, label, startTime)
+        await postSessionStart(user?.sub, title, label?.id ?? undefined, startTime)
             .then(response => response.json())
             .then(data => {
                 sessionId = data.id
@@ -32,6 +33,10 @@ export default function NewSessionDialog() {
         await postSessionStop(sessionId, endTime)
         setOpen(false)
         setUserAllSessions(user?.sub)
+    }
+
+    function handleLabelChange(selectedLabel: LabelAtom) {
+        setLabel(selectedLabel)
     }
 
     return (
@@ -46,28 +51,31 @@ export default function NewSessionDialog() {
                     <DialogTitle>Enter session details</DialogTitle>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
+                    <div className="grid grid-cols-4 items-center gap-4 py-1">
                         <Label htmlFor="title" className="text-right">
-                            Title
+                            Title:
                         </Label>
-                        <Input
+                        <div className="col-span-3">
+                            <TitleTextField variant="standard" placeholder="Title" onChange={(e) => setTitle(e.currentTarget.value)} />
+                            {/* <Input
                             id="title"
                             defaultValue="Untitled"
                             className="col-span-3"
                             onChange={(e) => setTitle(e.currentTarget.value)}
-                        />
+                        /> */}
+                        </div>
                     </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
+                    <div className="grid grid-cols-4 items-center gap-4 py-1">
                         <Label htmlFor="labels" className="text-right">
-                            Labels
+                            Label:
                         </Label>
                         <div className="col-span-3">
-                            <LabelCombobox disabled={false} onLabelChange={(selectedLabel) => setLabel(selectedLabel)} />
+                            <LabelCombobox selectedLabel={label} disabled={false} onLabelChange={handleLabelChange} />
                         </div>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="start" className="text-right">
-                            Start time
+                            Start time:
                         </Label>
                         <div className="col-span-3">
                             <DateTimeField
@@ -79,7 +87,7 @@ export default function NewSessionDialog() {
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="stop" className="text-right">
-                            Stop time
+                            Stop time:
                         </Label>
                         <div className="col-span-3">
                             <DateTimeField
