@@ -30,10 +30,12 @@ export default function Home() {
 
     useEffect(() => {
         console.log("Labels atom updated - should force rerender")
+        setEditedLabels(new Map())
     }, [labels])
 
     useEffect(() => {
         console.log("Sessions atom updated - should force rerender")
+        setEditedSessions(new Map())
     }, [userAllSessions])
 
     useEffect(() => {
@@ -47,7 +49,6 @@ export default function Home() {
             sessionUpdates.push(postSessionModify(sessionId, title, labelId))
         })
         Promise.all(sessionUpdates).then(() => {
-            setEditedSessions(new Map())
             setUserAllSessions(user?.sub)
         })
     }
@@ -58,7 +59,6 @@ export default function Home() {
             labelUpdates.push(postLabelUpdate(labelId, name, color))
         })
         Promise.all(labelUpdates).then(() => {
-            setEditedLabels(new Map())
             setLabels(user?.sub)
         })
     }
@@ -88,7 +88,7 @@ export default function Home() {
                         <div className="flex justify-between pt-6 pb-4">
                             <article className="prose lg:prose-xl"><h1>Labels</h1></article>
                             <div className="flex justify-center gap-4 items-center">
-                                {editedLabels.size != 0 && <Button className="bg-yellow-400 hover:bg-yellow-500" onClick={updateEditedLabels}>
+                                {editedLabels.size != 0 && <Button className="bg-amber-500 hover:bg-amber-600" onClick={updateEditedLabels}>
                                     Save edited labels
                                 </Button>}
                                 <NewLabelDialog />

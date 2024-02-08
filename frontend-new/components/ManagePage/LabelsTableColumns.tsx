@@ -22,6 +22,7 @@ export const labelColumns: ColumnDef<Label>[] = [
         header: "Name",
         cell: ({ row }) => {
             const [editedLabels, setEditedLabels] = useAtom(editedLabelsAtom)
+            const color = editedLabels.get(row.original.id)?.color ?? row.original.color
             const updateLabelName = (newName: string) => {
                 if (newName == "") {
                     return
@@ -33,7 +34,7 @@ export const labelColumns: ColumnDef<Label>[] = [
             return (
                 <TextField variant="standard" defaultValue={row.original.name} placeholder={row.original.name}
                     onBlur={(e) => updateLabelName(e.currentTarget.value)}
-                    style={{ backgroundColor: `${row.original.color}`, minWidth: "200px", width: "100%", paddingLeft: "10px", borderRadius: "6px", paddingTop: "5px" }}
+                    style={{ backgroundColor: `${color}`, minWidth: "200px", width: "100%", paddingLeft: "10px", borderRadius: "6px", paddingTop: "5px" }}
                     InputProps={{ disableUnderline: true }} />
             )
         }

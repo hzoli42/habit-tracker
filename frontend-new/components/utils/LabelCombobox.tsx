@@ -27,40 +27,33 @@ import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 export type LabelComboboxProps = {
-    startingLabel?: string
-    onLabelChange?: (selectedLabel: string) => void
+    selectedLabel?: Label
+    onLabelChange?: (selectedLabel: Label) => void
     disabled: boolean
 }
 
-export function LabelCombobox({ startingLabel, onLabelChange, disabled }: LabelComboboxProps) {
+export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelComboboxProps) {
     const [labels, setLabels] = useAtom(labelsAtom)
     const { user, error, isLoading } = useUser();
     const [open, setOpen] = useState(false)
     const [labelSearchInput, setLabelSearchInput] = useState("")
-    const [selectedLabel, setSelectedLabel] = useState<string | undefined>(startingLabel)
-    const [selectedLabelData, setSelectedLabelData] = useState<Label | undefined>(undefined)
+    // const [selectedLabel, setSelectedLabel] = useState<string | undefined>(startingLabel)
+    // const [selectedLabelData, setSelectedLabelData] = useState<Label | undefined>(undefined)
     const [newLabelColor, setNewLabelColor] = useState("#F5F3E7")
 
     // useEffect(() => {
-    //     if (!isLoading) {
-    //         return
-    //     }
-    //     setLabels(user?.sub ?? undefined)
-    //     console.log(labels)
-    // }, [isLoading])
-
-    useEffect(() => {
-        const newSelectedLabelData = labels.find(ld => ld.id === selectedLabel)
-        setSelectedLabelData(newSelectedLabelData)
-    }, [labels])
+    //     const newSelectedLabelData = labels.find(ld => ld.id === selectedLabel)
+    //     setSelectedLabelData(newSelectedLabelData)
+    // }, [labels])
 
 
     function onSelectLabel(currentValue: string) {
+        setOpen(false)
         const newSelectedLabel = labels.find(ld => ld.id === currentValue) ??
             { id: "", user_id: "", name: "Error", color: "#9E9E9E" }
-        setSelectedLabel(newSelectedLabel.id)
-        setSelectedLabelData(newSelectedLabel)
-        onLabelChange ? onLabelChange(newSelectedLabel.id) : null
+        // // setSelectedLabel(newSelectedLabel.id)
+        // setSelectedLabelData(newSelectedLabel)
+        onLabelChange ? onLabelChange(newSelectedLabel) : null
     }
 
     async function addNewLabel() {
@@ -68,10 +61,12 @@ export function LabelCombobox({ startingLabel, onLabelChange, disabled }: LabelC
         postNewLabel(user?.sub, labelSearchInput, newLabelColor)
             .then(response => response.json())
             .then((data: Label) => {
-                setSelectedLabel(data.id)
-                setSelectedLabelData(data)
-                setLabels(user?.sub ?? undefined)
-                onLabelChange ? onLabelChange(data.id) : null
+                // setSelectedLabel(data.id)
+                // setSelectedLabelData(data)
+                setLabels(user?.sub ?? undefined).then(() => {
+                    const newLabel = labels.find(ld => ld.id === data.id) ?? { id: "", user_id: "", name: "Error", color: "#9E9E9E" }
+                    onLabelChange ? onLabelChange(newLabel) : null
+                })
             })
     }
 
@@ -80,11 +75,11 @@ export function LabelCombobox({ startingLabel, onLabelChange, disabled }: LabelC
             <PopoverTrigger disabled={disabled}>
                 <div className=" flex justify-start min-w-[130px]">
                     {
-                        selectedLabel != undefined && selectedLabelData != undefined
+                        selectedLabel != undefined
                             ?
-                            <div style={{ backgroundColor: `${selectedLabelData.color}` }}
+                            <div style={{ backgroundColor: `${selectedLabel.color}` }}
                                 className="min-h-[20px] rounded-md px-2 py-1">
-                                <p>{selectedLabelData.name}</p>
+                                <p>{selectedLabel.name}</p>
                             </div>
                             : <>
                                 <p className="text-gray-500">Select a label</p>

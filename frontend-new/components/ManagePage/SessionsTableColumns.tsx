@@ -7,10 +7,10 @@ import { LabelCombobox } from "../utils/LabelCombobox"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { useAtom } from "jotai"
-import { Session, editedSessionsAtom, userAllSessionsAtom } from "@/atoms/jotai"
+import { Label, Session, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/atoms/jotai"
 import DeleteIcon from '@mui/icons-material/Delete'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import { deleteSessionById } from "@/lib/api_utils"
 import { TitleTextField } from "../utils/TitleTextField"
@@ -44,13 +44,20 @@ export const sessionColumns: ColumnDef<Session>[] = [
         header: "Labels",
         cell: ({ row }) => {
             const [sessions, setSessions] = useAtom(editedSessionsAtom)
-            const onLabelChange = (selectedLabel: string) => {
+            const [labels, setLabels] = useAtom(labelsAtom)
+            const [currentLabel, setCurrentLabel] = useState<Label | undefined>(undefined)
+
+            useEffect(() => {
+                setCurrentLabel(labels.find(ld => ld.id === row.original.label_id))
+            }, [labels])
+            const onLabelChange = (selectedLabel: Label) => {
                 const title = sessions.get(row.original.id)?.title ?? row.original.title
-                const newSessions = new Map(sessions).set(row.original.id, { title: title, labelId: selectedLabel })
-                console.log('session labels change')
+                const newSessions = new Map(sessions).set(row.original.id, { title: title, labelId: selectedLabel.id })
+                setCurrentLabel(labels.find(ld => ld.id === selectedLabel.id))
+                console.log(`New label is ${currentLabel?.id}, ${currentLabel?.name}, ${currentLabel?.color}`)
                 setSessions(newSessions)
             }
-            return <LabelCombobox disabled={false} startingLabel={row.original.label_id} onLabelChange={onLabelChange} />
+            return <LabelCombobox disabled={false} selectedLabel={currentLabel} onLabelChange={onLabelChange} />
         },
     },
     {
