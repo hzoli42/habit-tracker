@@ -78,9 +78,9 @@ export default function Home() {
                         <TabsTrigger value="labels">Labels</TabsTrigger>
                     </TabsList>
                     <TabsContent value="sessions">
-                        <div className="flex justify-between pt-6 pb-4">
-                            <article className="prose lg:prose-xl"><h1>Sessions</h1></article>
-                            <div className="flex justify-center gap-4 items-center">
+                        <div className="grid grid-cols-1 md:grid-cols-2 pt-6 pb-4">
+                            <article className="prose lg:prose-xl pb-4 md:pb-0"><h1>Sessions</h1></article>
+                            <div className="flex justify-end gap-4 items-center">
                                 {editedSessions.size != 0 && <Button className="bg-amber-500 hover:bg-amber-600" onClick={updateEditedSessions}>
                                     Save edited sessions
                                 </Button>}
@@ -91,9 +91,9 @@ export default function Home() {
                         <DataTable data={userAllSessions} columns={sessionColumns} />
                     </TabsContent>
                     <TabsContent value="labels">
-                        <div className="flex justify-between pt-6 pb-4">
-                            <article className="prose lg:prose-xl"><h1>Labels</h1></article>
-                            <div className="flex justify-center gap-4 items-center">
+                        <div className="grid grid-cols-1 md:grid-cols-2 pt-6 pb-4">
+                            <article className="prose lg:prose-xl pb-4 md:pb-0"><h1>Labels</h1></article>
+                            <div className="flex justify-end gap-4 items-center">
                                 {editedLabels.size != 0 && <Button className="bg-amber-500 hover:bg-amber-600" onClick={updateEditedLabels}>
                                     Save edited labels
                                 </Button>}
