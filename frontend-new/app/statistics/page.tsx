@@ -6,6 +6,7 @@ import { Typography } from "@material-tailwind/react"
 import { useAtom } from "jotai"
 import { useEffect } from "react"
 import BuildIcon from '@mui/icons-material/Build'
+import { useRouter } from "next/navigation"
 
 
 // const dummyDataLines = [
@@ -104,6 +105,7 @@ import BuildIcon from '@mui/icons-material/Build'
 export default function Home() {
     const [userAllSessions, setUserAllSessions] = useAtom(userAllSessionsAtom)
     const [labels, setLabels] = useAtom(labelsAtom)
+    const router = useRouter()
 
     const { user, error, isLoading } = useUser();
 
@@ -111,6 +113,10 @@ export default function Home() {
         if (isLoading) {
             return
         }
+        if (user?.sub === null || user?.sub === undefined) {
+            router.push('/')
+        }
+
         setUserAllSessions(user?.sub)
         setLabels(user?.sub)
     }, [isLoading])

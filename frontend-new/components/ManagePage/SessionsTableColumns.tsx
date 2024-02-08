@@ -64,7 +64,7 @@ export const sessionColumns: ColumnDef<Session>[] = [
         accessorKey: "duration",
         header: "Duration",
         cell: ({ row }) => {
-            return <p className="min-w-[90px]">{row.original.duration}</p>
+            return <p className="min-w-[90px] text-end">{row.original.duration}</p>
         }
     },
     {

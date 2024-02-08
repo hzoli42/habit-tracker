@@ -10,6 +10,7 @@ import { DataTable } from "@/components/utils/DataTable";
 import { postLabelUpdate, postSessionModify } from "@/lib/api_utils";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAtom } from "jotai";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 
@@ -19,10 +20,15 @@ export default function Home() {
     const [editedSessions, setEditedSessions] = useAtom(editedSessionsAtom)
     const [editedLabels, setEditedLabels] = useAtom(editedLabelsAtom)
     const [userAllSessions, setUserAllSessions] = useAtom(userAllSessionsAtom)
+    const router = useRouter()
+
 
     useEffect(() => {
         if (isLoading) {
             return
+        }
+        if (user?.sub === null || user?.sub === undefined) {
+            router.push('/')
         }
         setLabels(user?.sub)
         setUserAllSessions(user?.sub)

@@ -54,6 +54,18 @@ export type SessionResponse = {
     ]
 }
 
+
+function formatDuration(durationObject: Date) {
+    const days = durationObject.getUTCDate() - 1
+    const hours = durationObject.getUTCHours()
+    const minutes = durationObject.getUTCMinutes()
+    const seconds = durationObject.getUTCSeconds()
+    const daysString = days > 0 ? `${days}d` : ''
+    const hoursString = (hours > 0 || daysString !== '') ? `${hours}h` : ''
+    const minutesString = (minutes > 0 || hoursString !== '') ? `${minutes}m` : ''
+    const secondsString = (seconds > 0 || minutesString !== '') ? `${seconds}s` : ''
+    return `${daysString} ${hoursString} ${minutesString} ${secondsString}`
+}
 const userAllSessionsPrimitiveAtom = atom<Session[]>([])
 export const userAllSessionsAtom = atom(
     (get) => get(userAllSessionsPrimitiveAtom),
@@ -72,7 +84,7 @@ export const userAllSessionsAtom = atom(
                         let duration = "This session does not have an end time"
                         if (stop != null) {
                             const durationObject = new Date(stop.timestamp * 1000 - start.timestamp * 1000)
-                            duration = `${durationObject.getHours()}h ${durationObject.getMinutes()}m ${durationObject.getSeconds()}s`
+                            duration = formatDuration(durationObject)
                         }
                         return {
                             id: session.id,
