@@ -95,6 +95,10 @@ module.exports = withMT({
         'clock-sm': '100px',
         'clock-md': '86px',
         'clock-lg': '110px',
+      },
+      content: {
+        'soon': "url('/coming_soon_graphic_small.png')",
+        'soon-large': "url('/coming_soon_graphic_large.png')",
       }
     },
   },

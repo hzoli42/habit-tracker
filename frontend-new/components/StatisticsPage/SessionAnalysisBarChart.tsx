@@ -1,5 +1,5 @@
 'use client'
-import { ResponsiveContainer, CartesianGrid, Bar, XAxis, YAxis, BarChart, Cell } from "recharts";
+import { ResponsiveContainer, CartesianGrid, Bar, XAxis, YAxis, BarChart, Cell, Tooltip, Legend } from "recharts";
 import { Card, CardContent, CardDescription, CardTitle } from "../ui/card";
 
 
@@ -11,70 +11,61 @@ export default function SessionAnalysisBarChart({ title, data }: {
         labelColor: string
     }[]
 }) {
-    function formatDate(value: Date, index: number): string {
-        return `${value.toDateString()}`
+    function formatDate(value: number, index: number): string {
+        return `${new Date(value).toDateString()}`
     }
 
-    let dataMap = new Map<string, Map<string, { duration: number, color: string }>>()
-    data.forEach(x => {
-        if (!dataMap.has(formatDate(x.date, 0))) {
-            dataMap.set(formatDate(x.date, 0), new Map())
+    let labelsList: { name: string, color: string }[] = []
+    data.map(x => ({ name: x.labelName, color: x.labelColor })).forEach(l => {
+        if (labelsList.find(x => x.name === l.name && x.color === l.color) === undefined) {
+            labelsList.push(l)
         }
-        if (!dataMap.get(formatDate(x.date, 0))?.has(x.labelName)) {
-            dataMap.get(formatDate(x.date, 0))?.set(x.labelName, { duration: x.duration, color: x.labelColor })
+    })
+    console.log(labelsList)
+
+    let chartData: { date: number, [key: string]: number }[] = []
+    data.forEach((d, i) => {
+        if (chartData.find(x => x.date === d.date.getTime()) === undefined) {
+            const newData: { date: number, [key: string]: number } = { date: d.date.getTime() }
+            labelsList.forEach(l => newData[l.name] = 0)
+            newData[d.labelName] = d.duration
+            chartData.push(newData)
         } else {
-            const currentDuration = dataMap.get(formatDate(x.date, 0))?.get(x.labelName)?.duration ?? 0
-            dataMap.get(formatDate(x.date, 0))?.set(x.labelName, { duration: currentDuration + x.duration, color: x.labelColor })
+            const data = chartData.find(x => x.date === d.date.getTime())
+            if (!data) {
+                return
+            }
+            data[d.labelName] += d.duration
         }
-
     })
+    chartData.sort((a, b) => a.date - b.date)
+    console.log(chartData)
 
-    let barChartData: { date: string, duration: number, pairs: { [key: string]: { duration: number, color: string } } }[] = []
-    dataMap.forEach((v, k, m) => {
-        let pairs: { [key: string]: { duration: number, color: string } } = {}
-        let duration = 0
-        v.forEach((v1, k1, m1) => {
-            pairs[k1] = v1
-            duration += v1.duration
-        })
-        barChartData.push({ date: k, duration: duration, pairs: pairs })
-    })
-    let labelsList: string[] = []
-    new Set(data.map(x => x.labelName)).forEach(l =>
-        labelsList.push(l)
-    )
 
     return (
-        <Card>
-            <CardContent>
-                <CardTitle className="flex justify-center pt-10 pb-4">{title}</CardTitle>
-                <ResponsiveContainer width="100%" aspect={2}>
-                    <BarChart data={barChartData} margin={{ top: 0, right: 30, bottom: 70, left: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        {
-                            labelsList.map(l => {
-                                const datakey = `pairs.${l}.duration`
-                                return (
-                                    < Bar stackId="pairs" dataKey={datakey}>
-                                        {
-                                            barChartData.map(d => {
-                                                if (d.pairs[l] == null) {
-                                                    return
-                                                }
-                                                return (
-                                                    <Cell fill={d.pairs[l].color} />
-                                                )
-                                            })
-                                        }
-                                    </Bar>
-                                )
-                            })
-                        }
-                        <XAxis dataKey="date" angle={-90} textAnchor="end" />
-                        <YAxis dataKey={"duration"} />
-                    </BarChart>
-                </ResponsiveContainer>
-            </CardContent>
-        </Card>
+        <div className="relative before:absolute before:flex before:justify-center before:items-center before:block before:w-full before:h-full before:bg-[#000000]/[0.15] before:content-soon  md:before:content-soon-large before:z-10">
+            <Card>
+                <CardContent>
+                    <CardTitle className="flex justify-center pt-10 pb-4">{title}</CardTitle>
+                    <ResponsiveContainer width="100%" height="100%" aspect={1.2} >
+                        <BarChart data={chartData} margin={{ top: 0, right: 30, bottom: 70, left: 0 }}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="date" tickFormatter={formatDate} angle={-90} textAnchor="end" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend verticalAlign="top" />
+                            {
+                                labelsList.map((l, i) => {
+                                    console.log(` <Bar key=${i} stackId="test" dataKey="${l.name}" fill="${l.color}" />`)
+                                    return (
+                                        <Bar key={i} stackId="a" dataKey={l.name} fill={l.color} />
+                                    )
+                                })
+                            }
+                        </BarChart>
+                    </ResponsiveContainer>
+                </CardContent>
+            </Card>
+        </div>
     )
 }

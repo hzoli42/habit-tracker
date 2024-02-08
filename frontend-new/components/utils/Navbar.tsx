@@ -33,14 +33,14 @@ export default function AppNavbar() {
                         Manage
                     </Typography>
                 </Link>
-                {/* <Link href="/statistics"> */}
-                <Tooltip content="Coming soon!" className="border-2 bg-white text-gray-500">
-                    <Typography variant="h6" className="flex gap-2 text-gray-500">
+                <Link href="/analyse">
+                    {/* <Tooltip content="Coming soon!" className="border-2 bg-white text-gray-500"> */}
+                    <Typography variant="h6" className="flex gap-2 text-black">
                         <TrendingUpIcon />
                         Analyse
                     </Typography>
-                </Tooltip>
-                {/* </Link> */}
+                    {/* </Tooltip> */}
+                </Link>
 
                 <a href="/api/auth/logout">
                     <Button variant="outline" className="bg-black hover:bg-black hover:opacity-75 border-2 border-black ms-4">
