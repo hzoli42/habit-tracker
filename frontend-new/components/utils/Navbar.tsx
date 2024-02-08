@@ -12,11 +12,14 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { Button } from "../ui/button";
 import { useViewport } from "@/lib/hooks";
 import MenuIcon from '@mui/icons-material/Menu';
+import { StethoscopeIcon } from "lucide-react";
+import { useState } from "react";
 
 
 export default function AppNavbar() {
     const { user, error, isLoading } = useUser()
     const { width, height } = useViewport()
+    const [open, setOpen] = useState(false)
 
     function desktopMenu() {
         return (
@@ -56,35 +59,35 @@ export default function AppNavbar() {
     function mobileMenu() {
         return (
             <div className="flex justify-center gap-6 items-center">
-                <DropdownMenu>
+                <DropdownMenu open={open} onOpenChange={setOpen}>
                     <DropdownMenuTrigger className="text-black text-lg">
                         <MenuIcon fontSize="large" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <Link href="/track">
+                        <Link href="/track" onClick={() => setOpen(false)}>
                             <Typography variant="h6" className="flex gap-2 text-black py-2">
                                 <TimerIcon className="fill-black" />
                                 Track
                             </Typography>
                         </Link>
                         <DropdownMenuSeparator />
-                        <Link href="/manage">
+                        <Link href="/manage" onClick={() => setOpen(false)}>
                             <Typography variant="h6" className="flex gap-2 text-black py-2">
                                 <EditIcon className="fill-black" />
                                 Manage
                             </Typography>
                         </Link>
                         <DropdownMenuSeparator />
-                        {/* <Link href="/statistics"> */}
-                        <Tooltip content="Coming soon!" className="border-2 bg-white text-gray-500">
-                            <Typography variant="h6" className="flex gap-2 text-gray-500 py-2">
+                        <Link href="/analyse" onClick={() => setOpen(false)}>
+                            {/* <Tooltip content="Coming soon!" className="border-2 bg-white text-gray-500"> */}
+                            <Typography variant="h6" className="flex gap-2 text-black py-2">
                                 <TrendingUpIcon />
                                 Analyse
                             </Typography>
-                        </Tooltip>
-                        {/* </Link> */}
+                            {/* </Tooltip> */}
+                        </Link>
                         <DropdownMenuSeparator className="my-2" />
-                        <a href="/api/auth/logout">
+                        <a href="/api/auth/logout" onClick={() => setOpen(false)}>
                             <Typography variant="h6" className="text-red-600 flex justify-center py-2">
                                 Log out
                             </Typography>
