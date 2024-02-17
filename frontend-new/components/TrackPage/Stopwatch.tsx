@@ -61,9 +61,10 @@ export async function stopSession(sessionId: string) {
 
 export default function Stopwatch() {
     const [labels, setLabels] = useAtom(labelsAtom)
-    const [time, setTime] = useState<StopwatchTime>({ hours: 0, minutes: 0, seconds: 0 })
+    const [displayTime, setDisplayTime] = useState<StopwatchTime>({ hours: 0, minutes: 0, seconds: 0 })
     const [isRunning, setIsRunning] = useState<boolean>(false)
-    const [stopwatchDirection, setStopwatchDirection] = useState<number>(1)
+    const [clockStartEnd, setClockStartEnd] = useState<{ start: Date, end: undefined } | { start: undefined, end: Date }>({ start: new Date(), end: undefined })
+    const [clockMode, setClockMode] = useState<"stopwatch" | "timer">("stopwatch")
     const [title, setTitle] = useState<string>("")
     const [selectedLabel, setSelectedLabel] = useState<Label | undefined>(undefined)
     const { user, error, isLoading } = useUser();
@@ -124,7 +125,7 @@ export default function Stopwatch() {
         <>
             <div className="grid grid-cols-1 md:grid-cols-4">
                 <div className="md:col-span-3">
-                    <StopwatchClock time={time} setTime={setTime} setStopwatchDirection={setStopwatchDirection} isRunning={isRunning} />
+                    <StopwatchClock time={displayTime} setTime={setDisplayTime} setStopwatchDirection={setStopwatchDirection} isRunning={isRunning} />
                 </div>
                 <StopwatchInputs
                     titleValue={title}
