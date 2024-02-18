@@ -3,7 +3,6 @@
 import { Label, labelsAtom } from "@/atoms/jotai";
 import { Clock } from "@/components/TrackPage/Clock";
 import { ClockInput } from "@/components/TrackPage/ClockInput";
-import Stopwatch from "@/components/TrackPage/Stopwatch";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LabelCombobox } from "@/components/utils/LabelCombobox";
@@ -13,6 +12,10 @@ import { Button } from "@mui/material";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
+import useSound from "use-sound";
+import alarmSound from '../../sounds/alarm_sound.mp3';
+import { postSessionStart, postSessionStop } from "@/lib/api_utils";
+import Head from "next/head";
 
 export type StopwatchTime = {
   hours: number,
@@ -25,10 +28,37 @@ export default function Home() {
   const [labels, setLabels] = useAtom(labelsAtom)
   const router = useRouter()
   const [displayTime, setDisplayTime] = useState<StopwatchTime>({ hours: 0, minutes: 0, seconds: 0 })
+  const [clockMode, setClockMode] = useState<"stopwatch" | "timer">("stopwatch")
+  const [referenceTime, setReferenceTime] = useState<Date>(new Date())
+  const [timerPossible, setTimerPossible] = useState(false)
   const [isRunning, setIsRunning] = useState<boolean>(false)
   const [title, setTitle] = useState<string>("")
   const [selectedLabel, setSelectedLabel] = useState<Label | undefined>(undefined)
+  const [sessionId, setSessionId] = useState<string>("")
   const [timerExpiredDialogOpen, setTimerExpiredDialogOpen] = useState(false)
+  const [playAlarm, { stop }] = useSound(alarmSound, { volume: 0.5 })
+
+  function timeStep() {
+    let displayTimeObject: Date
+    const currentTime = new Date()
+    if (clockMode === "stopwatch") {
+      displayTimeObject = new Date(currentTime.getTime() - referenceTime.getTime())
+    } else {
+      displayTimeObject = new Date(referenceTime.getTime() - currentTime.getTime())
+    }
+    const newDisplayTime = { hours: displayTimeObject.getUTCHours(), minutes: displayTimeObject.getUTCMinutes(), seconds: displayTimeObject.getUTCSeconds() }
+    setDisplayTime(newDisplayTime)
+    console.log(`Display time object: ${displayTimeObject.getTime()}`)
+    console.log(`New display time is: ${newDisplayTime.hours}, ${newDisplayTime.minutes}, ${newDisplayTime.seconds}`)
+
+    if (clockMode === "timer" && newDisplayTime.hours === 0 && newDisplayTime.minutes === 0 && newDisplayTime.seconds === 0) {
+      console.log('Stopping session because timer reached 0')
+      handleStop()
+      setTimerExpiredDialogOpen(true)
+      playAlarm()
+    }
+  }
+
 
   useEffect(() => {
     if (isLoading) {
@@ -40,25 +70,64 @@ export default function Home() {
     setLabels(user?.sub)
   }, [isLoading])
 
+  useEffect(() => {
+    let interval: NodeJS.Timer | undefined = undefined;
+    if (isRunning) {
+      interval = setInterval(() => {
+        timeStep();
+      }, 100);
+    } else {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [isRunning, displayTime]);
+
 
   function handleTabChange(value: string) {
-    if (value == "timer") {
-      // setStopwatchDirection(-1)
+    if (value === "stopwatch") {
+      setClockMode("stopwatch")
     } else {
-      // setStopwatchDirection(1)
+      setClockMode("timer")
     }
+  }
+
+  function handleClockInputChange(clockInput: StopwatchTime) {
+    console.log(clockInput.hours, clockInput.minutes, clockInput.seconds)
+    setTimerPossible(clockInput.hours !== 0 || clockInput.minutes !== 0 || clockInput.seconds !== 0)
+    setReferenceTime(new Date(clockInput.seconds * 1000 + clockInput.minutes * 1000 * 60 + clockInput.hours * 1000 * 60 * 60))
   }
 
   function handleTitleChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     setTitle(e.currentTarget.value)
+    console.log(e.currentTarget.value)
   }
 
   function handleLabelChange(label: Label | undefined) {
     setSelectedLabel(label)
   }
 
-  function handleStartStopToggle() {
-    null
+  async function handleStart() {
+    const startTime = new Date()
+    if (clockMode === "stopwatch") {
+      setReferenceTime(startTime)
+    } else {
+      setReferenceTime(new Date(startTime.getTime() + referenceTime.getTime()))
+      console.log(`Setting reference time to ${new Date(startTime.getTime() + referenceTime.getTime()).getTime()}`)
+    }
+
+    setIsRunning(true)
+    await postSessionStart(user?.sub, title, selectedLabel?.id, startTime.getTime())
+      .then(response => response.json())
+      .then(data => setSessionId(data.id))
+  }
+
+  async function handleStop() {
+    const stopTime = new Date()
+    setIsRunning(false)
+    setDisplayTime({ hours: 0, minutes: 0, seconds: 0 })
+    setTitle("")
+    setSelectedLabel(undefined)
+    await postSessionStop(sessionId, stopTime.getTime())
   }
 
   return (
@@ -77,7 +146,7 @@ export default function Home() {
               {
                 isRunning
                   ? <Clock time={displayTime} color="active" />
-                  : <ClockInput />
+                  : <ClockInput onClockInput={handleClockInputChange} />
               }
 
             </TabsContent>
@@ -89,8 +158,8 @@ export default function Home() {
           <LabelCombobox selectedLabel={selectedLabel} onLabelChange={handleLabelChange} disabled={isRunning} />
           {
             !isRunning
-              ? <Button className="bg-green-400 mt-2" variant="contained" onClick={handleStartStopToggle} fullWidth>Start</Button>
-              : <Button className="bg-red-400 mt-2" variant="contained" onClick={handleStartStopToggle} fullWidth>Stop</Button>
+              ? <Button className="bg-green-400 mt-2" variant="contained" disabled={clockMode === "timer" && !timerPossible} onClick={() => handleStart()} fullWidth>Start</Button>
+              : <Button className="bg-red-400 mt-2" variant="contained" onClick={() => handleStop()} fullWidth>Stop</Button>
           }
         </div>
       </div>
@@ -100,7 +169,10 @@ export default function Home() {
             <DialogTitle>Your timer has expired!</DialogTitle>
           </DialogHeader>
           <DialogFooter>
-            <Button onClick={() => { setTimerExpiredDialogOpen(false) }}>
+            <Button onClick={() => {
+              setTimerExpiredDialogOpen(false)
+              stop()
+            }}>
               Close
             </Button>
           </DialogFooter>

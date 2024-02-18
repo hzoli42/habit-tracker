@@ -5,15 +5,18 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { LabelCombobox } from "../utils/LabelCombobox";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { userAllSessionsAtom, Label as LabelAtom } from "@/atoms/jotai";
 import { useAtom } from "jotai";
 import { postSessionStart, postSessionStop } from "@/lib/api_utils";
 import { TitleTextField } from "../utils/TitleTextField";
+import 'dayjs/plugin/utc';
 
 export default function NewSessionDialog() {
+    dayjs.extend(require('dayjs/plugin/utc'));
+
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState("")
     const [label, setLabel] = useState<LabelAtom | undefined>(undefined)
@@ -25,12 +28,14 @@ export default function NewSessionDialog() {
 
     async function onDialogSubmit() {
         let sessionId = ""
-        await postSessionStart(user?.sub, title, label?.id ?? undefined, startTime)
+        const startTimeUTC = dayjs.unix(startTime).utc().unix() * 1000
+        const endTimeUTC = dayjs.unix(endTime).utc().unix() * 1000
+        await postSessionStart(user?.sub, title, label?.id ?? undefined, startTimeUTC)
             .then(response => response.json())
             .then(data => {
                 sessionId = data.id
             })
-        await postSessionStop(sessionId, endTime)
+        await postSessionStop(sessionId, endTimeUTC)
         setOpen(false)
         setUserAllSessions(user?.sub)
     }
@@ -57,12 +62,6 @@ export default function NewSessionDialog() {
                         </Label>
                         <div className="col-span-3">
                             <TitleTextField variant="standard" placeholder="Title" onChange={(e) => setTitle(e.currentTarget.value)} />
-                            {/* <Input
-                            id="title"
-                            defaultValue="Untitled"
-                            className="col-span-3"
-                            onChange={(e) => setTitle(e.currentTarget.value)}
-                        /> */}
                         </div>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4 py-1">

@@ -1,5 +1,5 @@
+import { StopwatchTime } from "@/app/track/page"
 import { useViewport } from "@/lib/hooks"
-import { StopwatchTime } from "./Stopwatch"
 
 export type ClockProps = {
     time: StopwatchTime

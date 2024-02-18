@@ -83,7 +83,8 @@ export const userAllSessionsAtom = atom(
                         const stop = session.actions.filter(a => a.event == "stop")[0]
                         let duration = "This session does not have an end time"
                         if (stop != null) {
-                            const durationObject = new Date(stop.timestamp * 1000 - start.timestamp * 1000)
+                            const durationObject = new Date(stop.timestamp - start.timestamp)
+                            console.log(`Duration unix timestamp: ${durationObject.getTime()}`)
                             duration = formatDuration(durationObject)
                         }
                         return {
@@ -91,8 +92,8 @@ export const userAllSessionsAtom = atom(
                             title: session.title,
                             label_id: session.label_id,
                             duration: duration,
-                            start_date: new Date(start.timestamp * 1000),
-                            end_date: new Date(stop.timestamp * 1000)
+                            start_date: new Date(start.timestamp),
+                            end_date: new Date(stop.timestamp)
                         }
                     })
                 )

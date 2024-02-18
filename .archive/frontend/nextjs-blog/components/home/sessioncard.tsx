@@ -15,7 +15,7 @@ export default function SessionCard(session: Session) {
                 <Typography>Actions</Typography>
                 {
                     session.actions.map((a, idx) => {
-                        const date = new Date(a.timestamp * 1000);
+                        const date = new Date(a.timestamp);
                         return (<Typography>{date.toLocaleString()}: {a.action}</Typography>);
                     })
                 }
