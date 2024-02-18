@@ -140,13 +140,13 @@ export default function Home() {
 
     return (
         <main>
-            <div className="grid grid-cols-1 gap-8">
-                <SessionAnalysisLineChart title="Total work time" data={dummyDataLines} />
-                <SessionAnalysisBarChart title="Total work time by label" data={dummyDataBars} />
-                {/* <Typography variant="h2" className="flex justify-center gap-4 p-8 items-center text-gray-500">
-                    <BuildIcon />
-                    Content coming soon!
-                </Typography> */}
+            <div className="grid grid-cols-1 gap-8 place-items-center">
+                <div className="w-full md:w-3/4">
+                    <SessionAnalysisLineChart title="Total work time" data={dummyDataLines} />
+                </div>
+                <div className="w-full md:w-3/4">
+                    <SessionAnalysisBarChart title="Total work time by label" data={dummyDataBars} />
+                </div>
             </div>
         </main>
     )
