@@ -3,6 +3,7 @@ import { editedLabelsAtom, editedSessionsAtom, labelsAtom, userAllSessionsAtom }
 import { labelColumns } from "@/components/ManagePage/LabelsTableColumns";
 import NewLabelDialog from "@/components/ManagePage/NewLabelDialog";
 import NewSessionDialog from "@/components/ManagePage/NewSessionDialog";
+import { SessionFilter } from "@/components/ManagePage/SessionFilter";
 import { sessionColumns } from "@/components/ManagePage/SessionsTableColumns";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -78,16 +79,22 @@ export default function Home() {
                         <TabsTrigger value="labels">Labels</TabsTrigger>
                     </TabsList>
                     <TabsContent value="sessions">
-                        <div className="grid grid-cols-1 md:grid-cols-2 pt-6 pb-4">
-                            <article className="prose lg:prose-xl pb-4 md:pb-0"><h1>Sessions</h1></article>
-                            <div className="flex justify-end gap-4 items-center">
+                        <div className="flex flex-start pt-6">
+                            <article className="prose lg:prose-xl"><h1>Sessions</h1></article>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 py-4">
+                            <div className="flex justify-start items-center">
+                                <SessionFilter />
+                            </div>
+                            <div className="flex justify-end gap-4">
                                 {editedSessions.size != 0 && <Button className="bg-amber-500 hover:bg-amber-600" onClick={updateEditedSessions}>
-                                    Save edited sessions
+                                    Save changes
                                 </Button>}
                                 <NewSessionDialog />
                             </div>
-
                         </div>
+
+
                         <DataTable data={userAllSessions} columns={sessionColumns} />
                     </TabsContent>
                     <TabsContent value="labels">
@@ -95,7 +102,7 @@ export default function Home() {
                             <article className="prose lg:prose-xl pb-4 md:pb-0"><h1>Labels</h1></article>
                             <div className="flex justify-end gap-4 items-center">
                                 {editedLabels.size != 0 && <Button className="bg-amber-500 hover:bg-amber-600" onClick={updateEditedLabels}>
-                                    Save edited labels
+                                    Save changes
                                 </Button>}
                                 <NewLabelDialog />
                             </div>
