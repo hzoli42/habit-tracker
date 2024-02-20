@@ -48,11 +48,8 @@ export default function Home() {
     }
     const newDisplayTime = { hours: displayTimeObject.getUTCHours(), minutes: displayTimeObject.getUTCMinutes(), seconds: displayTimeObject.getUTCSeconds() }
     setDisplayTime(newDisplayTime)
-    console.log(`Display time object: ${displayTimeObject.getTime()}`)
-    console.log(`New display time is: ${newDisplayTime.hours}, ${newDisplayTime.minutes}, ${newDisplayTime.seconds}`)
 
     if (clockMode === "timer" && newDisplayTime.hours === 0 && newDisplayTime.minutes === 0 && newDisplayTime.seconds === 0) {
-      console.log('Stopping session because timer reached 0')
       handleStop()
       setTimerExpiredDialogOpen(true)
       playAlarm()
@@ -92,14 +89,12 @@ export default function Home() {
   }
 
   function handleClockInputChange(clockInput: StopwatchTime) {
-    console.log(clockInput.hours, clockInput.minutes, clockInput.seconds)
     setTimerPossible(clockInput.hours !== 0 || clockInput.minutes !== 0 || clockInput.seconds !== 0)
     setReferenceTime(new Date(clockInput.seconds * 1000 + clockInput.minutes * 1000 * 60 + clockInput.hours * 1000 * 60 * 60))
   }
 
   function handleTitleChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     setTitle(e.currentTarget.value)
-    console.log(e.currentTarget.value)
   }
 
   function handleLabelChange(label: Label | undefined) {
@@ -112,7 +107,6 @@ export default function Home() {
       setReferenceTime(startTime)
     } else {
       setReferenceTime(new Date(startTime.getTime() + referenceTime.getTime()))
-      console.log(`Setting reference time to ${new Date(startTime.getTime() + referenceTime.getTime()).getTime()}`)
     }
 
     setIsRunning(true)
