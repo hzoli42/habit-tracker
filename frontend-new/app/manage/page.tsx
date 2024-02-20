@@ -35,17 +35,14 @@ export default function Home() {
     }, [isLoading])
 
     useEffect(() => {
-        console.log("Labels atom updated - should force rerender")
         setEditedLabels(new Map())
     }, [labels])
 
     useEffect(() => {
-        console.log("Sessions atom updated - should force rerender")
         setEditedSessions(new Map())
     }, [userAllSessions])
 
     useEffect(() => {
-        console.log("Editedlabels atom updated - should force rerender")
     }, [editedLabels])
 
 

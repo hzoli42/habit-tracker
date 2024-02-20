@@ -18,7 +18,6 @@ export const labelsAtom = atom(
             set(labelsPrimitiveAtom, [])
             return
         }
-        console.log(process.env.NEXT_PUBLIC_API_BASE)
         getAllUserLabels(user_id)
             .then(response => response.json())
             .then((data: LabelsResponse) => {
@@ -84,7 +83,6 @@ export const userAllSessionsAtom = atom(
                         let duration = "This session does not have an end time"
                         if (stop != null) {
                             const durationObject = new Date(stop.timestamp - start.timestamp)
-                            console.log(`Duration unix timestamp: ${durationObject.getTime()}`)
                             duration = formatDuration(durationObject)
                         }
                         return {

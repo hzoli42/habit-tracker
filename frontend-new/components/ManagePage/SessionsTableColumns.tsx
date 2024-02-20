@@ -28,7 +28,6 @@ export const sessionColumns: ColumnDef<Session>[] = [
                 }
                 const label_id = sessions.get(row.original.id)?.labelId ?? row.original.label_id
                 const newSessions = new Map(sessions).set(row.original.id, { title: newTitle, labelId: label_id })
-                console.log('session title change')
                 setSessions(newSessions)
             }
 
@@ -54,7 +53,6 @@ export const sessionColumns: ColumnDef<Session>[] = [
                 const title = sessions.get(row.original.id)?.title ?? row.original.title
                 const newSessions = new Map(sessions).set(row.original.id, { title: title, labelId: selectedLabel?.id ?? undefined })
                 setCurrentLabel(labels.find(ld => ld.id === selectedLabel?.id))
-                console.log(`New label is ${currentLabel?.id}, ${currentLabel?.name}, ${currentLabel?.color}`)
                 setSessions(newSessions)
             }
             return <LabelCombobox disabled={false} selectedLabel={currentLabel} onLabelChange={handleLabelChange} />

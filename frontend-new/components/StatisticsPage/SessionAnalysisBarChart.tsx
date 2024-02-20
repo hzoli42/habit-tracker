@@ -21,7 +21,6 @@ export default function SessionAnalysisBarChart({ title, data }: {
             labelsList.push(l)
         }
     })
-    console.log(labelsList)
 
     let chartData: { date: number, [key: string]: number }[] = []
     data.forEach((d, i) => {
@@ -39,7 +38,6 @@ export default function SessionAnalysisBarChart({ title, data }: {
         }
     })
     chartData.sort((a, b) => a.date - b.date)
-    console.log(chartData)
 
 
     return (
@@ -56,7 +54,6 @@ export default function SessionAnalysisBarChart({ title, data }: {
                             <Legend verticalAlign="top" />
                             {
                                 labelsList.map((l, i) => {
-                                    console.log(` <Bar key=${i} stackId="test" dataKey="${l.name}" fill="${l.color}" />`)
                                     return (
                                         <Bar key={i} stackId="a" dataKey={l.name} fill={l.color} />
                                     )
