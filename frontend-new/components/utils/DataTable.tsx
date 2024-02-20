@@ -1,8 +1,11 @@
-"use client"
-
 import {
     ColumnDef,
+    OnChangeFn,
+    RowSelectionState,
+    TableState,
+    Updater,
     flexRender,
+    functionalUpdate,
     getCoreRowModel,
     useReactTable,
 } from "@tanstack/react-table"
@@ -15,20 +18,27 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { useEffect, useState } from "react"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
+    state: { rowSelection: RowSelectionState }
+    onRowSelectionChange?: (updater: Updater<RowSelectionState>) => void
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
+    state,
+    onRowSelectionChange
 }: DataTableProps<TData, TValue>) {
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        onRowSelectionChange: onRowSelectionChange ?? undefined,
+        state: state
     })
 
     return (

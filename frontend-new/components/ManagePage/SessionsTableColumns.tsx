@@ -14,9 +14,31 @@ import { useEffect, useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import { deleteSessionById } from "@/lib/api_utils"
 import { TitleTextField } from "../utils/TitleTextField"
+import { Checkbox } from "../ui/checkbox"
 
 
 export const sessionColumns: ColumnDef<Session>[] = [
+    {
+        id: "select",
+        header: ({ table }) => (
+            <Checkbox
+                checked={
+                    table.getIsAllPageRowsSelected() ||
+                    (table.getIsSomePageRowsSelected() && undefined)
+                }
+
+                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            />
+        ),
+        cell: ({ row }) => (
+            <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(value) => row.toggleSelected(!!value)}
+            />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+    },
     {
         accessorKey: "title",
         header: "Title",
@@ -73,7 +95,7 @@ export const sessionColumns: ColumnDef<Session>[] = [
         }
     },
     {
-        accessorKey: "delete",
+        id: "delete",
         header: "",
         cell: ({ row }) => {
             const [open, setOpen] = useState(false)
@@ -88,7 +110,7 @@ export const sessionColumns: ColumnDef<Session>[] = [
             return (
                 <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger asChild>
-                        <Button variant="ghost">
+                        <Button variant="ghost" disabled={row.getIsSelected()}>
                             <DeleteIcon className="hover:fill-red-600" />
                         </Button>
                     </DialogTrigger>
