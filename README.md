@@ -15,6 +15,7 @@
 - Additional guide for nginx frontend setup: https://medium.com/@asttle1997/deploying-your-next-js-app-to-ec2-with-nginx-and-pm2-7afc6d878f5b
 
 ## Deploy commands
+- Build production-ready frontend: `npm run build`
 - Stop current version of frontend: `pm2 delete frontend-new`
 - Deploy new version of frontend: `pm2 start npm --name frontend-new -- run start -- -p 3000`
 
