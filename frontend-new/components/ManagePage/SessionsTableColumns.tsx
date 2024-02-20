@@ -90,16 +90,16 @@ export const sessionColumns: ColumnDef<Session>[] = [
         accessorKey: "duration",
         header: "Duration",
         cell: ({ row }) => {
-            return <p className="min-w-[120px] text-end">{row.original.duration}</p>
+            return <p className="min-w-[120px] text-start">{row.original.duration}</p>
         }
     },
-    {
-        accessorKey: "date",
-        header: "Date",
-        cell: ({ row }) => {
-            return <p className="min-w-[150px]">{row.original.start_date.toDateString()}</p>
-        }
-    },
+    // {
+    //     accessorKey: "date",
+    //     header: "Date",
+    //     cell: ({ row }) => {
+    //         return <p className="min-w-[150px]">{row.original.start_date.toDateString()}</p>
+    //     }
+    // },
     {
         id: "delete",
         header: "",
