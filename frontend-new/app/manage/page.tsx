@@ -1,8 +1,10 @@
 'use client'
-import { Session, editedLabelsAtom, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/atoms/jotai";
+import { Label, Session, editedLabelsAtom, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/atoms/jotai";
+import { BulkActions } from "@/components/ManagePage/BulkActions";
 import { labelColumns } from "@/components/ManagePage/LabelsTableColumns";
 import NewLabelDialog from "@/components/ManagePage/NewLabelDialog";
 import NewSessionDialog from "@/components/ManagePage/NewSessionDialog";
+import { SaveButton } from "@/components/ManagePage/SaveButton";
 import { sessionColumns } from "@/components/ManagePage/SessionsTableColumns";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -38,14 +40,14 @@ export default function Home() {
 
     useEffect(() => {
         setEditedLabels(new Map())
+        setSelectedSessionRows({})
     }, [labels])
 
     useEffect(() => {
         setEditedSessions(new Map())
+        setSelectedSessionRows({})
     }, [userAllSessions])
 
-    useEffect(() => {
-    }, [editedLabels])
 
 
     function updateEditedSessions() {
@@ -77,9 +79,20 @@ export default function Home() {
             sessionDeletes.push(deleteSessionById(s.id))
         })
         await Promise.all(sessionDeletes).then(() => {
-            setSelectedSessionRows({})
             setUserAllSessions(user?.sub)
         })
+    }
+
+    async function modifySelectedLabels(label: Label | undefined) {
+        const newEditedSessions = new Map(editedSessions)
+
+        let selectedSessions: Session[] = []
+        Object.keys(selectedSessionRows).forEach(x => selectedSessions.push(userAllSessions[parseInt(x)]))
+        selectedSessions.forEach(s => {
+            newEditedSessions.set(s.id, { title: s.title, labelId: label?.id ?? undefined })
+        })
+
+        setEditedSessions(newEditedSessions)
     }
 
     function handleRowSelectionChange(updater: Updater<RowSelectionState>) {
@@ -100,20 +113,17 @@ export default function Home() {
                             <article className="prose lg:prose-xl pb-4 md:pb-0"><h1>Sessions</h1></article>
                         </div>
 
-                        <div className="flex justify-between mb-2">
-                            {Object.keys(selectedSessionRows).length !== 0
-                                ? (
-                                    <div className="flex justify-start">
-                                        <Button className="bg-amber-500 hover:bg-amber-600" onClick={deleteSelectedSessions}>
-                                            Delete selected sessions
-                                        </Button>
-                                    </div>
-                                )
-                                : <div></div>}
+                        <div className="grid grid-cols-1 md:grid-cols-2 mb-2 min-w-[300px]">
+                            <div className="flex justify-end md:justify-start mb-2 md:mb-0 ">
+                                {Object.keys(selectedSessionRows).length !== 0
+                                    ? <BulkActions
+                                        numSelected={Object.keys(selectedSessionRows).length}
+                                        onBulkDelete={deleteSelectedSessions}
+                                        onBulkLabelChange={modifySelectedLabels} />
+                                    : <div></div>}
+                            </div>
                             <div className="flex justify-end gap-4 items-center">
-                                {editedSessions.size != 0 && <Button className="bg-amber-500 hover:bg-amber-600" onClick={updateEditedSessions}>
-                                    Save edited sessions
-                                </Button>}
+                                {editedSessions.size != 0 && <SaveButton onClick={updateEditedSessions} />}
                                 <NewSessionDialog />
                             </div>
                         </div>
@@ -126,9 +136,7 @@ export default function Home() {
                         <div className="grid grid-cols-1 md:grid-cols-2 pt-6 pb-4">
                             <article className="prose lg:prose-xl pb-4 md:pb-0"><h1>Labels</h1></article>
                             <div className="flex justify-end gap-4 items-center">
-                                {editedLabels.size != 0 && <Button className="bg-amber-500 hover:bg-amber-600" onClick={updateEditedLabels}>
-                                    Save edited labels
-                                </Button>}
+                                {editedLabels.size != 0 && <SaveButton onClick={updateEditedLabels} />}
                                 <NewLabelDialog />
                             </div>
 

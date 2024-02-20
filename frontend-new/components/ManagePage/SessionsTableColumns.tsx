@@ -71,6 +71,12 @@ export const sessionColumns: ColumnDef<Session>[] = [
             useEffect(() => {
                 setCurrentLabel(labels.find(ld => ld.id === row.original.label_id))
             }, [labels])
+
+            useEffect(() => {
+                const referenceLabel = sessions.get(row.original.id)?.labelId ?? row.original.label_id
+                setCurrentLabel(labels.find(ld => ld.id === referenceLabel))
+            }, [sessions])
+
             const handleLabelChange = (selectedLabel: Label | undefined) => {
                 const title = sessions.get(row.original.id)?.title ?? row.original.title
                 const newSessions = new Map(sessions).set(row.original.id, { title: title, labelId: selectedLabel?.id ?? undefined })
