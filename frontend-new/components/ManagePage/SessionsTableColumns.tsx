@@ -14,9 +14,31 @@ import { useEffect, useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import { deleteSessionById } from "@/lib/api_utils"
 import { TitleTextField } from "../utils/TitleTextField"
+import { Checkbox } from "../ui/checkbox"
 
 
 export const sessionColumns: ColumnDef<Session>[] = [
+    {
+        id: "select",
+        header: ({ table }) => (
+            <Checkbox
+                checked={
+                    table.getIsAllPageRowsSelected() ||
+                    (table.getIsSomePageRowsSelected() && undefined)
+                }
+
+                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            />
+        ),
+        cell: ({ row }) => (
+            <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(value) => row.toggleSelected(!!value)}
+            />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+    },
     {
         accessorKey: "title",
         header: "Title",
@@ -49,6 +71,12 @@ export const sessionColumns: ColumnDef<Session>[] = [
             useEffect(() => {
                 setCurrentLabel(labels.find(ld => ld.id === row.original.label_id))
             }, [labels])
+
+            useEffect(() => {
+                const referenceLabel = sessions.get(row.original.id)?.labelId ?? row.original.label_id
+                setCurrentLabel(labels.find(ld => ld.id === referenceLabel))
+            }, [sessions])
+
             const handleLabelChange = (selectedLabel: Label | undefined) => {
                 const title = sessions.get(row.original.id)?.title ?? row.original.title
                 const newSessions = new Map(sessions).set(row.original.id, { title: title, labelId: selectedLabel?.id ?? undefined })
@@ -62,18 +90,18 @@ export const sessionColumns: ColumnDef<Session>[] = [
         accessorKey: "duration",
         header: "Duration",
         cell: ({ row }) => {
-            return <p className="min-w-[120px] text-end">{row.original.duration}</p>
+            return <p className="min-w-[120px] text-start">{row.original.duration}</p>
         }
     },
+    // {
+    //     accessorKey: "date",
+    //     header: "Date",
+    //     cell: ({ row }) => {
+    //         return <p className="min-w-[150px]">{row.original.start_date.toDateString()}</p>
+    //     }
+    // },
     {
-        accessorKey: "date",
-        header: "Date",
-        cell: ({ row }) => {
-            return <p className="min-w-[150px]">{row.original.start_date.toDateString()}</p>
-        }
-    },
-    {
-        accessorKey: "delete",
+        id: "delete",
         header: "",
         cell: ({ row }) => {
             const [open, setOpen] = useState(false)
@@ -88,7 +116,7 @@ export const sessionColumns: ColumnDef<Session>[] = [
             return (
                 <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger asChild>
-                        <Button variant="ghost">
+                        <Button variant="ghost" disabled={row.getIsSelected()}>
                             <DeleteIcon className="hover:fill-red-600" />
                         </Button>
                     </DialogTrigger>
