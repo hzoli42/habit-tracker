@@ -77,7 +77,7 @@ export const sessionColumns: ColumnDef<Session>[] = [
             }
 
             return (
-                <div className="flex flex-wrap justify-start gap-4 pl-8 md:pl-4">
+                <div className="flex flex-wrap justify-start gap-6 pl-8 md:pl-4">
                     <div className="flex justify-start gap-8">
                         <TitleTextField variant="standard" defaultValue={row.original.title} placeholder={row.original.title}
                             onBlur={(e) => updateSessionTitle(e.currentTarget.value)}

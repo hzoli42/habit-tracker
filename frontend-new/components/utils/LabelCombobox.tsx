@@ -1,4 +1,3 @@
-import * as React from "react"
 import { Check } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -15,18 +14,26 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import Chip from '@mui/material/Chip'
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import { useAtom } from "jotai"
 import { Label, labelsAtom } from "@/atoms/jotai"
 import ColorPicker from "./ColorPicker"
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from '@mui/icons-material/Add'
 import { postNewLabel } from "@/lib/api_utils"
-import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import CloseIcon from '@mui/icons-material/Close';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import CloseIcon from '@mui/icons-material/Close'
 import { IconButton } from "@mui/material"
+import LabelIcon from '@mui/icons-material/Label';
+
+function LabelTag({ name, color }: { name: string, color: string }) {
+    return (
+        <div style={{ backgroundColor: "rgba(167, 172, 177, 0.07)" }} className="flex justify-start gap-2 min-h-[20px] rounded-3xl px-3 py-1 inline">
+            <LabelIcon style={{ color: color }} />
+            <p>{name}</p>
+        </div>
+    )
+}
 
 export type LabelComboboxProps = {
     selectedLabel?: Label
@@ -39,7 +46,7 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
     const { user, error, isLoading } = useUser();
     const [open, setOpen] = useState(false)
     const [labelSearchInput, setLabelSearchInput] = useState("")
-    const [newLabelColor, setNewLabelColor] = useState("#F5F3E7")
+    const [newLabelColor, setNewLabelColor] = useState("#ef476f")
 
     function onSelectLabel(currentValue: string | undefined) {
         setOpen(false)
@@ -72,10 +79,7 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
                     {
                         selectedLabel !== undefined
                             ?
-                            <div style={{ backgroundColor: `${selectedLabel.color}` }}
-                                className="min-h-[20px] rounded-md px-2 py-1">
-                                <p>{selectedLabel.name}</p>
-                            </div>
+                            <LabelTag name={selectedLabel.name} color={selectedLabel.color} />
                             : <>
                                 <p className="text-gray-500">Select a label</p>
                                 <ArrowDropDownIcon style={{ color: "#9E9E9E", marginLeft: "5px" }} />
@@ -94,9 +98,7 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
                                 className="gap-x-2 w-full h-auto justify-start"
                             >
                                 <AddIcon className="fill-black" />
-                                <div style={{ backgroundColor: newLabelColor }} className="flex min-h-[20px] rounded-lg px-2 py-1 inline">
-                                    <p>{labelSearchInput}</p>
-                                </div>
+                                <LabelTag name={labelSearchInput} color={newLabelColor} />
                             </Button>
                             <ColorPicker initialColor={newLabelColor} onColorChange={(color) => (setNewLabelColor(color))} />
                         </div>
@@ -115,9 +117,7 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
                                             <Check className={cn("mr-2 h-4 w-4")} />
                                         }
 
-                                        <div style={{ backgroundColor: `${label.color}` }} className="flex min-h-[20px] rounded-lg px-2 py-1 inline">
-                                            <p>{label.name}</p>
-                                        </div>
+                                        <LabelTag name={label.name} color={label.color} />
                                     </CommandItem>
                                     {(selectedLabel?.id ?? "") === label.id &&
                                         <IconButton style={{ borderRadius: 0 }} onClick={() => onSelectLabel(undefined)}>

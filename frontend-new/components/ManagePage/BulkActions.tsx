@@ -4,7 +4,6 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import { useState } from "react";
 import { Label } from "@/atoms/jotai";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { MenuIcon } from "lucide-react";
 import { LabelCombobox } from "../utils/LabelCombobox";
 
 export type BulkActionsProps = {

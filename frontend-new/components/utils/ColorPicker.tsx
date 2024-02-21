@@ -33,9 +33,10 @@ export default function ColorPicker({ initialColor, onColorChange }: {
                 <PopoverContent className="z-10">
                     {/* <SketchPicker disableAlpha={true} color={color} onChange={handleChange} /> */}
                     <TwitterPicker color={color} colors={[
-                        '#F5F3E7', '#F7F6CF', '#F5E2E4',
-                        '#EEBAB2', '#DEC4D6', '#E5DBD9',
-                        '#DDF2F4', '#E4CEE0', '#A9C8C0', '#C2D9E1']}
+                        '#ef476f', '#b5179e', '#d90429',
+                        '#fb5607', '#fca311', '#ffd166',
+                        '#00b4d8', '#023e8a', '#03045e', '#264653',
+                        '#2d6a4f', '#40916c']}
                         onChange={handleChange} triangle="hide" />
                 </PopoverContent>
             </Popover>
