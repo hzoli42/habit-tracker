@@ -14,7 +14,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import { useAtom } from "jotai"
 import { Label, labelsAtom } from "@/atoms/jotai"
@@ -47,6 +47,28 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
     const [open, setOpen] = useState(false)
     const [labelSearchInput, setLabelSearchInput] = useState("")
     const [newLabelColor, setNewLabelColor] = useState("#ef476f")
+    const [currentLabelId, setCurrentLabelId] = useState(selectedLabel?.id)
+    const previousValues = useRef({ labels, currentLabelId })
+
+    useEffect(() => {
+        const oldLabels = previousValues.current.labels.sort((a, b) => a.id.localeCompare(b.id))
+        const newLabels = labels.sort((a, b) => a.id.localeCompare(b.id))
+        let labelsChanged = false || oldLabels.length != newLabels.length
+        oldLabels.forEach((l, i) => {
+            if (l.id != newLabels[i].id) {
+                labelsChanged = true
+            }
+        })
+
+        if (labelsChanged && previousValues.current.currentLabelId !== currentLabelId) {
+            const newSelectedLabel = labels.find(ld => ld.id === currentLabelId) ?? undefined
+            console.log(labels)
+            console.log(currentLabelId)
+            onLabelChange ? onLabelChange(newSelectedLabel) : null
+
+            previousValues.current = { labels, currentLabelId }
+        }
+    })
 
     function onSelectLabel(currentValue: string | undefined) {
         setOpen(false)
@@ -54,22 +76,19 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
             onLabelChange ? onLabelChange(currentValue) : null
             return
         }
+        setCurrentLabelId(currentValue)
 
-        const newSelectedLabel = labels.find(ld => ld.id === currentValue) ??
-            { id: "", user_id: "", name: "Error", color: "#9E9E9E" }
+        const newSelectedLabel = labels.find(ld => ld.id === currentValue) ?? undefined
         onLabelChange ? onLabelChange(newSelectedLabel) : null
     }
 
     async function addNewLabel() {
         setOpen(false)
-        postNewLabel(user?.sub, labelSearchInput, newLabelColor)
+        const newLabelId = await postNewLabel(user?.sub, labelSearchInput, newLabelColor)
             .then(response => response.json())
-            .then((data: Label) => {
-                setLabels(user?.sub ?? undefined).then(() => {
-                    const newLabel = labels.find(ld => ld.id === data.id) ?? { id: "", user_id: "", name: "Error", color: "#9E9E9E" }
-                    onLabelChange ? onLabelChange(newLabel) : null
-                })
-            })
+            .then((data: Label) => data.id)
+        setCurrentLabelId(newLabelId)
+        setLabels(user?.sub ?? undefined)
     }
 
     return (

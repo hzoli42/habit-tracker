@@ -36,6 +36,8 @@ export default function Home() {
         }
         setLabels(user?.sub)
         setUserAllSessions(user?.sub)
+        setEditedLabels(new Map())
+        setEditedSessions(new Map())
     }, [isLoading])
 
     useEffect(() => {
@@ -47,6 +49,11 @@ export default function Home() {
         setEditedSessions(new Map())
         setSelectedSessionRows({})
     }, [userAllSessions])
+
+    useEffect(() => {
+        console.log(`Edited sessions size: ${editedSessions.size}`)
+        console.log(editedLabels.size)
+    }, [editedSessions, editedLabels])
 
 
 
@@ -123,7 +130,7 @@ export default function Home() {
                                     : <div></div>}
                             </div>
                             <div className="flex justify-end gap-4 items-center">
-                                {editedSessions.size != 0 && <SaveButton onClick={updateEditedSessions} />}
+                                {editedSessions.size !== 0 && <SaveButton onClick={updateEditedSessions} />}
                                 <NewSessionDialog />
                             </div>
                         </div>
@@ -136,7 +143,7 @@ export default function Home() {
                         <div className="grid grid-cols-1 md:grid-cols-2 pt-6 pb-4">
                             <article className="prose lg:prose-xl pb-4 md:pb-0"><h1>Labels</h1></article>
                             <div className="flex justify-end gap-4 items-center">
-                                {editedLabels.size != 0 && <SaveButton onClick={updateEditedLabels} />}
+                                {editedLabels.size !== 0 && <SaveButton onClick={updateEditedLabels} />}
                                 <NewLabelDialog />
                             </div>
 
