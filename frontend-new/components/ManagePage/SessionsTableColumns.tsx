@@ -52,7 +52,7 @@ export const sessionColumns: ColumnDef<Session>[] = [
             const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
             useEffect(() => {
-                let referenceLabel = undefined
+                let referenceLabel: string | undefined = undefined
                 if (sessions.has(row.original.id)) {
                     referenceLabel = sessions.get(row.original.id)?.labelId
                 } else {
@@ -62,7 +62,7 @@ export const sessionColumns: ColumnDef<Session>[] = [
             }, [labels])
 
             useEffect(() => {
-                let referenceLabel = undefined
+                let referenceLabel: string | undefined = undefined
                 if (sessions.has(row.original.id)) {
                     referenceLabel = sessions.get(row.original.id)?.labelId
                 } else {
