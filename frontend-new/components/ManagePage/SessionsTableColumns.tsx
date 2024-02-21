@@ -52,11 +52,22 @@ export const sessionColumns: ColumnDef<Session>[] = [
             const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
             useEffect(() => {
-                setCurrentLabel(labels.find(ld => ld.id === row.original.label_id))
+                let referenceLabel = undefined
+                if (sessions.has(row.original.id)) {
+                    referenceLabel = sessions.get(row.original.id)?.labelId
+                } else {
+                    referenceLabel = row.original.label_id
+                }
+                setCurrentLabel(labels.find(ld => ld.id === referenceLabel))
             }, [labels])
 
             useEffect(() => {
-                const referenceLabel = sessions.get(row.original.id)?.labelId ?? row.original.label_id
+                let referenceLabel = undefined
+                if (sessions.has(row.original.id)) {
+                    referenceLabel = sessions.get(row.original.id)?.labelId
+                } else {
+                    referenceLabel = row.original.label_id
+                }
                 setCurrentLabel(labels.find(ld => ld.id === referenceLabel))
             }, [sessions])
 
@@ -70,6 +81,7 @@ export const sessionColumns: ColumnDef<Session>[] = [
             }
 
             const handleLabelChange = (selectedLabel: Label | undefined) => {
+                console.log(selectedLabel?.name)
                 const title = sessions.get(row.original.id)?.title ?? row.original.title
                 const newSessions = new Map(sessions).set(row.original.id, { title: title, labelId: selectedLabel?.id ?? undefined })
                 setCurrentLabel(labels.find(ld => ld.id === selectedLabel?.id))
