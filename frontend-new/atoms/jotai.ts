@@ -62,7 +62,7 @@ function formatDuration(durationObject: Date) {
     const daysString = days > 0 ? `${days}d` : ''
     const hoursString = (hours > 0 || daysString !== '') ? `${hours}h` : ''
     const minutesString = (minutes > 0 || hoursString !== '') ? `${minutes}m` : ''
-    const secondsString = (seconds > 0 || minutesString !== '') ? `${seconds}s` : ''
+    const secondsString = `${seconds}s`
     return `${daysString} ${hoursString} ${minutesString} ${secondsString}`
 }
 const userAllSessionsPrimitiveAtom = atom<Session[]>([])

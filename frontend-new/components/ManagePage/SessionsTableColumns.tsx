@@ -15,6 +15,8 @@ import { useUser } from "@auth0/nextjs-auth0/client"
 import { deleteSessionById } from "@/lib/api_utils"
 import { TitleTextField } from "../utils/TitleTextField"
 import { Checkbox } from "../ui/checkbox"
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 
 export const sessionColumns: ColumnDef<Session>[] = [
@@ -40,33 +42,14 @@ export const sessionColumns: ColumnDef<Session>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "title",
-        header: "Title",
-        cell: ({ row }) => {
-            const [sessions, setSessions] = useAtom(editedSessionsAtom)
-            const updateSessionTitle = (newTitle: string) => {
-                if (newTitle == "") {
-                    return
-                }
-                const label_id = sessions.get(row.original.id)?.labelId ?? row.original.label_id
-                const newSessions = new Map(sessions).set(row.original.id, { title: newTitle, labelId: label_id })
-                setSessions(newSessions)
-            }
-
-            return (
-                <TitleTextField variant="standard" defaultValue={row.original.title} placeholder={row.original.title}
-                    onBlur={(e) => updateSessionTitle(e.currentTarget.value)}
-                    style={{ minWidth: "200px" }} />
-            )
-        }
-    },
-    {
-        accessorKey: "labels",
-        header: "Labels",
+        id: "session",
+        header: "",
         cell: ({ row }) => {
             const [sessions, setSessions] = useAtom(editedSessionsAtom)
             const [labels, setLabels] = useAtom(labelsAtom)
             const [currentLabel, setCurrentLabel] = useState<Label | undefined>(undefined)
+
+            const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
             useEffect(() => {
                 setCurrentLabel(labels.find(ld => ld.id === row.original.label_id))
@@ -77,29 +60,44 @@ export const sessionColumns: ColumnDef<Session>[] = [
                 setCurrentLabel(labels.find(ld => ld.id === referenceLabel))
             }, [sessions])
 
+            const updateSessionTitle = (newTitle: string) => {
+                if (newTitle == "") {
+                    return
+                }
+                const label_id = sessions.get(row.original.id)?.labelId ?? row.original.label_id
+                const newSessions = new Map(sessions).set(row.original.id, { title: newTitle, labelId: label_id })
+                setSessions(newSessions)
+            }
+
             const handleLabelChange = (selectedLabel: Label | undefined) => {
                 const title = sessions.get(row.original.id)?.title ?? row.original.title
                 const newSessions = new Map(sessions).set(row.original.id, { title: title, labelId: selectedLabel?.id ?? undefined })
                 setCurrentLabel(labels.find(ld => ld.id === selectedLabel?.id))
                 setSessions(newSessions)
             }
-            return <LabelCombobox disabled={false} selectedLabel={currentLabel} onLabelChange={handleLabelChange} />
-        },
-    },
-    {
-        accessorKey: "duration",
-        header: "Duration",
-        cell: ({ row }) => {
-            return <p className="min-w-[120px] text-start">{row.original.duration}</p>
+
+            return (
+                <div className="flex flex-wrap justify-start gap-4 pl-8 md:pl-4">
+                    <div className="flex justify-start gap-8">
+                        <TitleTextField variant="standard" defaultValue={row.original.title} placeholder={row.original.title}
+                            onBlur={(e) => updateSessionTitle(e.currentTarget.value)}
+                            style={{ minWidth: "200px" }} />
+                        <LabelCombobox disabled={false} selectedLabel={currentLabel} onLabelChange={handleLabelChange} />
+                    </div>
+                    <div className="grid grid-cols-1 gap-2">
+                        <div className="flex justify-start gap-2">
+                            <CalendarMonthIcon />
+                            {dayNames[row.original.end_date.getDay()]}, {row.original.end_date.getDate()}/{row.original.end_date.getMonth()}/{row.original.end_date.getFullYear()}
+                        </div>
+                        <div className="flex justify-start gap-2">
+                            <AccessTimeIcon />
+                            {row.original.duration}
+                        </div>
+                    </div>
+                </div>
+            )
         }
     },
-    // {
-    //     accessorKey: "date",
-    //     header: "Date",
-    //     cell: ({ row }) => {
-    //         return <p className="min-w-[150px]">{row.original.start_date.toDateString()}</p>
-    //     }
-    // },
     {
         id: "delete",
         header: "",
