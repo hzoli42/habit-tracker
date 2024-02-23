@@ -22,3 +22,9 @@
 - Reload the daemon: `systemctl daemon-reload`
 - Restart gunicorn to apply changes in backend: `systemctl restart gunicorn`
 
+## Deploy using Docker to AWS Lambda
+- Login to ECR: `aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 258502676601.dkr.ecr.us-east-1.amazonaws.com`
+- Build docker image: `docker build . -t habit-tracker -f backend/dockerfiles/Dockerfile` --> make sure you run this from the repo root
+- Add tag to newly built Docker image: `docker tag habit-tracker:latest 258502676601.dkr.ecr.us-east-1.amazonaws.com/habit-tracker:latest`
+- Push Docker image to ECR: `docker push 258502676601.dkr.ecr.us-east-1.amazonaws.com/habit-tracker:latest `
+
