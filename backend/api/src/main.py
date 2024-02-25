@@ -1,15 +1,21 @@
+import os
+from dotenv import load_dotenv
 from fastapi import FastAPI
+from mangum import Mangum
 from api.src.routers.session.router import router as session_router
-from api.src.routers.label.router import router as user_router
+from api.src.routers.label.router import router as label_router
 
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
+from api.src.config import settings
+
 app = FastAPI()
+
 
 api_v1 = FastAPI()
 api_v1.include_router(session_router)
-api_v1.include_router(user_router)
+api_v1.include_router(label_router)
 
 app.mount("/api/v1", api_v1)
 
@@ -27,6 +33,9 @@ api_v1.add_middleware(
     allow_headers=["*"],
 )
 
+handler = Mangum(app, lifespan="off")
+
 
 if __name__ == "__main__":
+    print(settings.env_name)
     uvicorn.run(app, host="localhost", port=5000, log_level="info")
