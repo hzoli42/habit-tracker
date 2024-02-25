@@ -5,7 +5,7 @@ import pymongo
 from .model import SessionActionIn, SessionAllOut, SessionModifyIn, SessionStartIn
 from api.src.dependencies import mongo_db_client, uuid_generator
 
-import api.src.mongodb.session as mongodb_model
+import api.src.db_models.session as mongodb_model
 from pymongo.database import Database
 
 

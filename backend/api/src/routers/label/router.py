@@ -5,7 +5,7 @@ from pymongo.database import Database
 
 from api.src.dependencies import mongo_db_client, uuid_generator
 from api.src.routers.label.model import NewLabelIn, UpdateLabelIn
-from api.src.mongodb.label import Label
+from api.src.db_models.label import Label
 
 router = APIRouter()
 

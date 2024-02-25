@@ -9,7 +9,7 @@ from api.src.main import app
 from api.src.dependencies import mongo_db_client, uuid_generator
 from api.src.routers.session.model import SessionActionIn, SessionStartIn
 from api.test.unit.utils import constant_uuid_generator, mock_mongo
-from backend.api.src.mongodb.session import Action, Session, StopwatchTime
+from backend.api.src.db_models.session import Action, Session
 
 
 class TestSessionRouter(unittest.TestCase):
@@ -20,12 +20,10 @@ class TestSessionRouter(unittest.TestCase):
             "labels": ["foo", "bar"],
             "start_action": Action(
                 timestamp=0.0,
-                stopwatch_time=StopwatchTime(hours=0, minutes=0, seconds=0),
                 event="start"
             ),
             "stop_action": Action(
                 timestamp=10.0,
-                stopwatch_time=StopwatchTime(hours=0, minutes=0, seconds=10),
                 event="stop"
             ),
         }

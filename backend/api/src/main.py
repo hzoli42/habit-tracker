@@ -13,11 +13,11 @@ from api.src.config import settings
 app = FastAPI()
 
 
-api_v1 = FastAPI()
-api_v1.include_router(session_router)
-api_v1.include_router(label_router)
+api = FastAPI()
+api.include_router(session_router)
+api.include_router(label_router)
 
-app.mount("/api/v1", api_v1)
+app.mount("/api/v2", api)
 
 origins = [
     "http://0.0.0.0:3000",
@@ -25,7 +25,7 @@ origins = [
     "http://habit-tracker.zoltanhanesz.com"
 ]
 
-api_v1.add_middleware(
+api.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,

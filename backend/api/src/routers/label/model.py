@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from api.src.mongodb.label import Label
+from api.src.db_models.label import Label
 
 
 class NewLabelIn(BaseModel):

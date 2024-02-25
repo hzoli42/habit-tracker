@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from api.src.mongodb.session import Session, Action
+from api.src.db_models.session import Session, Action
 
 #######################################################################################################################
 
