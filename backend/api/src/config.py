@@ -5,7 +5,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 environments = {
     "dev": ".env/.env.dev",
     "prod": "./env/.env.prod",
-    "lambda": "./env.env.lambda"
 }
 
 env_file = environments[os.getenv("HT_ENV") or "dev"]

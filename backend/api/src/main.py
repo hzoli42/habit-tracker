@@ -33,8 +33,6 @@ api_v1.add_middleware(
     allow_headers=["*"],
 )
 
-handler = Mangum(app, lifespan="off")
-
 
 if __name__ == "__main__":
     print(settings.env_name)
