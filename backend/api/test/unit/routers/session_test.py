@@ -6,7 +6,7 @@ from fastapi.testclient import TestClient
 from httpx import Response
 from mongomock import MongoClient
 from api.src.main import app
-from api.src.dependencies import mongo_db_client, uuid_generator
+from api.src.dependencies import dynamodb_client, uuid_generator
 from api.src.routers.session.model import SessionActionIn, SessionStartIn
 from api.test.unit.utils import constant_uuid_generator, mock_mongo
 from backend.api.src.db_models.session import Action, Session
@@ -30,7 +30,7 @@ class TestSessionRouter(unittest.TestCase):
 
         self.mock_mongo = mock_mongo()
 
-        app.dependency_overrides[mongo_db_client] = lambda: self.mock_mongo
+        # app.dependency_overrides[mongo_db_client] = lambda: self.mock_mongo
         app.dependency_overrides[uuid_generator] = constant_uuid_generator
         self.client = TestClient(app)
 
@@ -41,7 +41,7 @@ class TestSessionRouter(unittest.TestCase):
         response_object = Session.from_dict(response.json())
 
         expected_object = Session(
-            **self.test_data, id=test_uuid(), actions=[self.test_data["start_action"]])
+            **self.test_data, session_id=test_uuid(), actions=[self.test_data["start_action"]])
 
         assert response.status_code == 200
         assert expected_object == response_object
@@ -54,8 +54,8 @@ class TestSessionRouter(unittest.TestCase):
         response_object = Session.from_dict(response.json())
 
         expected_object = Session(
-            **self.test_data, id=test_uuid(), actions=[self.test_data["start_action"],
-                                                       self.test_data["stop_action"]])
+            **self.test_data, session_id=test_uuid(), actions=[self.test_data["start_action"],
+                                                               self.test_data["stop_action"]])
 
         assert response.status_code == 200
         assert expected_object == response_object

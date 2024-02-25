@@ -9,6 +9,15 @@ class NewLabelIn(BaseModel):
     color: str
 
 
+class GetLabelIn(BaseModel):
+    user_id: str
+
+
+class DeleteLabelIn(BaseModel):
+    user_id: str
+
+
 class UpdateLabelIn(BaseModel):
+    user_id: str
     name: str
     color: str

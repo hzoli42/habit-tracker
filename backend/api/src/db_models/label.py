@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 class Label(BaseModel):
-    id: str
+    label_id: str
     user_id: str
     name: str
     color: str
@@ -12,7 +12,7 @@ class Label(BaseModel):
     @classmethod
     def from_dict(cls, d: dict):
         return cls(
-            id=d["id"],
+            label_id=d["label_id"],
             user_id=d["user_id"],
             name=d["name"],
             color=d["color"]

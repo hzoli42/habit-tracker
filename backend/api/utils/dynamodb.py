@@ -27,22 +27,22 @@ if __name__ == "__main__":
     labels_table = create_table(
         name="labels",
         key_schema=[
-            {"AttributeName": "user", "KeyType": "HASH"},
+            {"AttributeName": "user_id", "KeyType": "HASH"},
             {"AttributeName": "label_id", "KeyType": "RANGE"},
         ],
         attribute_definitions=[
-            {"AttributeName": "user", "AttributeType": "S"},
+            {"AttributeName": "user_id", "AttributeType": "S"},
             {"AttributeName": "label_id", "AttributeType": "S"},
         ]
     )
     sessions_table = create_table(
         name="sessions",
         key_schema=[
-            {"AttributeName": "user", "KeyType": "HASH"},
+            {"AttributeName": "user_id", "KeyType": "HASH"},
             {"AttributeName": "session_id", "KeyType": "RANGE"},
         ],
         attribute_definitions=[
-            {"AttributeName": "user", "AttributeType": "S"},
+            {"AttributeName": "user_id", "AttributeType": "S"},
             {"AttributeName": "session_id", "AttributeType": "S"},
         ]
     )

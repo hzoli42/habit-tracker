@@ -1,15 +1,15 @@
 from typing import Callable
+import typing
 import uuid
+from mypy_boto3_dynamodb import DynamoDBClient
 from pymongo import MongoClient
 from pymongo.database import Database
 from api.src.config import settings
+import boto3
 
 
-async def mongo_db_client() -> Database:
-    client = MongoClient(settings.mongo_connection_string,
-                         uuidRepresentation='standard')
-    db = client[settings.mongo_db_name]
-    return db
+async def dynamodb_client() -> DynamoDBClient:
+    return boto3.client('dynamodb')
 
 
 async def uuid_generator() -> Callable[[], str]:

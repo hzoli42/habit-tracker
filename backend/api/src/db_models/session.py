@@ -9,7 +9,7 @@ class Action(BaseModel):
 
 
 class Session(BaseModel):
-    id: str
+    session_id: str
     title: str
     user_id: str
     label_id: str
@@ -18,7 +18,7 @@ class Session(BaseModel):
     @classmethod
     def from_dict(cls, d: dict):
         return cls(
-            id=d["id"],
+            session_id=d["session_id"],
             title=d["title"],
             user_id=d["user_id"],
             label_id=d["label_id"],
