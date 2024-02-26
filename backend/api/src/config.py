@@ -5,7 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 environments = {
     "dev": "./env/.env.dev",
     "prod": "./env/.env.prod",
-    "lambda": "./env.env.lambda"
+    "lambda": "./env/.env.lambda"
 }
 
 env_file = environments[os.getenv("HT_ENV") or "dev"]
@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     mongo_db_name: str = ""
     dynamodb_labels_table: str = ""
     dynamodb_sessions_table: str = ""
+    root_path: str = ""
 
     model_config = SettingsConfigDict()
 

@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from api.src.config import settings
 
-app = FastAPI()
+app = FastAPI(root_path=settings.root_path)
 
 
 api = FastAPI()
