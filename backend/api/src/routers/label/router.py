@@ -9,9 +9,11 @@ from pymongo.database import Database
 from api.src.dependencies import dynamodb_client, uuid_generator
 from api.src.routers.label.model import NewLabelIn, UpdateLabelIn
 from api.src.db_models.label import Label
+from api.src.config import settings
 
 router = APIRouter()
-TABLE_NAME = "labels"
+TABLE_NAME = settings.dynamodb_labels_table
+print(TABLE_NAME)
 
 
 @router.get("/label/user/{user_id}")

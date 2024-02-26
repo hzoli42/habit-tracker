@@ -25,7 +25,7 @@ def create_table(name: str, key_schema: list[dict[str, str]], attribute_definiti
 
 if __name__ == "__main__":
     labels_table = create_table(
-        name="labels",
+        name="labels_prod",
         key_schema=[
             {"AttributeName": "user_id", "KeyType": "HASH"},
             {"AttributeName": "label_id", "KeyType": "RANGE"},
@@ -36,7 +36,7 @@ if __name__ == "__main__":
         ]
     )
     sessions_table = create_table(
-        name="sessions",
+        name="sessions_prod",
         key_schema=[
             {"AttributeName": "user_id", "KeyType": "HASH"},
             {"AttributeName": "session_id", "KeyType": "RANGE"},

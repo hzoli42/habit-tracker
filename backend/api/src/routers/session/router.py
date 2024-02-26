@@ -4,12 +4,14 @@ from fastapi import APIRouter, Depends, HTTPException
 from mypy_boto3_dynamodb import DynamoDBClient
 from api.src.dependencies import dynamodb_client, uuid_generator
 from api.src.routers.session.model import EventStopSessionIn, NewSessionIn, UpdateSessionIn
+from api.src.config import settings
 
 from api.src.db_models.session import Session
 
 
 router = APIRouter()
-TABLE_NAME = "sessions"
+TABLE_NAME = settings.dynamodb_sessions_table
+print(TABLE_NAME)
 
 
 @router.get("/session/user/{user_id}")
