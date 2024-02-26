@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { labelsAtom } from "@/atoms/jotai";
 import { useAtom } from "jotai";
-import { postNewLabel } from "@/lib/api_utils";
+import { postLabelNew } from "@/lib/api_utils";
 import ColorPicker from "../utils/ColorPicker";
 import { TextField } from "@mui/material";
 
@@ -19,7 +19,7 @@ export default function NewSessionDialog() {
 
     async function onDialogSubmit() {
         let sessionId = ""
-        postNewLabel(user?.sub, name, color).then(() => {
+        postLabelNew(user?.sub, name, color).then(() => {
             setOpen(false)
             setLabels(user?.sub)
         })

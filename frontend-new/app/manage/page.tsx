@@ -9,7 +9,7 @@ import { sessionColumns } from "@/components/ManagePage/SessionsTableColumns";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DataTable } from "@/components/utils/DataTable";
-import { deleteSessionById, postLabelUpdate, postSessionModify } from "@/lib/api_utils";
+import { deleteSessionById, postLabelUpdate, postSessionUpdate } from "@/lib/api_utils";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { RowSelection, RowSelectionState, TableState, Updater, functionalUpdate } from "@tanstack/react-table";
 import { useAtom } from "jotai";
@@ -60,7 +60,7 @@ export default function Home() {
     function updateEditedSessions() {
         let sessionUpdates: Promise<Response>[] = []
         editedSessions.forEach(({ title, labelId }, sessionId) => {
-            sessionUpdates.push(postSessionModify(sessionId, title, labelId ?? ""))
+            sessionUpdates.push(postSessionUpdate(sessionId, user?.sub, title, labelId ?? ""))
         })
         Promise.all(sessionUpdates).then(() => {
             setUserAllSessions(user?.sub)
@@ -70,7 +70,7 @@ export default function Home() {
     function updateEditedLabels() {
         let labelUpdates: Promise<Response>[] = []
         editedLabels.forEach(({ name, color }, labelId) => {
-            labelUpdates.push(postLabelUpdate(labelId, name, color))
+            labelUpdates.push(postLabelUpdate(labelId, user?.sub, name, color))
         })
         Promise.all(labelUpdates).then(() => {
             setLabels(user?.sub)
@@ -83,7 +83,7 @@ export default function Home() {
 
         let sessionDeletes: Promise<Response>[] = []
         selectedSessions.forEach(s => {
-            sessionDeletes.push(deleteSessionById(s.id))
+            sessionDeletes.push(deleteSessionById(s.id, user?.sub))
         })
         await Promise.all(sessionDeletes).then(() => {
             setUserAllSessions(user?.sub)

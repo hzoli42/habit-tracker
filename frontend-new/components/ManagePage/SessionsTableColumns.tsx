@@ -118,7 +118,7 @@ export const sessionColumns: ColumnDef<Session>[] = [
             const [userAllSessions, setUserAllSessions] = useAtom(userAllSessionsAtom)
             const { user, error, isLoading } = useUser();
             const onSessionDelete = async () => {
-                await deleteSessionById(row.original.id)
+                await deleteSessionById(row.original.id, user?.sub)
                 setOpen(false)
                 setUserAllSessions(user?.sub ?? undefined)
             }

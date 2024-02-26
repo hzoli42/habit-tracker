@@ -10,7 +10,10 @@ class NewSessionIn(BaseModel):
     action: Action
 
 
+class EventStopSessionIn(BaseModel):
+    action: Action
+
+
 class UpdateSessionIn(BaseModel):
     title: str
     label_id: str
-    action: Action

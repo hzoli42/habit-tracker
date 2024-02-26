@@ -3,7 +3,7 @@ from typing import Annotated, Callable
 from fastapi import APIRouter, Depends, HTTPException
 from mypy_boto3_dynamodb import DynamoDBClient
 from api.src.dependencies import dynamodb_client, uuid_generator
-from api.src.routers.session.model import NewSessionIn, UpdateSessionIn
+from api.src.routers.session.model import EventStopSessionIn, NewSessionIn, UpdateSessionIn
 
 from api.src.db_models.session import Session
 
@@ -49,19 +49,34 @@ async def new_session(user_id: str,
     return get_session_by_id(user_id, session_id, db)
 
 
+@router.post("/session/{session_id}/user/{user_id}/event/stop")
+async def event_stop_session(session_id: str,
+                             user_id: str,
+                             input: EventStopSessionIn,
+                             db: Annotated[DynamoDBClient, Depends(dynamodb_client)]) -> Session:
+    db.update_item(
+        TableName=TABLE_NAME,
+        Key={"user_id": {"S": user_id}, "session_id": {"S": session_id}},
+        UpdateExpression="SET actions = list_append(actions, :new_action)",
+        ExpressionAttributeValues={
+            ':new_action': {"L": [{"M": input.action.to_dynamodb_item()}]}
+        }
+    )
+    return get_session_by_id(user_id, session_id, db)
+
+
 @router.post("/session/{session_id}/user/{user_id}")
-async def modify_session(session_id: str,
+async def update_session(session_id: str,
                          user_id: str,
                          input: UpdateSessionIn,
                          db: Annotated[DynamoDBClient, Depends(dynamodb_client)]) -> Session:
     db.update_item(
         TableName=TABLE_NAME,
         Key={"user_id": {"S": user_id}, "session_id": {"S": session_id}},
-        UpdateExpression="SET title = :new_title, label_id = :new_label_id, actions = list_append(actions, :new_action)",
+        UpdateExpression="SET title = :new_title, label_id = :new_label_id",
         ExpressionAttributeValues={
             ':new_title': {"S": input.title},
             ':new_label_id': {"S": input.label_id},
-            ':new_action': {"L": [{"M": input.action.to_dynamodb_item()}]}
         }
     )
     return get_session_by_id(user_id, session_id, db)

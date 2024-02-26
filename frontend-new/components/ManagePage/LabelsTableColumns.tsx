@@ -71,7 +71,7 @@ export const labelColumns: ColumnDef<Label>[] = [
             const [labels, setLabels] = useAtom(labelsAtom)
             const { user, error, isLoading } = useUser();
             const onLabelDelete = async () => {
-                deleteLabel(row.original.id).then(() => {
+                deleteLabel(row.original.id, user?.sub).then(() => {
                     setOpen(false)
                     setLabels(user?.sub)
                 })

@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import useSound from "use-sound";
 import alarmSound from '../../sounds/alarm_sound.mp3';
-import { postSessionStart, postSessionStop } from "@/lib/api_utils";
+import { postSessionNew, postSessionEventStop } from "@/lib/api_utils";
 import Head from "next/head";
 
 export type StopwatchTime = {
@@ -110,9 +110,9 @@ export default function Home() {
     }
 
     setIsRunning(true)
-    await postSessionStart(user?.sub, title, selectedLabel?.id, startTime.getTime())
+    await postSessionNew(user?.sub, title, selectedLabel?.id, startTime.getTime())
       .then(response => response.json())
-      .then(data => setSessionId(data.id))
+      .then(data => setSessionId(data.session_id))
   }
 
   async function handleStop() {
@@ -121,7 +121,7 @@ export default function Home() {
     setDisplayTime({ hours: 0, minutes: 0, seconds: 0 })
     setTitle("")
     setSelectedLabel(undefined)
-    await postSessionStop(sessionId, stopTime.getTime())
+    await postSessionEventStop(sessionId, user?.sub, stopTime.getTime())
   }
 
   return (

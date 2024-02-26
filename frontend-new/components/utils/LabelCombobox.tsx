@@ -20,7 +20,7 @@ import { useAtom } from "jotai"
 import { Label, labelsAtom } from "@/atoms/jotai"
 import ColorPicker from "./ColorPicker"
 import AddIcon from '@mui/icons-material/Add'
-import { postNewLabel } from "@/lib/api_utils"
+import { postLabelNew } from "@/lib/api_utils"
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import CloseIcon from '@mui/icons-material/Close'
 import { IconButton } from "@mui/material"
@@ -84,7 +84,7 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
 
     async function addNewLabel() {
         setOpen(false)
-        const newLabelId = await postNewLabel(user?.sub, labelSearchInput, newLabelColor)
+        const newLabelId = await postLabelNew(user?.sub, labelSearchInput, newLabelColor)
             .then(response => response.json())
             .then((data: Label) => data.id)
         setCurrentLabelId(newLabelId)

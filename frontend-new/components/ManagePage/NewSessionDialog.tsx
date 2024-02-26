@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { userAllSessionsAtom, Label as LabelAtom } from "@/atoms/jotai";
 import { useAtom } from "jotai";
-import { postSessionStart, postSessionStop } from "@/lib/api_utils";
+import { postSessionNew, postSessionEventStop } from "@/lib/api_utils";
 import { TitleTextField } from "../utils/TitleTextField";
 import 'dayjs/plugin/utc';
 
@@ -30,12 +30,12 @@ export default function NewSessionDialog() {
         let sessionId = ""
         const startTimeUTC = dayjs.unix(startTime).utc().unix() * 1000
         const endTimeUTC = dayjs.unix(endTime).utc().unix() * 1000
-        await postSessionStart(user?.sub, title, label?.id ?? undefined, startTimeUTC)
+        await postSessionNew(user?.sub, title, label?.id ?? undefined, startTimeUTC)
             .then(response => response.json())
             .then(data => {
-                sessionId = data.id
+                sessionId = data.session_id
             })
-        await postSessionStop(sessionId, endTimeUTC)
+        await postSessionEventStop(sessionId, user?.sub, endTimeUTC)
         setOpen(false)
         setUserAllSessions(user?.sub)
     }

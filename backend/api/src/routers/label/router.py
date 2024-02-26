@@ -14,7 +14,7 @@ router = APIRouter()
 TABLE_NAME = "labels"
 
 
-@router.get("/labels/user/{user_id}")
+@router.get("/label/user/{user_id}")
 def user_get_labels(user_id: str,
                     db: Annotated[DynamoDBClient, Depends(dynamodb_client)]) -> list[Label]:
     labels = db.query(
@@ -25,7 +25,7 @@ def user_get_labels(user_id: str,
     return [Label.from_dynamodb_item(s) for s in labels["Items"]]
 
 
-@router.get("/labels/{label_id}/user/{user_id}")
+@router.get("/label/{label_id}/user/{user_id}")
 def user_get_label_by_id(
         label_id: str,
         user_id: str,
@@ -33,7 +33,7 @@ def user_get_label_by_id(
     return get_label_by_id(user_id, label_id, db)
 
 
-@router.post("/labels/user/{user_id}")
+@router.post("/label/user/{user_id}")
 def new_label(
         user_id: str,
         input: NewLabelIn,
@@ -51,7 +51,7 @@ def new_label(
     return get_label_by_id(user_id, label_id, db)
 
 
-@router.post("/labels/{label_id}/user/{user_id}")
+@router.post("/label/{label_id}/user/{user_id}")
 def update_label(
     label_id: str,
     user_id: str,

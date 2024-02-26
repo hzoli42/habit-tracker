@@ -8,7 +8,14 @@ export type Label = {
     color: string
 }
 
-export type LabelsResponse = Label[]
+
+
+export type LabelsResponse = {
+    label_id: string
+    user_id: string
+    name: string
+    color: string
+}[]
 
 const labelsPrimitiveAtom = atom<Label[]>([])
 export const labelsAtom = atom(
@@ -22,7 +29,7 @@ export const labelsAtom = atom(
             .then(response => response.json())
             .then((data: LabelsResponse) => {
                 const labelsProcessed = data.map((ld, i, a) => { 
-                    return {id: ld.id, user_id: ld.user_id, name: ld.name, color: ld.color}
+                    return {id: ld.label_id, user_id: ld.user_id, name: ld.name, color: ld.color}
                 })
                 set(labelsPrimitiveAtom, labelsProcessed)
             })
@@ -41,7 +48,7 @@ export type Session = {
 }
 
 export type SessionResponse = {
-    id: string,
+    session_id: string,
     title: string,
     user_id: string,
     label_id: string,
@@ -80,18 +87,18 @@ export const userAllSessionsAtom = atom(
                     .map((session: SessionResponse) => {
                         const start = session.actions.filter(a => a.event == "start")[0]
                         const stop = session.actions.filter(a => a.event == "stop")[0]
-                        let duration = "This session does not have an end time"
-                        if (stop != null) {
+                        let duration = "Session has not ended yet"
+                        if (stop != null && stop != undefined) {
                             const durationObject = new Date(stop.timestamp - start.timestamp)
                             duration = formatDuration(durationObject)
-                        }
+                        } 
                         return {
-                            id: session.id,
+                            id: session.session_id,
                             title: session.title,
                             label_id: session.label_id,
                             duration: duration,
                             start_date: new Date(start.timestamp),
-                            end_date: new Date(stop.timestamp)
+                            end_date: new Date(stop ? stop.timestamp : start.timestamp)
                         }
                     })
                 )
