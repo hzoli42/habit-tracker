@@ -1,6 +1,7 @@
 from typing import Callable
 import typing
 import uuid
+from fastapi.security import HTTPBearer
 from mypy_boto3_dynamodb import DynamoDBClient
 from pymongo import MongoClient
 from pymongo.database import Database

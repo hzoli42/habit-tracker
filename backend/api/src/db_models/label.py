@@ -17,3 +17,20 @@ class Label(BaseModel):
             name=d["name"],
             color=d["color"]
         )
+
+    @classmethod
+    def from_dynamodb_item(cls, d: dict):
+        return cls(
+            label_id=d["label_id"]["S"],
+            user_id=d["user_id"]["S"],
+            name=d["name"]["S"],
+            color=d["color"]["S"]
+        )
+
+    def to_dynamodb_item(self):
+        return {
+            "label_id": {"S": self.label_id},
+            "user_id": {"S": self.user_id},
+            "name": {"S": self.name},
+            "color": {"S": self.color}
+        }
