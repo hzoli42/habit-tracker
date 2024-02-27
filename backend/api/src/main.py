@@ -22,7 +22,8 @@ app.mount("/api/v2", api)
 origins = [
     "http://0.0.0.0:3000",
     "http://localhost:3000",
-    "http://habit-tracker.zoltanhanesz.com"
+    "http://habit-tracker.zoltanhanesz.com",
+    "https://habit-tracker.zoltanhanesz.com"
 ]
 
 api.add_middleware(
