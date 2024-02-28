@@ -77,7 +77,7 @@ def update_label(
     return get_label_by_id(user_id, label_id, db)
 
 
-@router.delete("/labels/{label_id}/user/{user_id}")
+@router.delete("/label/{label_id}/user/{user_id}")
 def user_delete_labels(label_id: str,
                        user_id: str,
                        db: Annotated[DynamoDBClient, Depends(dynamodb_client)]) -> int:
