@@ -1,4 +1,0 @@
-apiVersion: v2
-name: habit-tracker-backend
-version: 0.0.1
-description: Packages everything needed to deploy the backend of the Habit Tracker app
