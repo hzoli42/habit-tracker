@@ -2,9 +2,9 @@ import { Divider } from "@mui/material"
 import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { useState } from "react";
-import { Label } from "@/atoms/jotai";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { LabelCombobox } from "../utils/LabelCombobox";
+import { Label } from "@/lib/jotai";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../../../components/ui/dropdown-menu";
+import { LabelCombobox } from "../../../components/utils/LabelCombobox";
 
 export type BulkActionsProps = {
     numSelected: number

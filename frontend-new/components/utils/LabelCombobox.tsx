@@ -17,7 +17,7 @@ import {
 import { useEffect, useRef, useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import { useAtom } from "jotai"
-import { Label, labelsAtom } from "@/atoms/jotai"
+import { Label, labelsAtom } from "@/lib/jotai"
 import ColorPicker from "./ColorPicker"
 import AddIcon from '@mui/icons-material/Add'
 import { postLabelNew } from "@/lib/api_utils"

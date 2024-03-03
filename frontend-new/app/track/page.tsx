@@ -1,8 +1,8 @@
 'use client'
 
-import { Label, labelsAtom } from "@/atoms/jotai";
-import { Clock } from "@/components/TrackPage/Clock";
-import { ClockInput } from "@/components/TrackPage/ClockInput";
+import { Label, labelsAtom } from "@/lib/jotai";
+import { Clock } from "@/app/track/components/Clock";
+import { ClockInput } from "@/app/track/components/ClockInput";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LabelCombobox } from "@/components/utils/LabelCombobox";

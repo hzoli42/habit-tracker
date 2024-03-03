@@ -1,5 +1,5 @@
 'use client'
-import { Card, CardContent, CardDescription, CardTitle } from "../ui/card";
+import { Card, CardContent, CardDescription, CardTitle } from "../../../components/ui/card";
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 

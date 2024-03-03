@@ -1,6 +1,6 @@
 'use client'
 import { ResponsiveContainer, CartesianGrid, Bar, XAxis, YAxis, BarChart, Cell, Tooltip, Legend } from "recharts";
-import { Card, CardContent, CardDescription, CardTitle } from "../ui/card";
+import { Card, CardContent, CardDescription, CardTitle } from "../../../components/ui/card";
 
 
 export default function SessionAnalysisBarChart({ title, data }: {

@@ -1,11 +1,11 @@
 'use client'
-import { Label, Session, editedLabelsAtom, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/atoms/jotai";
-import { BulkActions } from "@/components/ManagePage/BulkActions";
-import { labelColumns } from "@/components/ManagePage/LabelsTableColumns";
-import NewLabelDialog from "@/components/ManagePage/NewLabelDialog";
-import NewSessionDialog from "@/components/ManagePage/NewSessionDialog";
-import { SaveButton } from "@/components/ManagePage/SaveButton";
-import { sessionColumns } from "@/components/ManagePage/SessionsTableColumns";
+import { Label, Session, editedLabelsAtom, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/lib/jotai";
+import { BulkActions } from "@/app/manage/components/BulkActions";
+import { labelColumns } from "@/app/manage/components/LabelsTableColumns";
+import NewLabelDialog from "@/app/manage/components/NewLabelDialog";
+import NewSessionDialog from "@/app/manage/components/NewSessionDialog";
+import { SaveButton } from "@/app/manage/components/SaveButton";
+import { sessionColumns } from "@/app/manage/components/SessionsTableColumns";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DataTable } from "@/components/utils/DataTable";

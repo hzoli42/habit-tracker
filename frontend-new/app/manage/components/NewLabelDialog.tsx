@@ -1,13 +1,13 @@
 'use client'
-import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
-import { Input } from "../ui/input";
+import { Button } from "../../../components/ui/button";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../../../components/ui/dialog";
+import { Input } from "../../../components/ui/input";
 import { useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { labelsAtom } from "@/atoms/jotai";
+import { labelsAtom } from "@/lib/jotai";
 import { useAtom } from "jotai";
 import { postLabelNew } from "@/lib/api_utils";
-import ColorPicker from "../utils/ColorPicker";
+import ColorPicker from "../../../components/utils/ColorPicker";
 import { TextField } from "@mui/material";
 
 export default function NewSessionDialog() {

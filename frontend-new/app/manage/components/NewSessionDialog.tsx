@@ -1,17 +1,17 @@
 'use client'
 import { DateTimeField } from "@mui/x-date-pickers";
-import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { LabelCombobox } from "../utils/LabelCombobox";
+import { Button } from "../../../components/ui/button";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../../../components/ui/dialog";
+import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
+import { LabelCombobox } from "../../../components/utils/LabelCombobox";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { userAllSessionsAtom, Label as LabelAtom } from "@/atoms/jotai";
+import { userAllSessionsAtom, Label as LabelAtom } from "@/lib/jotai";
 import { useAtom } from "jotai";
 import { postSessionNew, postSessionEventStop } from "@/lib/api_utils";
-import { TitleTextField } from "../utils/TitleTextField";
+import { TitleTextField } from "../../../components/utils/TitleTextField";
 import 'dayjs/plugin/utc';
 
 export default function NewSessionDialog() {

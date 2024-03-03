@@ -1,4 +1,4 @@
-import { viewportAtom } from "@/atoms/jotai";
+import { viewportAtom } from "@/lib/jotai";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 

@@ -3,18 +3,18 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { LabelCombobox } from "../utils/LabelCombobox"
-import { Button } from "../ui/button"
-import { Input } from "../ui/input"
+import { LabelCombobox } from "../../../components/utils/LabelCombobox"
+import { Button } from "../../../components/ui/button"
+import { Input } from "../../../components/ui/input"
 import { useAtom } from "jotai"
-import { Label, Session, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/atoms/jotai"
+import { Label, Session, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/lib/jotai"
 import DeleteIcon from '@mui/icons-material/Delete'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../../../components/ui/dialog"
 import { useEffect, useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import { deleteSessionById } from "@/lib/api_utils"
-import { TitleTextField } from "../utils/TitleTextField"
-import { Checkbox } from "../ui/checkbox"
+import { TitleTextField } from "../../../components/utils/TitleTextField"
+import { Checkbox } from "../../../components/ui/checkbox"
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
