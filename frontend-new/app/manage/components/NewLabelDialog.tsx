@@ -10,7 +10,7 @@ import { postLabelNew } from "@/lib/api_utils";
 import ColorPicker from "../../../components/utils/ColorPicker";
 import { TextField } from "@mui/material";
 
-export default function NewSessionDialog() {
+function NewLabelDialog() {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState("N/A")
     const [color, setColor] = useState("#F5F3E7")
@@ -55,10 +55,12 @@ export default function NewSessionDialog() {
                     </Button>
                 </div>
                 <DialogFooter>
-                    <Button onClick={onDialogSubmit}>Create session</Button>
+                    <Button onClick={onDialogSubmit}>Create label</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog >
     )
 }
+
+export default NewLabelDialog
 

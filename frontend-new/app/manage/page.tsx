@@ -1,11 +1,9 @@
 'use client'
 import { Label, Session, editedLabelsAtom, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/lib/jotai";
-import { BulkActions } from "@/app/manage/components/BulkActions";
-import { labelColumns } from "@/app/manage/components/LabelsTableColumns";
+import { labelColumns } from "@/app/manage/components/table/LabelsTableColumns";
 import NewLabelDialog from "@/app/manage/components/NewLabelDialog";
 import NewSessionDialog from "@/app/manage/components/NewSessionDialog";
-import { SaveButton } from "@/app/manage/components/SaveButton";
-import { sessionColumns } from "@/app/manage/components/SessionsTableColumns";
+import { sessionColumns } from "@/app/manage/components/table/SessionsTableColumns";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { deleteSessionById, postLabelUpdate, postSessionUpdate } from "@/lib/api_utils";
 import { useUser } from "@auth0/nextjs-auth0/client";
@@ -14,10 +12,12 @@ import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import DataTable from "@/components/utils/DataTable";
+import BulkActions from "./components/BulkActions";
+import SaveButton from "./components/SaveButton";
 
 
-export default function Home() {
-    const { user, error, isLoading } = useUser();
+function Home() {
+    const { user, isLoading } = useUser();
     const [labels, setLabels] = useAtom(labelsAtom)
     const [editedSessions, setEditedSessions] = useAtom(editedSessionsAtom)
     const [editedLabels, setEditedLabels] = useAtom(editedLabelsAtom)
@@ -154,3 +154,5 @@ export default function Home() {
         </main>
     )
 }
+
+export default Home

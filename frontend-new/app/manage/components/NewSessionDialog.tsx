@@ -14,7 +14,7 @@ import { TitleTextField } from "../../../components/utils/TitleTextField";
 import 'dayjs/plugin/utc';
 import LabelCombobox from "@/components/utils/LabelCombobox";
 
-export default function NewSessionDialog() {
+function NewSessionDialog() {
     dayjs.extend(require('dayjs/plugin/utc'));
 
     const [open, setOpen] = useState(false);
@@ -104,4 +104,6 @@ export default function NewSessionDialog() {
         </Dialog>
     )
 }
+
+export default NewSessionDialog
 

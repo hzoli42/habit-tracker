@@ -6,13 +6,13 @@ import { Label } from "@/lib/jotai";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../../../components/ui/dropdown-menu";
 import LabelCombobox from "@/components/utils/LabelCombobox";
 
-export type BulkActionsProps = {
+type Props = {
     numSelected: number
     onBulkDelete: () => void
     onBulkLabelChange: (selectedLabel: Label | undefined) => void
 }
 
-export function BulkActions({ numSelected, onBulkDelete, onBulkLabelChange }: BulkActionsProps) {
+function BulkActions({ numSelected, onBulkDelete, onBulkLabelChange }: Props) {
     const [currentLabel, setCurrentLabel] = useState<Label | undefined>(undefined)
     const [open, setOpen] = useState(false)
 
@@ -52,3 +52,5 @@ export function BulkActions({ numSelected, onBulkDelete, onBulkLabelChange }: Bu
         </div>
     )
 }
+
+export default BulkActions

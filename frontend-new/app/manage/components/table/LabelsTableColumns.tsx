@@ -3,15 +3,15 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Button } from "../../../components/ui/button"
-import { Input } from "../../../components/ui/input"
+import { Button } from "../../../../components/ui/button"
+import { Input } from "../../../../components/ui/input"
 import { useAtom } from "jotai"
 import { Label, editedLabelsAtom, labelsAtom, } from "@/lib/jotai"
 import DeleteIcon from '@mui/icons-material/Delete'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../../../components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../../../../components/ui/dialog"
 import { useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
-import ColorPicker from "../../../components/utils/ColorPicker"
+import ColorPicker from "../../../../components/utils/ColorPicker"
 import { deleteLabel } from "@/lib/api_utils"
 import { TextField } from "@mui/material"
 
