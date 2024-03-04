@@ -3,20 +3,20 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { LabelCombobox } from "../utils/LabelCombobox"
-import { Button } from "../ui/button"
-import { Input } from "../ui/input"
+import { Button } from "../../../../components/ui/button"
+import { Input } from "../../../../components/ui/input"
 import { useAtom } from "jotai"
-import { Label, Session, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/atoms/jotai"
+import { Label, Session, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/lib/jotai"
 import DeleteIcon from '@mui/icons-material/Delete'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../../../../components/ui/dialog"
 import { useEffect, useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import { deleteSessionById } from "@/lib/api_utils"
-import { TitleTextField } from "../utils/TitleTextField"
-import { Checkbox } from "../ui/checkbox"
+import { TitleTextField } from "../../../../components/utils/TitleTextField"
+import { Checkbox } from "../../../../components/ui/checkbox"
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import LabelCombobox from "@/components/utils/LabelCombobox"
 
 
 export const sessionColumns: ColumnDef<Session>[] = [
@@ -80,7 +80,7 @@ export const sessionColumns: ColumnDef<Session>[] = [
                 setSessions(newSessions)
             }
 
-            const handleLabelChange = (selectedLabel: Label | undefined) => {
+            const handleChangeLabel = (selectedLabel: Label | undefined) => {
                 console.log(selectedLabel?.name)
                 const title = sessions.get(row.original.id)?.title ?? row.original.title
                 const newSessions = new Map(sessions).set(row.original.id, { title: title, labelId: selectedLabel?.id ?? undefined })
@@ -94,7 +94,7 @@ export const sessionColumns: ColumnDef<Session>[] = [
                         <TitleTextField variant="standard" defaultValue={row.original.title} placeholder={row.original.title}
                             onBlur={(e) => updateSessionTitle(e.currentTarget.value)}
                             style={{ minWidth: "200px" }} />
-                        <LabelCombobox disabled={false} selectedLabel={currentLabel} onLabelChange={handleLabelChange} />
+                        <LabelCombobox disabled={false} selectedLabel={currentLabel} onChange={handleChangeLabel} />
                     </div>
                     <div className="grid grid-cols-1 gap-2">
                         <div className="flex justify-start gap-2">

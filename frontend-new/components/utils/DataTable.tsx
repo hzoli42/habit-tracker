@@ -1,13 +1,7 @@
 import {
-    ColumnDef,
-    OnChangeFn,
-    RowSelectionState,
-    TableState,
-    Updater,
-    flexRender,
-    functionalUpdate,
-    getCoreRowModel,
-    useReactTable,
+    ColumnDef, RowSelectionState, Updater,
+    flexRender, getCoreRowModel,
+    useReactTable
 } from "@tanstack/react-table"
 
 import {
@@ -18,7 +12,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { useEffect, useState } from "react"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -27,7 +20,7 @@ interface DataTableProps<TData, TValue> {
     onRowSelectionChange?: (updater: Updater<RowSelectionState>) => void
 }
 
-export function DataTable<TData, TValue>({
+function DataTable<TData, TValue>({
     columns,
     data,
     state,
@@ -88,3 +81,5 @@ export function DataTable<TData, TValue>({
         </div>
     )
 }
+
+export default DataTable

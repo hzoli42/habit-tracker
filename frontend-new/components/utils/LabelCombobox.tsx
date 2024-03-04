@@ -17,7 +17,7 @@ import {
 import { useEffect, useRef, useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import { useAtom } from "jotai"
-import { Label, labelsAtom } from "@/atoms/jotai"
+import { Label, labelsAtom } from "@/lib/jotai"
 import ColorPicker from "./ColorPicker"
 import AddIcon from '@mui/icons-material/Add'
 import { postLabelNew } from "@/lib/api_utils"
@@ -26,7 +26,12 @@ import CloseIcon from '@mui/icons-material/Close'
 import { IconButton } from "@mui/material"
 import LabelIcon from '@mui/icons-material/Label';
 
-function LabelTag({ name, color }: { name: string, color: string }) {
+type PropsLabelTag = {
+    name: string
+    color: string
+}
+
+function LabelTag({ name, color }: PropsLabelTag) {
     return (
         <div style={{ backgroundColor: "rgba(167, 172, 177, 0.07)" }} className="flex justify-start gap-2 min-h-[20px] rounded-3xl px-3 py-1 inline">
             <LabelIcon style={{ color: color }} />
@@ -35,15 +40,15 @@ function LabelTag({ name, color }: { name: string, color: string }) {
     )
 }
 
-export type LabelComboboxProps = {
+type Props = {
     selectedLabel?: Label
-    onLabelChange?: (selectedLabel: Label | undefined) => void
+    onChange?: (selectedLabel: Label | undefined) => void
     disabled: boolean
 }
 
-export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelComboboxProps) {
+function LabelCombobox({ selectedLabel, onChange, disabled }: Props) {
     const [labels, setLabels] = useAtom(labelsAtom)
-    const { user, error, isLoading } = useUser();
+    const { user } = useUser();
     const [open, setOpen] = useState(false)
     const [labelSearchInput, setLabelSearchInput] = useState("")
     const [newLabelColor, setNewLabelColor] = useState("#ef476f")
@@ -62,10 +67,7 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
 
         if (labelsChanged && previousValues.current.currentLabelId !== currentLabelId) {
             const newSelectedLabel = labels.find(ld => ld.id === currentLabelId) ?? undefined
-            console.log(labels)
-            console.log(currentLabelId)
-            onLabelChange ? onLabelChange(newSelectedLabel) : null
-
+            onChange ? onChange(newSelectedLabel) : null
             previousValues.current = { labels, currentLabelId }
         }
     })
@@ -73,13 +75,13 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
     function onSelectLabel(currentValue: string | undefined) {
         setOpen(false)
         if (currentValue === undefined) {
-            onLabelChange ? onLabelChange(currentValue) : null
+            onChange ? onChange(currentValue) : null
             return
         }
         setCurrentLabelId(currentValue)
 
         const newSelectedLabel = labels.find(ld => ld.id === currentValue) ?? undefined
-        onLabelChange ? onLabelChange(newSelectedLabel) : null
+        onChange ? onChange(newSelectedLabel) : null
     }
 
     async function addNewLabel() {
@@ -89,6 +91,10 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
             .then((data: Label) => data.id)
         setCurrentLabelId(newLabelId)
         setLabels(user?.sub ?? undefined)
+    }
+
+    function handleChangeColorPicker(color: string) {
+        setNewLabelColor(color)
     }
 
     return (
@@ -119,7 +125,7 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
                                 <AddIcon className="fill-black" />
                                 <LabelTag name={labelSearchInput} color={newLabelColor} />
                             </Button>
-                            <ColorPicker initialColor={newLabelColor} onColorChange={(color) => (setNewLabelColor(color))} />
+                            <ColorPicker color={newLabelColor} onChange={handleChangeColorPicker} />
                         </div>
                     </CommandEmpty>
                     <CommandGroup>
@@ -152,3 +158,5 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
         </Popover>
     )
 }
+
+export default LabelCombobox

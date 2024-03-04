@@ -1,23 +1,14 @@
 'use client'
 
-import { labelsAtom } from "@/atoms/jotai";
+import { labelsAtom } from "@/lib/jotai";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 
 export default function Home() {
-  const { user, error, isLoading } = useUser();
-  const [labels, setLabels] = useAtom(labelsAtom)
+  const { user, error } = useUser();
 
   if (error) return <div>{error.message}</div>;
-
-  useEffect(() => {
-    if (isLoading || user === undefined) {
-      return
-    }
-    // createUserIfNew(user).then(() => setLabels(user?.sub))
-    setLabels(user?.sub)
-  }, [isLoading])
 
   return (
     <article className="prose">

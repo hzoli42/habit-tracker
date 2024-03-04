@@ -5,20 +5,17 @@ import { Popover, PopoverTrigger } from "../ui/popover";
 import { PopoverContent } from "@radix-ui/react-popover";
 import { ColorResult, SketchPicker, SliderPicker, TwitterPicker } from 'react-color';
 
-export default function ColorPicker({ initialColor, onColorChange }: {
-    initialColor: string,
-    onColorChange: (color: string) => void
-}) {
-    const [color, setColor] = useState(initialColor)
+type Props = {
+    color: string
+    onChange: (color: string) => void
+}
+
+function ColorPicker({ color, onChange }: Props) {
     const [open, setOpen] = useState(false)
 
-    useEffect(() => {
-        setColor(initialColor)
-    }, [initialColor])
 
     function handleChange(color: ColorResult, event: React.ChangeEvent<HTMLInputElement>) {
-        setColor(color.hex)
-        onColorChange(color.hex)
+        onChange(color.hex)
     }
 
     return (
@@ -31,7 +28,6 @@ export default function ColorPicker({ initialColor, onColorChange }: {
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="z-10">
-                    {/* <SketchPicker disableAlpha={true} color={color} onChange={handleChange} /> */}
                     <TwitterPicker color={color} colors={[
                         '#ef476f', '#b5179e', '#d90429',
                         '#fb5607', '#fca311', '#ffd166',
@@ -43,3 +39,5 @@ export default function ColorPicker({ initialColor, onColorChange }: {
         </div>
     )
 }
+
+export default ColorPicker

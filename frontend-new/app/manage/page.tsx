@@ -1,24 +1,23 @@
 'use client'
-import { Label, Session, editedLabelsAtom, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/atoms/jotai";
-import { BulkActions } from "@/components/ManagePage/BulkActions";
-import { labelColumns } from "@/components/ManagePage/LabelsTableColumns";
-import NewLabelDialog from "@/components/ManagePage/NewLabelDialog";
-import NewSessionDialog from "@/components/ManagePage/NewSessionDialog";
-import { SaveButton } from "@/components/ManagePage/SaveButton";
-import { sessionColumns } from "@/components/ManagePage/SessionsTableColumns";
-import { Button } from "@/components/ui/button";
+import { Label, Session, editedLabelsAtom, editedSessionsAtom, labelsAtom, userAllSessionsAtom } from "@/lib/jotai";
+import { labelColumns } from "@/app/manage/components/table/LabelsTableColumns";
+import NewLabelDialog from "@/app/manage/components/NewLabelDialog";
+import NewSessionDialog from "@/app/manage/components/NewSessionDialog";
+import { sessionColumns } from "@/app/manage/components/table/SessionsTableColumns";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DataTable } from "@/components/utils/DataTable";
 import { deleteSessionById, postLabelUpdate, postSessionUpdate } from "@/lib/api_utils";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { RowSelection, RowSelectionState, TableState, Updater, functionalUpdate } from "@tanstack/react-table";
+import { RowSelectionState, Updater, functionalUpdate } from "@tanstack/react-table";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import DataTable from "@/components/utils/DataTable";
+import BulkActions from "./components/BulkActions";
+import SaveButton from "./components/SaveButton";
 
 
-export default function Home() {
-    const { user, error, isLoading } = useUser();
+function Home() {
+    const { user, isLoading } = useUser();
     const [labels, setLabels] = useAtom(labelsAtom)
     const [editedSessions, setEditedSessions] = useAtom(editedSessionsAtom)
     const [editedLabels, setEditedLabels] = useAtom(editedLabelsAtom)
@@ -155,3 +154,5 @@ export default function Home() {
         </main>
     )
 }
+
+export default Home

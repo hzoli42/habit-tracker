@@ -2,21 +2,21 @@ import { Divider } from "@mui/material"
 import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { useState } from "react";
-import { Label } from "@/atoms/jotai";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { LabelCombobox } from "../utils/LabelCombobox";
+import { Label } from "@/lib/jotai";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../../../components/ui/dropdown-menu";
+import LabelCombobox from "@/components/utils/LabelCombobox";
 
-export type BulkActionsProps = {
+type Props = {
     numSelected: number
     onBulkDelete: () => void
     onBulkLabelChange: (selectedLabel: Label | undefined) => void
 }
 
-export function BulkActions({ numSelected, onBulkDelete, onBulkLabelChange }: BulkActionsProps) {
+function BulkActions({ numSelected, onBulkDelete, onBulkLabelChange }: Props) {
     const [currentLabel, setCurrentLabel] = useState<Label | undefined>(undefined)
     const [open, setOpen] = useState(false)
 
-    function handleLabelChange(selectedLabel: Label | undefined) {
+    function handleChangeLabel(selectedLabel: Label | undefined) {
         setCurrentLabel(selectedLabel)
         onBulkLabelChange(selectedLabel)
     }
@@ -38,7 +38,7 @@ export function BulkActions({ numSelected, onBulkDelete, onBulkLabelChange }: Bu
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <div className="p-4">
-                        <LabelCombobox disabled={false} selectedLabel={currentLabel} onLabelChange={handleLabelChange} />
+                        <LabelCombobox disabled={false} selectedLabel={currentLabel} onChange={handleChangeLabel} />
                     </div>
                 </DropdownMenuContent>
             </DropdownMenu>
@@ -52,3 +52,5 @@ export function BulkActions({ numSelected, onBulkDelete, onBulkLabelChange }: Bu
         </div>
     )
 }
+
+export default BulkActions
