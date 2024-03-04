@@ -35,15 +35,15 @@ function LabelTag({ name, color }: { name: string, color: string }) {
     )
 }
 
-export type LabelComboboxProps = {
+type Props = {
     selectedLabel?: Label
-    onLabelChange?: (selectedLabel: Label | undefined) => void
+    onChange?: (selectedLabel: Label | undefined) => void
     disabled: boolean
 }
 
-export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelComboboxProps) {
+function LabelCombobox({ selectedLabel, onChange, disabled }: Props) {
     const [labels, setLabels] = useAtom(labelsAtom)
-    const { user, error, isLoading } = useUser();
+    const { user } = useUser();
     const [open, setOpen] = useState(false)
     const [labelSearchInput, setLabelSearchInput] = useState("")
     const [newLabelColor, setNewLabelColor] = useState("#ef476f")
@@ -62,10 +62,7 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
 
         if (labelsChanged && previousValues.current.currentLabelId !== currentLabelId) {
             const newSelectedLabel = labels.find(ld => ld.id === currentLabelId) ?? undefined
-            console.log(labels)
-            console.log(currentLabelId)
-            onLabelChange ? onLabelChange(newSelectedLabel) : null
-
+            onChange ? onChange(newSelectedLabel) : null
             previousValues.current = { labels, currentLabelId }
         }
     })
@@ -73,13 +70,13 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
     function onSelectLabel(currentValue: string | undefined) {
         setOpen(false)
         if (currentValue === undefined) {
-            onLabelChange ? onLabelChange(currentValue) : null
+            onChange ? onChange(currentValue) : null
             return
         }
         setCurrentLabelId(currentValue)
 
         const newSelectedLabel = labels.find(ld => ld.id === currentValue) ?? undefined
-        onLabelChange ? onLabelChange(newSelectedLabel) : null
+        onChange ? onChange(newSelectedLabel) : null
     }
 
     async function addNewLabel() {
@@ -152,3 +149,5 @@ export function LabelCombobox({ selectedLabel, onLabelChange, disabled }: LabelC
         </Popover>
     )
 }
+
+export default LabelCombobox

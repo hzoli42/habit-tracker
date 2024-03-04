@@ -1,7 +1,11 @@
 import { StopwatchTime } from "@/app/track/page";
 import { useState } from "react";
 
-export function ClockInput({ onClockInput }: { onClockInput: (clockInput: StopwatchTime) => void }) {
+type Props = {
+    onChange: (time: StopwatchTime) => void
+}
+
+function ClockInput({ onChange }: Props) {
     const [time, setTime] = useState<StopwatchTime>({ hours: 0, minutes: 0, seconds: 0 })
     const digitsTextClassNames = "text-clock-n-xs sm:text-clock-n-sm md:text-clock-n-md lg:text-clock-n-lg"
     const lettersTextClassNames = "text-clock-l-xs sm:text-clock-l-sm md:text-clock-l-md lg:text-clock-l-lg"
@@ -25,7 +29,7 @@ export function ClockInput({ onClockInput }: { onClockInput: (clockInput: Stopwa
             }
         }
         setTime(newTime)
-        onClockInput(newTime)
+        onChange(newTime)
     }
 
     return (
@@ -45,3 +49,5 @@ export function ClockInput({ onClockInput }: { onClockInput: (clockInput: Stopwa
         </div>
     )
 }
+
+export default ClockInput
