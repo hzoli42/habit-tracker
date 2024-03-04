@@ -4,7 +4,7 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import { useState } from "react";
 import { Label } from "@/lib/jotai";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../../../components/ui/dropdown-menu";
-import { LabelCombobox } from "../../../components/utils/LabelCombobox";
+import LabelCombobox from "@/components/utils/LabelCombobox";
 
 export type BulkActionsProps = {
     numSelected: number
@@ -16,7 +16,7 @@ export function BulkActions({ numSelected, onBulkDelete, onBulkLabelChange }: Bu
     const [currentLabel, setCurrentLabel] = useState<Label | undefined>(undefined)
     const [open, setOpen] = useState(false)
 
-    function handleLabelChange(selectedLabel: Label | undefined) {
+    function handleChangeLabel(selectedLabel: Label | undefined) {
         setCurrentLabel(selectedLabel)
         onBulkLabelChange(selectedLabel)
     }
@@ -38,7 +38,7 @@ export function BulkActions({ numSelected, onBulkDelete, onBulkLabelChange }: Bu
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <div className="p-4">
-                        <LabelCombobox disabled={false} selectedLabel={currentLabel} onLabelChange={handleLabelChange} />
+                        <LabelCombobox disabled={false} selectedLabel={currentLabel} onChange={handleChangeLabel} />
                     </div>
                 </DropdownMenuContent>
             </DropdownMenu>

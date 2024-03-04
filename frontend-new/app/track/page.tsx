@@ -2,10 +2,8 @@
 
 import { Label, labelsAtom } from "@/lib/jotai";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TitleTextField } from "@/components/utils/TitleTextField";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { Button } from "@mui/material";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -14,7 +12,6 @@ import alarmSound from '../../sounds/alarm_sound.mp3';
 import { postSessionNew, postSessionEventStop } from "@/lib/api_utils";
 import TimerExpiredDialog from "./components/TimerExpiredDialog";
 import Clock from "./components/Clock";
-import ClockInput from "./components/ClockInput";
 import StartButton from "./components/StartButton";
 import StopButton from "./components/StopButton";
 import LabelCombobox from "@/components/utils/LabelCombobox";
@@ -59,7 +56,6 @@ function Home() {
     }
   }
 
-
   useEffect(() => {
     if (isLoading) {
       return
@@ -83,15 +79,11 @@ function Home() {
   }, [isRunning, displayTime]);
 
 
-  function handleTabChange(value: string) {
-    if (value === "stopwatch") {
-      setClockMode("stopwatch")
-    } else {
-      setClockMode("timer")
-    }
+  function handleChangeModeClock(value: "stopwatch" | "timer") {
+    setClockMode(value)
   }
 
-  function handleChangeClockInput(clockInput: StopwatchTime) {
+  function handleChangeInputClock(clockInput: StopwatchTime) {
     setTimerPossible(clockInput.hours !== 0 || clockInput.minutes !== 0 || clockInput.seconds !== 0)
     setReferenceTime(new Date(clockInput.seconds * 1000 + clockInput.minutes * 1000 * 60 + clockInput.hours * 1000 * 60 * 60))
   }
@@ -136,23 +128,8 @@ function Home() {
     <main>
       <div className="grid grid-cols-1 md:grid-cols-4">
         <div className="md:col-span-3">
-          <Tabs defaultValue="stopwatch" onValueChange={handleTabChange}>
-            <TabsList>
-              <TabsTrigger value="stopwatch" disabled={isRunning}>Stopwatch</TabsTrigger>
-              <TabsTrigger value="timer" disabled={isRunning}>Timer</TabsTrigger>
-            </TabsList>
-            <TabsContent value="stopwatch">
-              <Clock time={displayTime} color={isRunning ? "active" : "inactive"} />
-            </TabsContent>
-            <TabsContent value="timer">
-              {
-                isRunning
-                  ? <Clock time={displayTime} color="active" />
-                  : <ClockInput onChange={handleChangeClockInput} />
-              }
-
-            </TabsContent>
-          </Tabs>
+          <Clock time={displayTime} isRunning={isRunning}
+            onChangeMode={handleChangeModeClock} onChangeInput={handleChangeInputClock} />
         </div>
         <div className="flex flex-col justify-end gap-4 mx-8 md:mx-0">
           <TitleTextField value={title} variant="standard" hiddenLabel placeholder="Title"
