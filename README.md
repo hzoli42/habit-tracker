@@ -12,6 +12,9 @@ The long-term vision is to build integrations with health & fitness trackers and
 ## Features in action
 ### Track using stopwatch or timer
 To measure the time of your work sessions, you can choose between a stopwatch (clock increments indefinitely) or a timer (clock decrements until it reaches 0):
+https://github.com/hzoli42/habit-tracker/assets/18235359/6b00e228-ce1b-47c9-80d0-deb973d5b8e0
+
+
 
 ### Add a title and label
 Each session can have a title and label assigned. This will help you stay more organised and enables better filtering & analysis:
