@@ -6,15 +6,14 @@ import NewLabelDialog from "@/app/manage/components/NewLabelDialog";
 import NewSessionDialog from "@/app/manage/components/NewSessionDialog";
 import { SaveButton } from "@/app/manage/components/SaveButton";
 import { sessionColumns } from "@/app/manage/components/SessionsTableColumns";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DataTable } from "@/components/utils/DataTable";
 import { deleteSessionById, postLabelUpdate, postSessionUpdate } from "@/lib/api_utils";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { RowSelection, RowSelectionState, TableState, Updater, functionalUpdate } from "@tanstack/react-table";
+import { RowSelectionState, Updater, functionalUpdate } from "@tanstack/react-table";
 import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import DataTable from "@/components/utils/DataTable";
 
 
 export default function Home() {

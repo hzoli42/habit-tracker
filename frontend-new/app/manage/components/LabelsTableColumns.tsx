@@ -44,6 +44,7 @@ export const labelColumns: ColumnDef<Label>[] = [
         header: "Color",
         cell: ({ row }) => {
             const [editedLabels, setEditedLabels] = useAtom(editedLabelsAtom)
+            const color = editedLabels.get(row.original.id)?.color ?? row.original.color
 
             const updateLabelColor = (newColor: string) => {
                 const name = editedLabels.get(row.original.id)?.name ?? row.original.name
@@ -57,7 +58,7 @@ export const labelColumns: ColumnDef<Label>[] = [
                         className="gap-x-2 w-full h-auto justify-start"
                         asChild
                     >
-                        <ColorPicker initialColor={row.original.color} onColorChange={updateLabelColor} />
+                        <ColorPicker color={color} onChange={updateLabelColor} />
                     </Button>
                 </div>
             )

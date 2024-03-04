@@ -14,7 +14,7 @@ export default function NewSessionDialog() {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState("N/A")
     const [color, setColor] = useState("#F5F3E7")
-    const { user, error, isLoading } = useUser();
+    const { user } = useUser();
     const [labels, setLabels] = useAtom(labelsAtom)
 
     async function onDialogSubmit() {
@@ -24,6 +24,10 @@ export default function NewSessionDialog() {
             setLabels(user?.sub)
         })
 
+    }
+
+    function handleChangeColorPicker(color: string) {
+        setColor(color)
     }
 
     return (
@@ -47,7 +51,7 @@ export default function NewSessionDialog() {
                         className="gap-x-2 w-full h-auto justify-start"
                         asChild
                     >
-                        <ColorPicker initialColor={color} onColorChange={(color) => setColor(color)} />
+                        <ColorPicker color={color} onChange={handleChangeColorPicker} />
                     </Button>
                 </div>
                 <DialogFooter>

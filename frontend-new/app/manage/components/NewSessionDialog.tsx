@@ -4,7 +4,6 @@ import { Button } from "../../../components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../../../components/ui/dialog";
 import { Input } from "../../../components/ui/input";
 import { Label } from "../../../components/ui/label";
-import { LabelCombobox } from "../../../components/utils/LabelCombobox";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
@@ -13,6 +12,7 @@ import { useAtom } from "jotai";
 import { postSessionNew, postSessionEventStop } from "@/lib/api_utils";
 import { TitleTextField } from "../../../components/utils/TitleTextField";
 import 'dayjs/plugin/utc';
+import LabelCombobox from "@/components/utils/LabelCombobox";
 
 export default function NewSessionDialog() {
     dayjs.extend(require('dayjs/plugin/utc'));
@@ -40,7 +40,7 @@ export default function NewSessionDialog() {
         setUserAllSessions(user?.sub)
     }
 
-    function handleLabelChange(selectedLabel: LabelAtom | undefined) {
+    function handleChangeLabel(selectedLabel: LabelAtom | undefined) {
         setLabel(selectedLabel)
     }
 
@@ -69,7 +69,7 @@ export default function NewSessionDialog() {
                             Label:
                         </Label>
                         <div className="col-span-3">
-                            <LabelCombobox selectedLabel={label} disabled={false} onLabelChange={handleLabelChange} />
+                            <LabelCombobox selectedLabel={label} disabled={false} onChange={handleChangeLabel} />
                         </div>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
