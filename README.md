@@ -18,7 +18,7 @@ https://github.com/hzoli42/habit-tracker/assets/18235359/ee837ece-f05a-4423-acce
 ### Add a title and label
 Each session can have a title and label assigned. This will help you stay more organised and enables better filtering & analysis:
 
-https://github.com/hzoli42/habit-tracker/assets/18235359/b096f861-00b6-4eae-8ea4-cbc6208cfda1
+https://github.com/hzoli42/habit-tracker/assets/18235359/f2063e41-633e-457a-8871-d3bc5a65c141
 
 ### Manage past sessions & metadata
 Sessions can be reviewed and modified. Here you can also modify the labels - their name and color:
