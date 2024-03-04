@@ -1,30 +1,31 @@
-# Habit Tracker Web app
-## MVP requirements
-1. User can start/pause/stop a session to record sessions
-2. User can view all past sessions
-3. User can login to access only information relevant to them
-4. User can view advanced analytics of their sessions over time corellated with data from Google Fit or other health trackers/monitors
+# Habit Tracker
 
-## Node config
-- Make sure you set legacy peer deps: `npm config set legacy-peer-deps=true`
+## What is Habit Tracker?
+Born out of my frustration to maintain accurate time sheets and from my obsession with tracking all aspects of my life, this simple web app allows a user to:
+1. **Track** their work sessions via a stopwatch or timer.
+2. **Label** each session with customisable metadata.
+3. **Review & manage** recorded sessions from the past
+4. **Analyse** their trends over time to help with designing an optimal personalised work schedule. [coming soon]
 
-## Deploying on AWS
-- Linux machine requires: sudo apt-get install -y libkrb5-dev
-- Guide to deploy backend on AWS EC2: https://medium.com/@vanyamyshkin/deploy-python-fastapi-for-free-on-aws-ec2-050b46744366
-- Guide to deploy frontend on AWS EC2: https://medium.com/@mudasirhaji/deploying-a-next-js-app-manually-on-aws-ec2-a-step-by-step-guide-58b266ff1c52
-- Additional guide for nginx frontend setup: https://medium.com/@asttle1997/deploying-your-next-js-app-to-ec2-with-nginx-and-pm2-7afc6d878f5b
+The long-term vision is to build integrations with health & fitness trackers and correllate them with the measured data, which will allow for even more accurate personalised suggestions.
 
-## Deploy commands
-- Build production-ready frontend: `npm run build`
-- Stop current version of frontend: `pm2 delete frontend-new`
-- Deploy new version of frontend: `pm2 start npm --name frontend-new -- run start -- -p 3000`
+## Features in action
+### Track using stopwatch or timer
+To measure the time of your work sessions, you can choose between a stopwatch (clock increments indefinitely) or a timer (clock decrements until it reaches 0):
 
-- Reload the daemon: `systemctl daemon-reload`
-- Restart gunicorn to apply changes in backend: `systemctl restart gunicorn`
+### Add a title and label
+Each session can have a title and label assigned. This will help you stay more organised and enables better filtering & analysis:
 
-## Deploy using Docker to AWS Lambda
-- Login to ECR: `aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 258502676601.dkr.ecr.us-east-1.amazonaws.com`
-- Build docker image: `docker build . -t habit-tracker -f backend/dockerfiles/Dockerfile` --> make sure you run this from the repo root
-- Add tag to newly built Docker image: `docker tag habit-tracker:latest 258502676601.dkr.ecr.us-east-1.amazonaws.com/habit-tracker:latest`
-- Push Docker image to ECR: `docker push 258502676601.dkr.ecr.us-east-1.amazonaws.com/habit-tracker:latest `
+### Manage past sessions & metadata
+Sessions can be reviewed and modified. Here you can also modify the labels - their name and color:
+
+### [coming soon] Analyse trends
+(this feature is currently under development) Gain valuable insights about your habits & trends by analysing your past sessions.
+
+## System architecture
+
+## Contributing
+The repository is public mainly because it is part of my freelancing portfolio at zoltanhanesz.com so I do not expect contributions from the public nor can I support maintaining this as an open-source project with frequent updates, code reviews etc.
+
+That being said, if you have somehow stumbled upon it and would like to make a contribution, feel free to raise a Github issue or pull request...I'll do my best to review as soon as I find time :blush:
 
