@@ -12,12 +12,15 @@ The long-term vision is to build integrations with health & fitness trackers and
 ## Features in action
 ### Track using stopwatch or timer
 To measure the time of your work sessions, you can choose between a stopwatch (clock increments indefinitely) or a timer (clock decrements until it reaches 0):
+
 https://github.com/hzoli42/habit-tracker/assets/18235359/6b00e228-ce1b-47c9-80d0-deb973d5b8e0
-
-
 
 ### Add a title and label
 Each session can have a title and label assigned. This will help you stay more organised and enables better filtering & analysis:
+
+<div style="position: relative; padding-bottom: 59.14567360350493%; height: 0;">
+  <iframe src="https://www.loom.com/embed/a9b6a283ff6740ba8457d9f0bf6009f4?sid=3d5dcf49-25f7-4508-821e-824c33b9412e" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" />
+</div>
 
 ### Manage past sessions & metadata
 Sessions can be reviewed and modified. Here you can also modify the labels - their name and color:
