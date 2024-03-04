@@ -26,7 +26,12 @@ import CloseIcon from '@mui/icons-material/Close'
 import { IconButton } from "@mui/material"
 import LabelIcon from '@mui/icons-material/Label';
 
-function LabelTag({ name, color }: { name: string, color: string }) {
+type PropsLabelTag = {
+    name: string
+    color: string
+}
+
+function LabelTag({ name, color }: PropsLabelTag) {
     return (
         <div style={{ backgroundColor: "rgba(167, 172, 177, 0.07)" }} className="flex justify-start gap-2 min-h-[20px] rounded-3xl px-3 py-1 inline">
             <LabelIcon style={{ color: color }} />
@@ -88,6 +93,10 @@ function LabelCombobox({ selectedLabel, onChange, disabled }: Props) {
         setLabels(user?.sub ?? undefined)
     }
 
+    function handleChangeColorPicker(color: string) {
+        setNewLabelColor(color)
+    }
+
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger disabled={disabled}>
@@ -116,7 +125,7 @@ function LabelCombobox({ selectedLabel, onChange, disabled }: Props) {
                                 <AddIcon className="fill-black" />
                                 <LabelTag name={labelSearchInput} color={newLabelColor} />
                             </Button>
-                            <ColorPicker initialColor={newLabelColor} onColorChange={(color) => (setNewLabelColor(color))} />
+                            <ColorPicker color={newLabelColor} onChange={handleChangeColorPicker} />
                         </div>
                     </CommandEmpty>
                     <CommandGroup>
