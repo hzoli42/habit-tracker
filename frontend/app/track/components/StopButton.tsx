@@ -11,7 +11,7 @@ function StopButton({ onClick }: Props) {
     }
 
     return (
-        <Button className="bg-red-400 mt-2" onClick={handleClick}>Stop</Button>
+        <Button className="bg-red-400 hover:bg-red-300 mt-2" onClick={handleClick}>Stop</Button>
     )
 }
 

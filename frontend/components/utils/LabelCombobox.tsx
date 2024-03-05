@@ -100,7 +100,7 @@ function LabelCombobox({ selectedLabel, onChange, disabled }: Props) {
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger disabled={disabled}>
-                <div className=" flex justify-start min-w-[130px]">
+                <div className="flex justify-start min-w-[130px]">
                     {
                         selectedLabel !== undefined
                             ?
@@ -136,7 +136,7 @@ function LabelCombobox({ selectedLabel, onChange, disabled }: Props) {
                                         key={label.id}
                                         value={label.id}
                                         onSelect={onSelectLabel}
-                                        className="flex justify-start items-center items-center w-full"
+                                        className="flex justify-start items-center w-full aria-selected:bg-transparent cursor-pointer"
                                     >
                                         {(selectedLabel?.id ?? "") === label.id &&
                                             <Check className={cn("mr-2 h-4 w-4")} />
@@ -145,7 +145,7 @@ function LabelCombobox({ selectedLabel, onChange, disabled }: Props) {
                                         <LabelTag name={label.name} color={label.color} />
                                     </CommandItem>
                                     {(selectedLabel?.id ?? "") === label.id &&
-                                        <IconButton style={{ borderRadius: 0 }} onClick={() => onSelectLabel(undefined)}>
+                                        <IconButton style={{ borderRadius: 0, backgroundColor: 'transparent' }} onClick={() => onSelectLabel(undefined)}>
                                             <CloseIcon className={cn("h-4 w-4")} />
                                         </IconButton>
                                     }
