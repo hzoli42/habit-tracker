@@ -12,7 +12,7 @@ function StartButton({ disabled, onClick }: Props) {
     }
 
     return (
-        <Button className="bg-green-400 mt-2" disabled={disabled} onClick={handleClick}>Start</Button>
+        <Button className="bg-green-400 hover:bg-green-300 mt-2" disabled={disabled} onClick={handleClick}>Start</Button>
     )
 }
 
