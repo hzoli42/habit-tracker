@@ -1,5 +1,5 @@
 import {
-    ColumnDef, RowSelectionState, Updater,
+    ColumnDef, RowData, RowSelectionState, Updater,
     flexRender, getCoreRowModel,
     useReactTable
 } from "@tanstack/react-table"
@@ -12,26 +12,42 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { Label } from "@/lib/api_utils/label"
+
+declare module '@tanstack/table-core' {
+    interface TableMeta<TData extends RowData> {
+        onDataChange: () => void
+        labels: Label[] | undefined
+    }
+}
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
+    labels?: Label[]
     state: { rowSelection: RowSelectionState }
     onRowSelectionChange?: (updater: Updater<RowSelectionState>) => void
+    onDataChange: () => void
 }
 
 function DataTable<TData, TValue>({
     columns,
     data,
+    labels,
     state,
-    onRowSelectionChange
+    onRowSelectionChange,
+    onDataChange
 }: DataTableProps<TData, TValue>) {
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
         onRowSelectionChange: onRowSelectionChange ?? undefined,
-        state: state
+        state: state,
+        meta: {
+            onDataChange: onDataChange,
+            labels: labels ?? undefined
+        }
     })
 
     return (

@@ -1,14 +1,13 @@
 'use client'
 
-import { labelsAtom, userAllSessionsAtom } from "@/lib/jotai"
 import { useUser } from "@auth0/nextjs-auth0/client"
-import { Typography } from "@material-tailwind/react"
 import { useAtom } from "jotai"
-import { useEffect } from "react"
-import BuildIcon from '@mui/icons-material/Build'
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import SessionAnalysisLineChart from "@/app/analyse/components/SessionAnalysisLineChart"
 import SessionAnalysisBarChart from "@/app/analyse/components/SessionAnalysisBarChart"
+import { Label, getAllUserLabels } from "@/lib/api_utils/label"
+import { Session, SessionResponse, getAllUserSessions, processSessionResponse } from "@/lib/api_utils/session"
 
 
 const dummyDataLines = [
@@ -105,8 +104,8 @@ const dummyDataBars = [
 
 
 export default function Home() {
-    const [userAllSessions, setUserAllSessions] = useAtom(userAllSessionsAtom)
-    const [labels, setLabels] = useAtom(labelsAtom)
+    const [labels, setLabels] = useState<Label[]>([])
+    const [sessions, setSessions] = useState<Session[]>([])
     const router = useRouter()
 
     const { user, error, isLoading } = useUser();
@@ -119,21 +118,25 @@ export default function Home() {
             router.push('/')
         }
 
-        setUserAllSessions(user?.sub)
-        setLabels(user?.sub)
+        getAllUserLabels(user?.sub)
+            .then(r => r.json())
+            .then((d: Label[]) => setLabels(d))
+        getAllUserSessions(user?.sub)
+            .then(r => r.json())
+            .then((d: SessionResponse[]) => setSessions(d.map(sr => processSessionResponse(sr))))
     }, [isLoading])
 
     function getLinesData() {
-        return userAllSessions.map(s => ({ date: s.start_date, duration: s.end_date.valueOf() - s.start_date.valueOf() }))
+        return sessions.map(s => ({ date: s.start_date, duration: s.end_date.valueOf() - s.start_date.valueOf() }))
     }
 
     function getBarsData() {
-        return userAllSessions.map(s => (
+        return sessions.map(s => (
             {
                 date: s.start_date,
                 duration: s.end_date.valueOf() - s.start_date.valueOf(),
-                labelName: labels.find(l => l.id === s.label_id)?.name ?? "Error",
-                labelColor: labels.find(l => l.id === s.label_id)?.color ?? "Error"
+                labelName: labels.find(l => l.label_id === s.label_id)?.name ?? "Error",
+                labelColor: labels.find(l => l.label_id === s.label_id)?.color ?? "Error"
             }
         ))
     }
