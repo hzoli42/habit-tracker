@@ -17,13 +17,13 @@ import {
 import { useEffect, useRef, useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
 import { useAtom } from "jotai"
-import { Label, labelsAtom } from "@/lib/jotai"
+import { Label, LabelsResponse, labelsAtom } from "@/lib/jotai"
 import ColorPicker from "./ColorPicker"
 import AddIcon from '@mui/icons-material/Add'
 import { postLabelNew } from "@/lib/api_utils"
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import CloseIcon from '@mui/icons-material/Close'
-import { IconButton } from "@mui/material"
+import { IconButton, Typography } from "@mui/material"
 import LabelIcon from '@mui/icons-material/Label';
 
 type PropsLabelTag = {
@@ -33,7 +33,7 @@ type PropsLabelTag = {
 
 function LabelTag({ name, color }: PropsLabelTag) {
     return (
-        <div style={{ backgroundColor: "rgba(167, 172, 177, 0.07)" }} className="flex justify-start gap-2 min-h-[20px] rounded-3xl px-3 py-1 inline">
+        <div className="flex justify-start gap-2 min-h-[20px] px-3 py-1 inline">
             <LabelIcon style={{ color: color }} />
             <p>{name}</p>
         </div>
@@ -64,11 +64,14 @@ function LabelCombobox({ selectedLabel, onChange, disabled }: Props) {
                 labelsChanged = true
             }
         })
+        console.log(oldLabels)
+        console.log(newLabels)
 
         if (labelsChanged && previousValues.current.currentLabelId !== currentLabelId) {
-            const newSelectedLabel = labels.find(ld => ld.id === currentLabelId) ?? undefined
+            const newSelectedLabel = newLabels.find(ld => ld.id === currentLabelId) ?? undefined
+            console.log(newSelectedLabel)
             onChange ? onChange(newSelectedLabel) : null
-            previousValues.current = { labels, currentLabelId }
+            previousValues.current = { labels: newLabels, currentLabelId: currentLabelId }
         }
     })
 
@@ -88,7 +91,8 @@ function LabelCombobox({ selectedLabel, onChange, disabled }: Props) {
         setOpen(false)
         const newLabelId = await postLabelNew(user?.sub, labelSearchInput, newLabelColor)
             .then(response => response.json())
-            .then((data: Label) => data.id)
+            .then(data => data.label_id)
+        console.log(newLabelId)
         setCurrentLabelId(newLabelId)
         setLabels(user?.sub ?? undefined)
     }
@@ -104,7 +108,9 @@ function LabelCombobox({ selectedLabel, onChange, disabled }: Props) {
                     {
                         selectedLabel !== undefined
                             ?
-                            <LabelTag name={selectedLabel.name} color={selectedLabel.color} />
+                            <div className="bg-[#F7F9FB] rounded-3xl">
+                                <LabelTag name={selectedLabel.name} color={selectedLabel.color} />
+                            </div>
                             : <>
                                 <p className="text-gray-500">Select a label</p>
                                 <ArrowDropDownIcon style={{ color: "#9E9E9E", marginLeft: "5px" }} />
@@ -122,7 +128,7 @@ function LabelCombobox({ selectedLabel, onChange, disabled }: Props) {
                                 onClick={addNewLabel}
                                 className="gap-x-2 w-full h-auto justify-start"
                             >
-                                <AddIcon className="fill-black" />
+                                + add
                                 <LabelTag name={labelSearchInput} color={newLabelColor} />
                             </Button>
                             <ColorPicker color={newLabelColor} onChange={handleChangeColorPicker} />
@@ -131,25 +137,26 @@ function LabelCombobox({ selectedLabel, onChange, disabled }: Props) {
                     <CommandGroup>
                         {
                             labels.map(label => (
-                                <div className="flex justify-between" key={label.id}>
-                                    <CommandItem
-                                        key={label.id}
-                                        value={label.id}
-                                        onSelect={onSelectLabel}
-                                        className="flex justify-start items-center w-full aria-selected:bg-transparent cursor-pointer"
-                                    >
+                                <CommandItem
+                                    key={label.id}
+                                    value={label.id}
+                                    onSelect={onSelectLabel}
+                                    className="flex justify-between items-center w-full cursor-pointer"
+                                >
+                                    <div className="flex justify-start items-center">
                                         {(selectedLabel?.id ?? "") === label.id &&
                                             <Check className={cn("mr-2 h-4 w-4")} />
                                         }
-
                                         <LabelTag name={label.name} color={label.color} />
-                                    </CommandItem>
-                                    {(selectedLabel?.id ?? "") === label.id &&
-                                        <IconButton style={{ borderRadius: 0, backgroundColor: 'transparent' }} onClick={() => onSelectLabel(undefined)}>
-                                            <CloseIcon className={cn("h-4 w-4")} />
-                                        </IconButton>
-                                    }
-                                </div>
+                                    </div>
+                                    <div>
+                                        {(selectedLabel?.id ?? "") === label.id &&
+                                            <IconButton style={{ borderRadius: 0 }} onClick={() => onSelectLabel(undefined)}>
+                                                <CloseIcon className={cn("h-4 w-4")} />
+                                            </IconButton>
+                                        }
+                                    </div>
+                                </CommandItem>
                             ))
                         }
                     </CommandGroup>
