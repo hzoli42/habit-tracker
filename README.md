@@ -1,4 +1,4 @@
-# Habit Tracker
+# [Habit Tracker](https://habit-tracker.zoltanhanesz.com/)
 
 ## What is Habit Tracker?
 Born out of my frustration to maintain accurate time sheets and from my obsession with tracking all aspects of my life, this simple web app allows a user to:
