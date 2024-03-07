@@ -14,17 +14,14 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 import { useUser } from "@auth0/nextjs-auth0/client"
-import { useAtom } from "jotai"
-import { Label, LabelsResponse, labelsAtom } from "@/lib/jotai"
 import ColorPicker from "./ColorPicker"
-import AddIcon from '@mui/icons-material/Add'
-import { postLabelNew } from "@/lib/api_utils"
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import CloseIcon from '@mui/icons-material/Close'
-import { IconButton, Typography } from "@mui/material"
-import LabelIcon from '@mui/icons-material/Label';
+import { IconButton } from "@mui/material"
+import LabelIcon from '@mui/icons-material/Label'
+import { Label, postLabelNew } from "@/lib/api_utils/label"
 
 type PropsLabelTag = {
     name: string
@@ -41,60 +38,32 @@ function LabelTag({ name, color }: PropsLabelTag) {
 }
 
 type Props = {
-    selectedLabel?: Label
-    onChange?: (selectedLabel: Label | undefined) => void
+    value: Label | undefined
+    labels: Label[]
+    onChange?: (value: Label | undefined) => void
+    onNewLabel?: (value: Label) => void
     disabled: boolean
 }
 
-function LabelCombobox({ selectedLabel, onChange, disabled }: Props) {
-    const [labels, setLabels] = useAtom(labelsAtom)
+function LabelCombobox({ value, labels, onChange, onNewLabel, disabled }: Props) {
     const { user } = useUser();
     const [open, setOpen] = useState(false)
     const [labelSearchInput, setLabelSearchInput] = useState("")
     const [newLabelColor, setNewLabelColor] = useState("#ef476f")
-    const [currentLabelId, setCurrentLabelId] = useState(selectedLabel?.id)
-    const previousValues = useRef({ labels, currentLabelId })
 
-    useEffect(() => {
-        const oldLabels = previousValues.current.labels.sort((a, b) => a.id.localeCompare(b.id))
-        const newLabels = labels.sort((a, b) => a.id.localeCompare(b.id))
-        let labelsChanged = false || oldLabels.length != newLabels.length
-        oldLabels.forEach((l, i) => {
-            if (l.id != newLabels[i].id) {
-                labelsChanged = true
-            }
-        })
-        console.log(oldLabels)
-        console.log(newLabels)
-
-        if (labelsChanged && previousValues.current.currentLabelId !== currentLabelId) {
-            const newSelectedLabel = newLabels.find(ld => ld.id === currentLabelId) ?? undefined
-            console.log(newSelectedLabel)
-            onChange ? onChange(newSelectedLabel) : null
-            previousValues.current = { labels: newLabels, currentLabelId: currentLabelId }
-        }
-    })
-
-    function onSelectLabel(currentValue: string | undefined) {
+    function handleSelectLabel(currentValue: string | undefined) {
         setOpen(false)
-        if (currentValue === undefined) {
-            onChange ? onChange(currentValue) : null
-            return
-        }
-        setCurrentLabelId(currentValue)
-
-        const newSelectedLabel = labels.find(ld => ld.id === currentValue) ?? undefined
+        const newSelectedLabel = labels?.find(ld => ld.label_id === currentValue) ?? undefined
         onChange ? onChange(newSelectedLabel) : null
     }
 
-    async function addNewLabel() {
+    async function handleClickNewLabel() {
         setOpen(false)
-        const newLabelId = await postLabelNew(user?.sub, labelSearchInput, newLabelColor)
+        const newLabel = await postLabelNew(user?.sub, labelSearchInput, newLabelColor)
             .then(response => response.json())
-            .then(data => data.label_id)
-        console.log(newLabelId)
-        setCurrentLabelId(newLabelId)
-        setLabels(user?.sub ?? undefined)
+            .then((data: Label) => data)
+        console.log(newLabel)
+        onNewLabel ? onNewLabel(newLabel) : null
     }
 
     function handleChangeColorPicker(color: string) {
@@ -104,12 +73,12 @@ function LabelCombobox({ selectedLabel, onChange, disabled }: Props) {
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger disabled={disabled}>
-                <div className="flex justify-start min-w-[130px]">
+                <div className="flex justify-start">
                     {
-                        selectedLabel !== undefined
+                        value !== undefined
                             ?
                             <div className="bg-[#F7F9FB] rounded-3xl">
-                                <LabelTag name={selectedLabel.name} color={selectedLabel.color} />
+                                <LabelTag name={value.name} color={value.color} />
                             </div>
                             : <>
                                 <p className="text-gray-500">Select a label</p>
@@ -125,7 +94,7 @@ function LabelCombobox({ selectedLabel, onChange, disabled }: Props) {
                         <div className="flex justify-between w-full px-2 items-center">
                             <Button
                                 variant="ghost"
-                                onClick={addNewLabel}
+                                onClick={handleClickNewLabel}
                                 className="gap-x-2 w-full h-auto justify-start"
                             >
                                 + add
@@ -136,27 +105,27 @@ function LabelCombobox({ selectedLabel, onChange, disabled }: Props) {
                     </CommandEmpty>
                     <CommandGroup>
                         {
-                            labels.map(label => (
-                                <CommandItem
-                                    key={label.id}
-                                    value={label.id}
-                                    onSelect={onSelectLabel}
-                                    className="flex justify-between items-center w-full cursor-pointer"
-                                >
-                                    <div className="flex justify-start items-center">
-                                        {(selectedLabel?.id ?? "") === label.id &&
+                            labels?.map(label => (
+                                <div className="flex justify-between items-center">
+                                    <CommandItem
+                                        key={label.label_id}
+                                        value={label.label_id}
+                                        onSelect={handleSelectLabel}
+                                        className="flex justify-start items-center w-full cursor-pointer"
+                                    >
+                                        {(value?.label_id ?? "") === label.label_id &&
                                             <Check className={cn("mr-2 h-4 w-4")} />
                                         }
                                         <LabelTag name={label.name} color={label.color} />
-                                    </div>
+                                    </CommandItem>
                                     <div>
-                                        {(selectedLabel?.id ?? "") === label.id &&
-                                            <IconButton style={{ borderRadius: 0 }} onClick={() => onSelectLabel(undefined)}>
+                                        {(value?.label_id ?? "") === label.label_id &&
+                                            <IconButton style={{ borderRadius: 0, backgroundColor: "transparent" }} onClick={() => handleSelectLabel(undefined)}>
                                                 <CloseIcon className={cn("h-4 w-4")} />
                                             </IconButton>
                                         }
                                     </div>
-                                </CommandItem>
+                                </div>
                             ))
                         }
                     </CommandGroup>

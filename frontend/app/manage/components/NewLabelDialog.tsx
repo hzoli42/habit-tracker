@@ -1,29 +1,35 @@
 'use client'
 import { Button } from "../../../components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../../../components/ui/dialog";
-import { Input } from "../../../components/ui/input";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { labelsAtom } from "@/lib/jotai";
-import { useAtom } from "jotai";
-import { postLabelNew } from "@/lib/api_utils";
-import ColorPicker from "../../../components/utils/ColorPicker";
 import { TextField } from "@mui/material";
+import { postLabelNew } from "@/lib/api_utils/label";
+import ColorPicker from "@/components/utils/ColorPicker";
+import LabelIcon from '@mui/icons-material/Label'
 
-function NewLabelDialog() {
+
+type Props = {
+    onDialogSubmit: () => void
+}
+
+function NewLabelDialog({ onDialogSubmit }: Props) {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState("N/A")
-    const [color, setColor] = useState("#F5F3E7")
+    const [color, setColor] = useState("#ef476f")
     const { user } = useUser();
-    const [labels, setLabels] = useAtom(labelsAtom)
 
-    async function onDialogSubmit() {
-        let sessionId = ""
-        postLabelNew(user?.sub, name, color).then(() => {
+    async function handleClickSubmit() {
+        await postLabelNew(user?.sub, name, color).then(() => {
             setOpen(false)
-            setLabels(user?.sub)
+            setName("N/A")
+            setColor("#ef476f")
+            onDialogSubmit()
         })
+    }
 
+    function handleChangeTextField(e: ChangeEvent<HTMLInputElement>) {
+        setName(e.currentTarget.value)
     }
 
     function handleChangeColorPicker(color: string) {
@@ -42,20 +48,24 @@ function NewLabelDialog() {
                     <DialogTitle>Enter label details</DialogTitle>
                 </DialogHeader>
                 <div className="flex items-center gap-4 py-4 justify-between h-auto">
-                    <TextField variant="standard" placeholder="Enter label name"
-                        style={{ backgroundColor: `${color}`, minWidth: "200px", width: "100%", paddingLeft: "10px", borderRadius: "6px", paddingTop: "5px" }}
-                        InputProps={{ disableUnderline: true }}
-                        onChange={(e) => setName(e.currentTarget.value)} />
-                    <Button
-                        variant="ghost"
-                        className="gap-x-2 w-full h-auto justify-start"
-                        asChild
-                    >
-                        <ColorPicker color={color} onChange={handleChangeColorPicker} />
-                    </Button>
+                    <div className="flex items-center gap-4 py-4 justify-between h-auto">
+                        <div className="flex justify-start gap-4 items-center">
+                            <LabelIcon style={{ color: color }} />
+                            <TextField variant="standard" placeholder="Enter label name"
+                                InputProps={{ disableUnderline: false }}
+                                onChange={handleChangeTextField} />
+                        </div>
+                        <Button
+                            variant="ghost"
+                            className="gap-x-2 w-full h-auto justify-start"
+                            asChild
+                        >
+                            <ColorPicker color={color} onChange={handleChangeColorPicker} />
+                        </Button>
+                    </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={onDialogSubmit}>Create label</Button>
+                    <Button onClick={handleClickSubmit}>Create label</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog >

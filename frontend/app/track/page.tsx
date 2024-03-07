@@ -1,7 +1,5 @@
 'use client'
 
-import { Label, labelsAtom } from "@/lib/jotai";
-
 import { TitleTextField } from "@/components/utils/TitleTextField";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAtom } from "jotai";
@@ -9,12 +7,13 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import useSound from "use-sound";
 import alarmSound from '../../sounds/alarm_sound.mp3';
-import { postSessionNew, postSessionEventStop } from "@/lib/api_utils";
 import TimerExpiredDialog from "./components/TimerExpiredDialog";
 import Clock from "./components/Clock";
 import StartButton from "./components/StartButton";
 import StopButton from "./components/StopButton";
 import LabelCombobox from "@/components/utils/LabelCombobox";
+import { Label, getAllUserLabels } from "@/lib/api_utils/label";
+import { postSessionEventStop, postSessionNew } from "@/lib/api_utils/session";
 
 export type StopwatchTime = {
   hours: number,
@@ -24,10 +23,10 @@ export type StopwatchTime = {
 
 function Home() {
   const { user, error, isLoading } = useUser();
-  const [labels, setLabels] = useAtom(labelsAtom)
   const router = useRouter()
   const [playAlarm, { stop }] = useSound(alarmSound, { volume: 0.5 })
 
+  const [labels, setLabels] = useState<Label[]>([])
   const [displayTime, setDisplayTime] = useState<StopwatchTime>({ hours: 0, minutes: 0, seconds: 0 })
   const [clockMode, setClockMode] = useState<"stopwatch" | "timer">("stopwatch")
   const [referenceTime, setReferenceTime] = useState<Date>(new Date())
@@ -56,6 +55,7 @@ function Home() {
     }
   }
 
+
   useEffect(() => {
     if (isLoading) {
       return
@@ -63,7 +63,9 @@ function Home() {
     if (user?.sub === null || user?.sub === undefined) {
       router.push('/')
     }
-    setLabels(user?.sub)
+    getAllUserLabels(user?.sub)
+      .then(r => r.json())
+      .then((d: Label[]) => setLabels(d))
   }, [isLoading])
 
   useEffect(() => {
@@ -96,6 +98,13 @@ function Home() {
     setSelectedLabel(label)
   }
 
+  function handleNewLabel(label: Label) {
+    setSelectedLabel(label)
+    getAllUserLabels(user?.sub)
+      .then(r => r.json())
+      .then((d: Label[]) => setLabels(d))
+  }
+
   async function handleClickStartButton() {
     const startTime = new Date()
     if (clockMode === "stopwatch") {
@@ -105,7 +114,7 @@ function Home() {
     }
 
     setIsRunning(true)
-    await postSessionNew(user?.sub, title, selectedLabel?.id, startTime.getTime())
+    await postSessionNew(user?.sub, title, selectedLabel?.label_id, startTime.getTime())
       .then(response => response.json())
       .then(data => setSessionId(data.session_id))
   }
@@ -134,7 +143,7 @@ function Home() {
         <div className="flex flex-col justify-end gap-4 mx-8 md:mx-0">
           <TitleTextField value={title} variant="standard" hiddenLabel placeholder="Title"
             onChange={handleChangeTitle} disabled={isRunning} />
-          <LabelCombobox selectedLabel={selectedLabel} onChange={handleChangeLabel} disabled={isRunning} />
+          <LabelCombobox value={selectedLabel} labels={labels} onChange={handleChangeLabel} onNewLabel={handleNewLabel} disabled={isRunning} />
           {
             !isRunning
               ? <StartButton disabled={clockMode === "timer" && !timerPossible} onClick={handleClickStartButton} />
