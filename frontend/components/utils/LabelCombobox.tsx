@@ -73,7 +73,7 @@ function LabelCombobox({ value, labels, onChange, onNewLabel, disabled }: Props)
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger disabled={disabled}>
-                <div className="flex justify-start min-w-[130px]">
+                <div className="flex justify-start">
                     {
                         value !== undefined
                             ?

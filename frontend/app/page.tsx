@@ -1,6 +1,5 @@
 'use client'
 
-import { labelsAtom } from "@/lib/jotai";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useAtom } from "jotai";
 import { useEffect } from "react";

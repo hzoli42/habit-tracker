@@ -24,17 +24,18 @@ function EditDialog({ session, labels, onNewLabel, onDialogSubmit }: Props) {
     const { user } = useUser()
     const [open, setOpen] = useState(false)
     const [title, setTitle] = useState(session.title)
-    const [label, setLabel] = useState<Label | undefined>()
-    const [startTime, setStartTime] = useState(session.start_date.getTime())
-    const [endTime, setEndTime] = useState(session.end_date.getTime())
+    const [label, setLabel] = useState<Label | undefined>(labels.find(l => l.label_id === session.label_id))
+    const [startTime, setStartTime] = useState(session.start_date.getTime() / 1000)
+    const [endTime, setEndTime] = useState(session.end_date.getTime() / 1000)
 
     function handleNewLabel(label: Label) {
+        setLabel(label)
         onNewLabel(label)
     }
 
     function handleDialogSubmit() {
         setOpen(false)
-        postSessionUpdate(session.session_id, user?.sub, title, label?.label_id).then(() => {
+        postSessionUpdate(session.session_id, user?.sub, title, label?.label_id, startTime * 1000, endTime * 1000).then(() => {
             onDialogSubmit(session.session_id, title, label?.label_id)
         })
     }
@@ -56,7 +57,7 @@ function EditDialog({ session, labels, onNewLabel, onDialogSubmit }: Props) {
                             Title:
                         </UILabel>
                         <div className="col-span-3">
-                            <TitleTextField variant="standard" placeholder={session.title} onChange={(e) => setTitle(e.currentTarget.value)} />
+                            <TitleTextField variant="standard" defaultValue={session.title} placeholder={session.title} onChange={(e) => setTitle(e.currentTarget.value)} />
                         </div>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4 py-1">

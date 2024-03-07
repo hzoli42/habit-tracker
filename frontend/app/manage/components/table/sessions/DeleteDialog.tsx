@@ -28,7 +28,7 @@ function DeleteDialog({ session, onDialogSubmit }: Props) {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button variant="ghost" className="flex justify-start gap-2">
-                    <DeleteIcon className="fill-red-600" /> delete
+                    <DeleteIcon className="text-red-600 fill-red-600" /> delete
                 </Button>
             </DialogTrigger>
             <DialogContent>

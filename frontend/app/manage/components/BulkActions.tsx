@@ -29,7 +29,7 @@ function BulkActions({ numSelected, labels, onBulkDelete, onBulkLabelChange }: P
                 {numSelected} selected
             </div>
             <Divider orientation="vertical" />
-            <DropdownMenu open={open} onOpenChange={setOpen}>
+            {/* <DropdownMenu open={open} onOpenChange={setOpen}>
                 <DropdownMenuTrigger className="text-black text-lg">
                     <div
                         className="flex justify-center items-center gap-1 cursor-pointer py-2 px-3 hover:text-amber-600"
@@ -42,7 +42,7 @@ function BulkActions({ numSelected, labels, onBulkDelete, onBulkLabelChange }: P
                         <LabelCombobox disabled={false} value={currentLabel} labels={labels} onChange={handleChangeLabel} onNewLabel={handleChangeLabel} />
                     </div>
                 </DropdownMenuContent>
-            </DropdownMenu>
+            </DropdownMenu> */}
             <Divider orientation="vertical" />
             <div
                 className="flex justify-center items-center gap-1 cursor-pointer py-2 px-3 hover:text-red-600"

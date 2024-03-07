@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from api.src.db_models.session import Session, Action
+from api.src.db_models.session import Session
 
 #######################################################################################################################
 
@@ -7,13 +7,15 @@ from api.src.db_models.session import Session, Action
 class NewSessionIn(BaseModel):
     title: str
     label_id: str
-    action: Action
+    start_time: float
 
 
 class EventStopSessionIn(BaseModel):
-    action: Action
+    end_time: float
 
 
 class UpdateSessionIn(BaseModel):
     title: str
     label_id: str
+    start_time: float
+    end_time: float

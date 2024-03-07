@@ -28,7 +28,10 @@ function Home() {
             .then((d: Label[]) => setLabels(d))
         getAllUserSessions(user_id)
             .then(r => r.json())
-            .then((d: SessionResponse[]) => setSessions(d.map(sr => processSessionResponse(sr))))
+            .then((d: SessionResponse[]) => setSessions(
+                d.map(sr => processSessionResponse(sr))
+                    .sort((a, b) => b.end_date.getTime() - a.end_date.getTime())
+            ))
     }
 
     useEffect(() => {
@@ -53,12 +56,13 @@ function Home() {
         await Promise.all(sessionDeletes).then(() => {
             reloadData(user?.sub)
         })
+        setSelectedSessionRows({})
     }
 
-    async function modifySelectedLabels(label: Label | undefined) {
-        let selectedSessions: Session[] = []
-        Object.keys(selectedSessionRows).forEach(x => selectedSessions.push(sessions[parseInt(x)]))
-    }
+    // async function modifySelectedLabels(label: Label | undefined) {
+    //     let selectedSessions: Session[] = []
+    //     Object.keys(selectedSessionRows).forEach(x => selectedSessions.push(sessions[parseInt(x)]))
+    // }
 
     function handleRowSelectionChange(updater: Updater<RowSelectionState>) {
         const newValue = functionalUpdate(updater, selectedSessionRows)
@@ -67,56 +71,54 @@ function Home() {
 
     return (
         <main>
-            <div className="container mx-auto max-w-screen-lg">
-                <Tabs defaultValue="sessions">
-                    <TabsList>
-                        <TabsTrigger value="sessions">Sessions</TabsTrigger>
-                        <TabsTrigger value="labels">Labels</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="sessions">
-                        <div className="my-4">
-                            <article className="prose lg:prose-xl pb-4 md:pb-0"><h1>Sessions</h1></article>
+            <Tabs defaultValue="sessions">
+                <TabsList>
+                    <TabsTrigger value="sessions">Sessions</TabsTrigger>
+                    <TabsTrigger value="labels">Labels</TabsTrigger>
+                </TabsList>
+                <TabsContent value="sessions">
+                    <div className="my-4">
+                        <article className="prose lg:prose-xl pb-4 md:pb-0"><h1>Sessions</h1></article>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 mb-2 min-w-[300px]">
+                        <div className="flex justify-end sm:justify-start mb-2 sm:mb-0 ">
+                            {Object.keys(selectedSessionRows).length !== 0
+                                ? <BulkActions
+                                    numSelected={Object.keys(selectedSessionRows).length}
+                                    labels={labels}
+                                    onBulkDelete={deleteSelectedSessions}
+                                    onBulkLabelChange={() => null} />
+                                : <div></div>}
+                        </div>
+                        <div className="flex justify-end gap-4 items-center">
+                            <NewSessionDialog onDialogSubmit={() => reloadData(user?.sub)} />
+                        </div>
+                    </div>
+
+                    <DataTable
+                        data={sessions}
+                        columns={sessionColumns}
+                        labels={labels}
+                        state={{ rowSelection: selectedSessionRows }}
+                        onRowSelectionChange={handleRowSelectionChange}
+                        onDataChange={() => reloadData(user?.sub)} />
+                </TabsContent>
+                <TabsContent value="labels">
+                    <div className="grid grid-cols-1 md:grid-cols-2 pt-6 pb-4">
+                        <article className="prose lg:prose-xl pb-4 md:pb-0"><h1>Labels</h1></article>
+                        <div className="flex justify-end gap-4 items-center">
+                            <NewLabelDialog onDialogSubmit={() => reloadData(user?.sub)} />
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 mb-2 min-w-[300px]">
-                            <div className="flex justify-end md:justify-start mb-2 md:mb-0 ">
-                                {Object.keys(selectedSessionRows).length !== 0
-                                    ? <BulkActions
-                                        numSelected={Object.keys(selectedSessionRows).length}
-                                        labels={labels}
-                                        onBulkDelete={deleteSelectedSessions}
-                                        onBulkLabelChange={modifySelectedLabels} />
-                                    : <div></div>}
-                            </div>
-                            <div className="flex justify-end gap-4 items-center">
-                                <NewSessionDialog onDialogSubmit={() => reloadData(user?.sub)} />
-                            </div>
-                        </div>
-
-                        <DataTable
-                            data={sessions}
-                            columns={sessionColumns}
-                            labels={labels}
-                            state={{ rowSelection: selectedSessionRows }}
-                            onRowSelectionChange={handleRowSelectionChange}
-                            onDataChange={() => reloadData(user?.sub)} />
-                    </TabsContent>
-                    <TabsContent value="labels">
-                        <div className="grid grid-cols-1 md:grid-cols-2 pt-6 pb-4">
-                            <article className="prose lg:prose-xl pb-4 md:pb-0"><h1>Labels</h1></article>
-                            <div className="flex justify-end gap-4 items-center">
-                                <NewLabelDialog onDialogSubmit={() => reloadData(user?.sub)} />
-                            </div>
-
-                        </div>
-                        <DataTable
-                            data={labels}
-                            columns={labelColumns}
-                            state={{ rowSelection: {} }}
-                            onDataChange={() => reloadData(user?.sub)} />
-                    </TabsContent>
-                </Tabs>
-            </div>
+                    </div>
+                    <DataTable
+                        data={labels}
+                        columns={labelColumns}
+                        state={{ rowSelection: {} }}
+                        onDataChange={() => reloadData(user?.sub)} />
+                </TabsContent>
+            </Tabs>
         </main>
     )
 }

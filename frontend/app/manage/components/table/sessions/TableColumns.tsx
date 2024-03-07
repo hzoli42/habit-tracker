@@ -9,14 +9,15 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import LabelCombobox from "@/components/utils/LabelCombobox"
 import { Session } from "@/lib/api_utils/session"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Divider } from "@mui/material"
 import EditDialog from "./EditDialog"
 import DeleteDialog from "./DeleteDialog"
 import { Checkbox } from "@/components/ui/checkbox"
-import { TitleTextField } from "@/components/utils/TitleTextField"
-import { IconButton } from "@material-tailwind/react"
+import { Typography } from "@material-tailwind/react"
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { Button } from "@/components/ui/button"
+import TitleIcon from '@mui/icons-material/Title'
+import LabelIcon from '@mui/icons-material/Label'
+
 
 
 
@@ -42,32 +43,68 @@ export const sessionColumns: ColumnDef<Session>[] = [
         enableHiding: false,
     },
     {
-        id: "session",
-        header: "",
+        id: "title",
+        header: () => (
+            <div className="flex justify-start gap-1">
+                <TitleIcon /> Title
+            </div>
+        ),
         cell: ({ row, table }) => {
             const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
             return (
-                <div className="flex flex-wrap justify-start gap-6 pl-8 md:pl-4">
-                    <div className="flex justify-start gap-8">
-                        <TitleTextField variant="standard" defaultValue={row.original.title}
-                            style={{ minWidth: "200px" }}
-                            disabled={true} />
-                        <LabelCombobox
-                            disabled={true}
-                            value={table.options.meta?.labels?.find(l => l.label_id === row.original.label_id)}
-                            labels={table.options.meta?.labels ?? []}
-                        />
-                    </div>
-                    <div className="grid grid-cols-1 gap-2">
-                        <div className="flex justify-start gap-2">
-                            <CalendarMonthIcon />
-                            {dayNames[row.original.end_date.getDay()]}, {row.original.end_date.getDate()}/{row.original.end_date.getMonth()}/{row.original.end_date.getFullYear()}
-                        </div>
-                        <div className="flex justify-start gap-2">
-                            <AccessTimeIcon />
-                            {row.original.duration}
-                        </div>
-                    </div>
+                <div className="flex flex-nowrap whitespace-nowrap text-nowrap justify-start gap-2">
+                    <Typography variant="h5" className="underline underline-offset-4">{row.original.title}</Typography>
+                </div>
+            )
+        }
+    },
+    {
+        id: "label",
+        header: () => (
+            <div className="flex justify-start gap-2 pl-3">
+                <LabelIcon /> Label
+            </div>
+        ),
+        cell: ({ row, table }) => {
+            return (
+                <div className="flex flex-nowrap whitespace-nowrap text-nowrap">
+                    <LabelCombobox
+                        disabled={true}
+                        value={table.options.meta?.labels?.find(l => l.label_id === row.original.label_id)}
+                        labels={table.options.meta?.labels ?? []}
+                    />
+                </div>
+            )
+        }
+    },
+    {
+        id: "date",
+        header: () => (
+            <div className="flex justify-start gap-2">
+                <CalendarMonthIcon /> Date
+            </div>
+        ),
+        cell: ({ row, table }) => {
+            const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+            return (
+                <div className="flex flex-nowrap whitespace-nowrap text-nowrap ">
+                    {dayNames[row.original.end_date.getDay()]}, {row.original.end_date.getDate()}/{row.original.end_date.getMonth()}/{row.original.end_date.getFullYear()}
+                </div>
+
+            )
+        }
+    },
+    {
+        id: "duration",
+        header: () => (
+            <div className="flex justify-end gap-2">
+                <AccessTimeIcon /> Duration
+            </div>
+        ),
+        cell: ({ row }) => {
+            return (
+                <div className="flex flex-nowrap whitespace-nowrap text-nowrap justify-end">
+                    {row.original.duration}
                 </div>
             )
         }
@@ -97,7 +134,7 @@ export const sessionColumns: ColumnDef<Session>[] = [
                                 labels={table.options.meta?.labels ?? []}
                                 onNewLabel={() => table.options.meta?.onDataChange()}
                                 onDialogSubmit={handleDialogSubmit} />
-                            <Divider />
+                            {/* <Divider /> */}
                             <DeleteDialog
                                 session={row.original}
                                 onDialogSubmit={handleDialogSubmit} />

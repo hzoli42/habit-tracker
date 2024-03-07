@@ -42,9 +42,10 @@ async def new_session(user_id: str,
     document = Session(
         session_id=session_id,
         user_id=user_id,
-        actions=[input.action],
         title=input.title,
-        label_id=input.label_id
+        label_id=input.label_id,
+        start_time=input.start_time,
+        end_time=-1
     )
 
     db.put_item(TableName=TABLE_NAME, Item=document.to_dynamodb_item())
@@ -59,9 +60,9 @@ async def event_stop_session(session_id: str,
     db.update_item(
         TableName=TABLE_NAME,
         Key={"user_id": {"S": user_id}, "session_id": {"S": session_id}},
-        UpdateExpression="SET actions = list_append(actions, :new_action)",
+        UpdateExpression="SET end_time = :new_end",
         ExpressionAttributeValues={
-            ':new_action': {"L": [{"M": input.action.to_dynamodb_item()}]}
+            ':new_end': {"N": str(input.end_time)}
         }
     )
     return get_session_by_id(user_id, session_id, db)
@@ -75,10 +76,12 @@ async def update_session(session_id: str,
     db.update_item(
         TableName=TABLE_NAME,
         Key={"user_id": {"S": user_id}, "session_id": {"S": session_id}},
-        UpdateExpression="SET title = :new_title, label_id = :new_label_id",
+        UpdateExpression="SET title = :new_title, label_id = :new_label_id, start_time = :new_start, end_time = :new_end",
         ExpressionAttributeValues={
             ':new_title': {"S": input.title},
             ':new_label_id': {"S": input.label_id},
+            ':new_start': {"N": str(input.start_time)},
+            ':new_end': {"N": str(input.end_time)}
         }
     )
     return get_session_by_id(user_id, session_id, db)

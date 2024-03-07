@@ -12,12 +12,8 @@ export type SessionResponse = {
     title: string,
     user_id: string,
     label_id: string,
-    actions: [
-        {
-            timestamp: number,
-            event: string
-        }
-    ]
+    start_time: number,
+    end_time: number
 }
 
 export function processSessionResponse(session: SessionResponse) {
@@ -32,11 +28,11 @@ export function processSessionResponse(session: SessionResponse) {
         const secondsString = `${seconds}s`
         return `${daysString} ${hoursString} ${minutesString} ${secondsString}`
     }
-    const start = session.actions.filter(a => a.event == "start")[0]
-    const stop = session.actions.filter(a => a.event == "stop")[0]
+    const start = session.start_time
+    const stop = session.end_time
     let duration = "Session has not ended yet"
     if (stop != null && stop != undefined) {
-        const durationObject = new Date(stop.timestamp - start.timestamp)
+        const durationObject = new Date(stop - start)
         duration = formatDuration(durationObject)
     } 
     return {
@@ -44,8 +40,8 @@ export function processSessionResponse(session: SessionResponse) {
         title: session.title,
         label_id: session.label_id,
         duration: duration,
-        start_date: new Date(start.timestamp),
-        end_date: new Date(stop ? stop.timestamp : start.timestamp)
+        start_date: new Date(start),
+        end_date: new Date(stop ? stop : start)
     }
 }
 
@@ -73,10 +69,7 @@ export function postSessionNew(userId: string | undefined | null, title: string,
         body: JSON.stringify({
             title: title,
             label_id: labelId ?? "",
-            action: {
-                timestamp: startTime,
-                event: "start"
-            }
+            start_time: startTime
         })
     })
 }
@@ -91,10 +84,7 @@ export function postSessionEventStop(
         mode: "cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            action: {
-                event: "stop",
-                timestamp: timestamp
-            }
+            end_time: timestamp
         })
     })
 }
@@ -103,7 +93,9 @@ export function postSessionUpdate(
     sessionId: string, 
     userId: string | undefined | null, 
     title: string, 
-    labelId: string | undefined): Promise<Response> {
+    labelId: string | undefined,
+    startTime: number,
+    endTime: number): Promise<Response> {
     
     return fetch(`${process.env.NEXT_PUBLIC_API_BASE}/session/${sessionId}/user/${userId ?? "undefined"}`, {
         method: "POST",
@@ -112,6 +104,8 @@ export function postSessionUpdate(
         body: JSON.stringify({
             title: title,
             label_id: labelId ?? "",
+            start_time: startTime,
+            end_time: endTime
         })
     })
 }

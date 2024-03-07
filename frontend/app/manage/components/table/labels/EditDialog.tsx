@@ -7,6 +7,8 @@ import ColorPicker from "@/components/utils/ColorPicker";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import EditIcon from '@mui/icons-material/Edit';
+import LabelIcon from '@mui/icons-material/Label'
+
 
 
 type Props = {
@@ -47,10 +49,12 @@ function NewLabelDialog({ label, onDialogSubmit }: Props) {
                     <DialogTitle>Enter label details</DialogTitle>
                 </DialogHeader>
                 <div className="flex items-center gap-4 py-4 justify-between h-auto">
-                    <TextField variant="standard" placeholder="Enter label name"
-                        style={{ backgroundColor: `${color}`, minWidth: "200px", width: "100%", paddingLeft: "10px", borderRadius: "6px", paddingTop: "5px" }}
-                        InputProps={{ disableUnderline: true }}
-                        onChange={handleChangeName} />
+                    <div className="flex justify-start gap-4 items-center">
+                        <LabelIcon style={{ color: color }} />
+                        <TextField variant="standard" placeholder={name} defaultValue={name}
+                            InputProps={{ disableUnderline: false }}
+                            onChange={handleChangeName} />
+                    </div>
                     <Button
                         variant="ghost"
                         className="gap-x-2 w-full h-auto justify-start"
@@ -60,7 +64,7 @@ function NewLabelDialog({ label, onDialogSubmit }: Props) {
                     </Button>
                 </div>
                 <DialogFooter>
-                    <Button onClick={handleDialogSubmit}>Create label</Button>
+                    <Button onClick={handleDialogSubmit}>Edit label</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog >
